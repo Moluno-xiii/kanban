@@ -23,6 +23,7 @@
   --color-secondary: var(--color-secondary);
   --color-text: var(--color-text);
   --color-background: var(--color-background);
+  --color-error: crimson;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -79,5 +80,16 @@
 @layer {
   .btn {
     @apply bg-primary hover:bg-primary/70 cursor-pointer rounded-md px-4 py-2 capitalize transition-all duration-200;
+  }
+  .btn-error {
+    @apply bg-error hover:bg-error/70 cursor-pointer rounded-md px-4 py-2 text-white transition-all duration-200;
+  }
+
+  input {
+    @apply border-secondary w-full min-w-xs rounded-md border-2 p-2 md:min-w-sm;
+  }
+
+  textarea {
+    @apply border-secondary w-full min-w-xs rounded-md border-2 p-2 md:min-w-sm;
   }
 }

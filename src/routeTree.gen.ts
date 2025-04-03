@@ -12,7 +12,15 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AboutImport } from './routes/about'
+import { Route as DashboardRouteImport } from './routes/dashboard/route'
 import { Route as IndexImport } from './routes/index'
+import { Route as DashboardProfileIndexImport } from './routes/dashboard/profile/index'
+import { Route as DashboardPersonalprojectsIndexImport } from './routes/dashboard/personal_projects/index'
+import { Route as DashboardOverviewIndexImport } from './routes/dashboard/overview/index'
+import { Route as DashboardOrganizationsIndexImport } from './routes/dashboard/organizations/index'
+import { Route as AuthSignupIndexImport } from './routes/auth/signup/index'
+import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
+import { Route as DashboardPersonalprojectsProjectidImport } from './routes/dashboard/personal_projects/$project_id'
 
 // Create/Update Routes
 
@@ -22,11 +30,62 @@ const AboutRoute = AboutImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DashboardRouteRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const DashboardProfileIndexRoute = DashboardProfileIndexImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+
+const DashboardPersonalprojectsIndexRoute =
+  DashboardPersonalprojectsIndexImport.update({
+    id: '/personal_projects/',
+    path: '/personal_projects/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+
+const DashboardOverviewIndexRoute = DashboardOverviewIndexImport.update({
+  id: '/overview/',
+  path: '/overview/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+
+const DashboardOrganizationsIndexRoute =
+  DashboardOrganizationsIndexImport.update({
+    id: '/organizations/',
+    path: '/organizations/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+
+const AuthSignupIndexRoute = AuthSignupIndexImport.update({
+  id: '/auth/signup/',
+  path: '/auth/signup/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthLoginIndexRoute = AuthLoginIndexImport.update({
+  id: '/auth/login/',
+  path: '/auth/login/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardPersonalprojectsProjectidRoute =
+  DashboardPersonalprojectsProjectidImport.update({
+    id: '/personal_projects/$project_id',
+    path: '/personal_projects/$project_id',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -39,6 +98,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -46,44 +112,175 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/personal_projects/$project_id': {
+      id: '/dashboard/personal_projects/$project_id'
+      path: '/personal_projects/$project_id'
+      fullPath: '/dashboard/personal_projects/$project_id'
+      preLoaderRoute: typeof DashboardPersonalprojectsProjectidImport
+      parentRoute: typeof DashboardRouteImport
+    }
+    '/auth/login/': {
+      id: '/auth/login/'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/signup/': {
+      id: '/auth/signup/'
+      path: '/auth/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthSignupIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/organizations/': {
+      id: '/dashboard/organizations/'
+      path: '/organizations'
+      fullPath: '/dashboard/organizations'
+      preLoaderRoute: typeof DashboardOrganizationsIndexImport
+      parentRoute: typeof DashboardRouteImport
+    }
+    '/dashboard/overview/': {
+      id: '/dashboard/overview/'
+      path: '/overview'
+      fullPath: '/dashboard/overview'
+      preLoaderRoute: typeof DashboardOverviewIndexImport
+      parentRoute: typeof DashboardRouteImport
+    }
+    '/dashboard/personal_projects/': {
+      id: '/dashboard/personal_projects/'
+      path: '/personal_projects'
+      fullPath: '/dashboard/personal_projects'
+      preLoaderRoute: typeof DashboardPersonalprojectsIndexImport
+      parentRoute: typeof DashboardRouteImport
+    }
+    '/dashboard/profile/': {
+      id: '/dashboard/profile/'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof DashboardProfileIndexImport
+      parentRoute: typeof DashboardRouteImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface DashboardRouteRouteChildren {
+  DashboardPersonalprojectsProjectidRoute: typeof DashboardPersonalprojectsProjectidRoute
+  DashboardOrganizationsIndexRoute: typeof DashboardOrganizationsIndexRoute
+  DashboardOverviewIndexRoute: typeof DashboardOverviewIndexRoute
+  DashboardPersonalprojectsIndexRoute: typeof DashboardPersonalprojectsIndexRoute
+  DashboardProfileIndexRoute: typeof DashboardProfileIndexRoute
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardPersonalprojectsProjectidRoute:
+    DashboardPersonalprojectsProjectidRoute,
+  DashboardOrganizationsIndexRoute: DashboardOrganizationsIndexRoute,
+  DashboardOverviewIndexRoute: DashboardOverviewIndexRoute,
+  DashboardPersonalprojectsIndexRoute: DashboardPersonalprojectsIndexRoute,
+  DashboardProfileIndexRoute: DashboardProfileIndexRoute,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
+  '/auth/login': typeof AuthLoginIndexRoute
+  '/auth/signup': typeof AuthSignupIndexRoute
+  '/dashboard/organizations': typeof DashboardOrganizationsIndexRoute
+  '/dashboard/overview': typeof DashboardOverviewIndexRoute
+  '/dashboard/personal_projects': typeof DashboardPersonalprojectsIndexRoute
+  '/dashboard/profile': typeof DashboardProfileIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
+  '/auth/login': typeof AuthLoginIndexRoute
+  '/auth/signup': typeof AuthSignupIndexRoute
+  '/dashboard/organizations': typeof DashboardOrganizationsIndexRoute
+  '/dashboard/overview': typeof DashboardOverviewIndexRoute
+  '/dashboard/personal_projects': typeof DashboardPersonalprojectsIndexRoute
+  '/dashboard/profile': typeof DashboardProfileIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
+  '/auth/login/': typeof AuthLoginIndexRoute
+  '/auth/signup/': typeof AuthSignupIndexRoute
+  '/dashboard/organizations/': typeof DashboardOrganizationsIndexRoute
+  '/dashboard/overview/': typeof DashboardOverviewIndexRoute
+  '/dashboard/personal_projects/': typeof DashboardPersonalprojectsIndexRoute
+  '/dashboard/profile/': typeof DashboardProfileIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/about'
+    | '/dashboard/personal_projects/$project_id'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/dashboard/organizations'
+    | '/dashboard/overview'
+    | '/dashboard/personal_projects'
+    | '/dashboard/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/about'
+    | '/dashboard/personal_projects/$project_id'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/dashboard/organizations'
+    | '/dashboard/overview'
+    | '/dashboard/personal_projects'
+    | '/dashboard/profile'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/about'
+    | '/dashboard/personal_projects/$project_id'
+    | '/auth/login/'
+    | '/auth/signup/'
+    | '/dashboard/organizations/'
+    | '/dashboard/overview/'
+    | '/dashboard/personal_projects/'
+    | '/dashboard/profile/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
+  AuthSignupIndexRoute: typeof AuthSignupIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AuthLoginIndexRoute: AuthLoginIndexRoute,
+  AuthSignupIndexRoute: AuthSignupIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +294,53 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about"
+        "/dashboard",
+        "/about",
+        "/auth/login/",
+        "/auth/signup/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/dashboard": {
+      "filePath": "dashboard/route.tsx",
+      "children": [
+        "/dashboard/personal_projects/$project_id",
+        "/dashboard/organizations/",
+        "/dashboard/overview/",
+        "/dashboard/personal_projects/",
+        "/dashboard/profile/"
+      ]
+    },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/dashboard/personal_projects/$project_id": {
+      "filePath": "dashboard/personal_projects/$project_id.tsx",
+      "parent": "/dashboard"
+    },
+    "/auth/login/": {
+      "filePath": "auth/login/index.tsx"
+    },
+    "/auth/signup/": {
+      "filePath": "auth/signup/index.tsx"
+    },
+    "/dashboard/organizations/": {
+      "filePath": "dashboard/organizations/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/overview/": {
+      "filePath": "dashboard/overview/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/personal_projects/": {
+      "filePath": "dashboard/personal_projects/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/profile/": {
+      "filePath": "dashboard/profile/index.tsx",
+      "parent": "/dashboard"
     }
   }
 }
