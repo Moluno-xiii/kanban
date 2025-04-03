@@ -78,6 +78,6 @@
 
 @layer {
   .btn {
-    @apply rounded-md bg-secondary px-4 py-2 hover:bg-secondary/70 transition-all duration-200 cursor-pointer capitalize;
+    @apply bg-primary hover:bg-primary/70 cursor-pointer rounded-md px-4 py-2 capitalize transition-all duration-200;
   }
 }
