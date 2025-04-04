@@ -4,6 +4,7 @@ import { IoClose } from "react-icons/io5";
 import { useNavbarContext } from "../contexts/NavContext";
 import NavLink from "./NavLink";
 import Modal from "./ui/Modal";
+import { logoutUser } from "../utils/auth";
 
 export interface LinkType {
   name: string;
@@ -34,6 +35,12 @@ const SideBar: React.FC = () => {
   const handleLogoutModal = (state: boolean) => {
     setOpenLogoutModal(state);
   };
+
+  async function handleLogout() {
+    await logoutUser();
+    navigate({ to: "/", replace: true });
+    alert("logout successful");
+  }
 
   const navigate = useNavigate();
   const date = new Date();
@@ -67,10 +74,7 @@ const SideBar: React.FC = () => {
             handleClose={() => handleLogoutModal(false)}
           >
             <div className="flex flex-row items-center justify-end gap-x-2">
-              <button
-                className="btn-error"
-                onClick={() => navigate({ to: "/", replace: true })}
-              >
+              <button className="btn-error" onClick={handleLogout}>
                 Yes
               </button>
               <button className="btn" onClick={() => handleLogoutModal(false)}>

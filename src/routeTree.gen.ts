@@ -18,7 +18,10 @@ import { Route as DashboardPersonalprojectsIndexImport } from './routes/dashboar
 import { Route as DashboardOverviewIndexImport } from './routes/dashboard/overview/index'
 import { Route as DashboardOrganizationsIndexImport } from './routes/dashboard/organizations/index'
 import { Route as AuthSignupIndexImport } from './routes/auth/signup/index'
+import { Route as AuthResetPasswordIndexImport } from './routes/auth/reset-password/index'
 import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
+import { Route as AuthForgotPasswordIndexImport } from './routes/auth/forgot-password/index'
+import { Route as AuthConfirmEmailIndexImport } from './routes/auth/confirm-email/index'
 import { Route as DashboardPersonalprojectsProjectidImport } from './routes/dashboard/personal_projects/$project_id'
 
 // Create/Update Routes
@@ -67,9 +70,27 @@ const AuthSignupIndexRoute = AuthSignupIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthResetPasswordIndexRoute = AuthResetPasswordIndexImport.update({
+  id: '/auth/reset-password/',
+  path: '/auth/reset-password/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AuthLoginIndexRoute = AuthLoginIndexImport.update({
   id: '/auth/login/',
   path: '/auth/login/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthForgotPasswordIndexRoute = AuthForgotPasswordIndexImport.update({
+  id: '/auth/forgot-password/',
+  path: '/auth/forgot-password/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthConfirmEmailIndexRoute = AuthConfirmEmailIndexImport.update({
+  id: '/auth/confirm-email/',
+  path: '/auth/confirm-email/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -105,11 +126,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardPersonalprojectsProjectidImport
       parentRoute: typeof DashboardRouteImport
     }
+    '/auth/confirm-email/': {
+      id: '/auth/confirm-email/'
+      path: '/auth/confirm-email'
+      fullPath: '/auth/confirm-email'
+      preLoaderRoute: typeof AuthConfirmEmailIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/forgot-password/': {
+      id: '/auth/forgot-password/'
+      path: '/auth/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/auth/login/': {
       id: '/auth/login/'
       path: '/auth/login'
       fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/reset-password/': {
+      id: '/auth/reset-password/'
+      path: '/auth/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordIndexImport
       parentRoute: typeof rootRoute
     }
     '/auth/signup/': {
@@ -177,7 +219,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
+  '/auth/confirm-email': typeof AuthConfirmEmailIndexRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
+  '/auth/reset-password': typeof AuthResetPasswordIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
   '/dashboard/organizations': typeof DashboardOrganizationsIndexRoute
   '/dashboard/overview': typeof DashboardOverviewIndexRoute
@@ -189,7 +234,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
+  '/auth/confirm-email': typeof AuthConfirmEmailIndexRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
+  '/auth/reset-password': typeof AuthResetPasswordIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
   '/dashboard/organizations': typeof DashboardOrganizationsIndexRoute
   '/dashboard/overview': typeof DashboardOverviewIndexRoute
@@ -202,7 +250,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
+  '/auth/confirm-email/': typeof AuthConfirmEmailIndexRoute
+  '/auth/forgot-password/': typeof AuthForgotPasswordIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
+  '/auth/reset-password/': typeof AuthResetPasswordIndexRoute
   '/auth/signup/': typeof AuthSignupIndexRoute
   '/dashboard/organizations/': typeof DashboardOrganizationsIndexRoute
   '/dashboard/overview/': typeof DashboardOverviewIndexRoute
@@ -216,7 +267,10 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dashboard/personal_projects/$project_id'
+    | '/auth/confirm-email'
+    | '/auth/forgot-password'
     | '/auth/login'
+    | '/auth/reset-password'
     | '/auth/signup'
     | '/dashboard/organizations'
     | '/dashboard/overview'
@@ -227,7 +281,10 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dashboard/personal_projects/$project_id'
+    | '/auth/confirm-email'
+    | '/auth/forgot-password'
     | '/auth/login'
+    | '/auth/reset-password'
     | '/auth/signup'
     | '/dashboard/organizations'
     | '/dashboard/overview'
@@ -238,7 +295,10 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dashboard/personal_projects/$project_id'
+    | '/auth/confirm-email/'
+    | '/auth/forgot-password/'
     | '/auth/login/'
+    | '/auth/reset-password/'
     | '/auth/signup/'
     | '/dashboard/organizations/'
     | '/dashboard/overview/'
@@ -250,14 +310,20 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  AuthConfirmEmailIndexRoute: typeof AuthConfirmEmailIndexRoute
+  AuthForgotPasswordIndexRoute: typeof AuthForgotPasswordIndexRoute
   AuthLoginIndexRoute: typeof AuthLoginIndexRoute
+  AuthResetPasswordIndexRoute: typeof AuthResetPasswordIndexRoute
   AuthSignupIndexRoute: typeof AuthSignupIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  AuthConfirmEmailIndexRoute: AuthConfirmEmailIndexRoute,
+  AuthForgotPasswordIndexRoute: AuthForgotPasswordIndexRoute,
   AuthLoginIndexRoute: AuthLoginIndexRoute,
+  AuthResetPasswordIndexRoute: AuthResetPasswordIndexRoute,
   AuthSignupIndexRoute: AuthSignupIndexRoute,
 }
 
@@ -273,7 +339,10 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/dashboard",
+        "/auth/confirm-email/",
+        "/auth/forgot-password/",
         "/auth/login/",
+        "/auth/reset-password/",
         "/auth/signup/"
       ]
     },
@@ -294,8 +363,17 @@ export const routeTree = rootRoute
       "filePath": "dashboard/personal_projects/$project_id.tsx",
       "parent": "/dashboard"
     },
+    "/auth/confirm-email/": {
+      "filePath": "auth/confirm-email/index.tsx"
+    },
+    "/auth/forgot-password/": {
+      "filePath": "auth/forgot-password/index.tsx"
+    },
     "/auth/login/": {
       "filePath": "auth/login/index.tsx"
+    },
+    "/auth/reset-password/": {
+      "filePath": "auth/reset-password/index.tsx"
     },
     "/auth/signup/": {
       "filePath": "auth/signup/index.tsx"
