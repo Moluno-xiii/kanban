@@ -5,6 +5,8 @@ import { routeTree } from "./routeTree.gen.ts";
 import "./index.css";
 import NotFound from "./components/NotFound.tsx";
 import NavbarContextProvider from "./contexts/NavContext.tsx";
+import { Provider } from "react-redux";
+import { store } from "./store/index.ts";
 
 const router = createRouter({ routeTree, defaultNotFoundComponent: NotFound });
 declare module "@tanstack/react-router" {
@@ -16,7 +18,9 @@ declare module "@tanstack/react-router" {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <NavbarContextProvider>
-      <RouterProvider router={router} />
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     </NavbarContextProvider>
   </StrictMode>,
 );

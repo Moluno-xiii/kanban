@@ -5,6 +5,9 @@ import { useNavbarContext } from "../contexts/NavContext";
 import NavLink from "./NavLink";
 import Modal from "./ui/Modal";
 import { logoutUser } from "../utils/auth";
+import toast from "react-hot-toast";
+import { useAppDispatch } from "../store/hooks";
+import { logout } from "../store/authSlice";
 
 export interface LinkType {
   name: string;
@@ -29,6 +32,7 @@ const navLinks: LinkType[] = [
   },
 ];
 const SideBar: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const { handleNavbarState } = useNavbarContext();
 
@@ -39,7 +43,8 @@ const SideBar: React.FC = () => {
   async function handleLogout() {
     await logoutUser();
     navigate({ to: "/", replace: true });
-    alert("logout successful");
+    toast.success("Logout successful");
+    dispatch(logout());
   }
 
   const navigate = useNavigate();

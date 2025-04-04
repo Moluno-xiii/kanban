@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { FaGoogle } from "react-icons/fa6";
 import { signInWithGoogle, signUpNewUser } from "../../../utils/auth.ts";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export const Route = createFileRoute("/auth/signup/")({
   component: RouteComponent,
@@ -12,18 +13,13 @@ function RouteComponent() {
   async function handleGoogleLogin() {
     try {
       setIsLoading(true);
-      const { data, error } = await signInWithGoogle();
+      const { error } = await signInWithGoogle();
       if (error) {
-        alert(error.message);
-        console.error("error signing in with google : ", error?.message);
         throw new Error(error.message);
       }
-      console.log(data);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error("error logging in with google : ", error.message);
-        alert(error.message);
-        throw new Error(error.message);
+        toast(error.message);
       }
     } finally {
       setIsLoading(false);
@@ -40,27 +36,23 @@ function RouteComponent() {
       const userEmail = dataObject.email as string;
       const password = dataObject.password as string;
 
-      const { data, error } = await signUpNewUser(userEmail, password);
+      const { error } = await signUpNewUser(userEmail, password);
 
       if (error) {
-        console.error("signup error:", error.message);
-        alert(error.message);
         throw new Error(error.message);
       }
 
-      console.log(dataObject);
-      alert("email verification sent, check your inbox");
-      console.log(data);
+      toast.success("email verification sent, check your inbox");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(error.message);
+        toast.error(error.message);
       }
     } finally {
       setIsLoading(false);
     }
   }
   return (
-    <div className="flex min-h-[calc(100dvh-150px)] flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <form
         action=""
         onSubmit={handleSubmit}

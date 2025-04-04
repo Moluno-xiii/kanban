@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard/route'
+import { Route as AuthRouteImport } from './routes/auth/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardProfileIndexImport } from './routes/dashboard/profile/index'
 import { Route as DashboardPersonalprojectsIndexImport } from './routes/dashboard/personal_projects/index'
@@ -21,7 +22,6 @@ import { Route as AuthSignupIndexImport } from './routes/auth/signup/index'
 import { Route as AuthResetPasswordIndexImport } from './routes/auth/reset-password/index'
 import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
 import { Route as AuthForgotPasswordIndexImport } from './routes/auth/forgot-password/index'
-import { Route as AuthConfirmEmailIndexImport } from './routes/auth/confirm-email/index'
 import { Route as DashboardPersonalprojectsProjectidImport } from './routes/dashboard/personal_projects/$project_id'
 
 // Create/Update Routes
@@ -29,6 +29,12 @@ import { Route as DashboardPersonalprojectsProjectidImport } from './routes/dash
 const DashboardRouteRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthRouteRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -65,33 +71,27 @@ const DashboardOrganizationsIndexRoute =
   } as any)
 
 const AuthSignupIndexRoute = AuthSignupIndexImport.update({
-  id: '/auth/signup/',
-  path: '/auth/signup/',
-  getParentRoute: () => rootRoute,
+  id: '/signup/',
+  path: '/signup/',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 const AuthResetPasswordIndexRoute = AuthResetPasswordIndexImport.update({
-  id: '/auth/reset-password/',
-  path: '/auth/reset-password/',
-  getParentRoute: () => rootRoute,
+  id: '/reset-password/',
+  path: '/reset-password/',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 const AuthLoginIndexRoute = AuthLoginIndexImport.update({
-  id: '/auth/login/',
-  path: '/auth/login/',
-  getParentRoute: () => rootRoute,
+  id: '/login/',
+  path: '/login/',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 const AuthForgotPasswordIndexRoute = AuthForgotPasswordIndexImport.update({
-  id: '/auth/forgot-password/',
-  path: '/auth/forgot-password/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const AuthConfirmEmailIndexRoute = AuthConfirmEmailIndexImport.update({
-  id: '/auth/confirm-email/',
-  path: '/auth/confirm-email/',
-  getParentRoute: () => rootRoute,
+  id: '/forgot-password/',
+  path: '/forgot-password/',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 const DashboardPersonalprojectsProjectidRoute =
@@ -112,6 +112,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -126,40 +133,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardPersonalprojectsProjectidImport
       parentRoute: typeof DashboardRouteImport
     }
-    '/auth/confirm-email/': {
-      id: '/auth/confirm-email/'
-      path: '/auth/confirm-email'
-      fullPath: '/auth/confirm-email'
-      preLoaderRoute: typeof AuthConfirmEmailIndexImport
-      parentRoute: typeof rootRoute
-    }
     '/auth/forgot-password/': {
       id: '/auth/forgot-password/'
-      path: '/auth/forgot-password'
+      path: '/forgot-password'
       fullPath: '/auth/forgot-password'
       preLoaderRoute: typeof AuthForgotPasswordIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthRouteImport
     }
     '/auth/login/': {
       id: '/auth/login/'
-      path: '/auth/login'
+      path: '/login'
       fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthRouteImport
     }
     '/auth/reset-password/': {
       id: '/auth/reset-password/'
-      path: '/auth/reset-password'
+      path: '/reset-password'
       fullPath: '/auth/reset-password'
       preLoaderRoute: typeof AuthResetPasswordIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthRouteImport
     }
     '/auth/signup/': {
       id: '/auth/signup/'
-      path: '/auth/signup'
+      path: '/signup'
       fullPath: '/auth/signup'
       preLoaderRoute: typeof AuthSignupIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthRouteImport
     }
     '/dashboard/organizations/': {
       id: '/dashboard/organizations/'
@@ -194,6 +194,24 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface AuthRouteRouteChildren {
+  AuthForgotPasswordIndexRoute: typeof AuthForgotPasswordIndexRoute
+  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
+  AuthResetPasswordIndexRoute: typeof AuthResetPasswordIndexRoute
+  AuthSignupIndexRoute: typeof AuthSignupIndexRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthForgotPasswordIndexRoute: AuthForgotPasswordIndexRoute,
+  AuthLoginIndexRoute: AuthLoginIndexRoute,
+  AuthResetPasswordIndexRoute: AuthResetPasswordIndexRoute,
+  AuthSignupIndexRoute: AuthSignupIndexRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 interface DashboardRouteRouteChildren {
   DashboardPersonalprojectsProjectidRoute: typeof DashboardPersonalprojectsProjectidRoute
   DashboardOrganizationsIndexRoute: typeof DashboardOrganizationsIndexRoute
@@ -217,9 +235,9 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
-  '/auth/confirm-email': typeof AuthConfirmEmailIndexRoute
   '/auth/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/reset-password': typeof AuthResetPasswordIndexRoute
@@ -232,9 +250,9 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
-  '/auth/confirm-email': typeof AuthConfirmEmailIndexRoute
   '/auth/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/reset-password': typeof AuthResetPasswordIndexRoute
@@ -248,9 +266,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
-  '/auth/confirm-email/': typeof AuthConfirmEmailIndexRoute
   '/auth/forgot-password/': typeof AuthForgotPasswordIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/auth/reset-password/': typeof AuthResetPasswordIndexRoute
@@ -265,9 +283,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/dashboard'
     | '/dashboard/personal_projects/$project_id'
-    | '/auth/confirm-email'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
@@ -279,9 +297,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/dashboard'
     | '/dashboard/personal_projects/$project_id'
-    | '/auth/confirm-email'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
@@ -293,9 +311,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/dashboard'
     | '/dashboard/personal_projects/$project_id'
-    | '/auth/confirm-email/'
     | '/auth/forgot-password/'
     | '/auth/login/'
     | '/auth/reset-password/'
@@ -309,22 +327,14 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
-  AuthConfirmEmailIndexRoute: typeof AuthConfirmEmailIndexRoute
-  AuthForgotPasswordIndexRoute: typeof AuthForgotPasswordIndexRoute
-  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
-  AuthResetPasswordIndexRoute: typeof AuthResetPasswordIndexRoute
-  AuthSignupIndexRoute: typeof AuthSignupIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
-  AuthConfirmEmailIndexRoute: AuthConfirmEmailIndexRoute,
-  AuthForgotPasswordIndexRoute: AuthForgotPasswordIndexRoute,
-  AuthLoginIndexRoute: AuthLoginIndexRoute,
-  AuthResetPasswordIndexRoute: AuthResetPasswordIndexRoute,
-  AuthSignupIndexRoute: AuthSignupIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -338,16 +348,21 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dashboard",
-        "/auth/confirm-email/",
+        "/auth",
+        "/dashboard"
+      ]
+    },
+    "/": {
+      "filePath": "index.tsx"
+    },
+    "/auth": {
+      "filePath": "auth/route.tsx",
+      "children": [
         "/auth/forgot-password/",
         "/auth/login/",
         "/auth/reset-password/",
         "/auth/signup/"
       ]
-    },
-    "/": {
-      "filePath": "index.tsx"
     },
     "/dashboard": {
       "filePath": "dashboard/route.tsx",
@@ -363,20 +378,21 @@ export const routeTree = rootRoute
       "filePath": "dashboard/personal_projects/$project_id.tsx",
       "parent": "/dashboard"
     },
-    "/auth/confirm-email/": {
-      "filePath": "auth/confirm-email/index.tsx"
-    },
     "/auth/forgot-password/": {
-      "filePath": "auth/forgot-password/index.tsx"
+      "filePath": "auth/forgot-password/index.tsx",
+      "parent": "/auth"
     },
     "/auth/login/": {
-      "filePath": "auth/login/index.tsx"
+      "filePath": "auth/login/index.tsx",
+      "parent": "/auth"
     },
     "/auth/reset-password/": {
-      "filePath": "auth/reset-password/index.tsx"
+      "filePath": "auth/reset-password/index.tsx",
+      "parent": "/auth"
     },
     "/auth/signup/": {
-      "filePath": "auth/signup/index.tsx"
+      "filePath": "auth/signup/index.tsx",
+      "parent": "/auth"
     },
     "/dashboard/organizations/": {
       "filePath": "dashboard/organizations/index.tsx",

@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { updateUser } from "../../../utils/auth";
+import toast from "react-hot-toast";
 
 export const Route = createFileRoute("/auth/reset-password/")({
   component: RouteComponent,
@@ -18,21 +19,17 @@ function RouteComponent() {
       const userEmail = dataObject.email as string;
       const userPassword = dataObject.password as string;
 
-      const { data, error } = await updateUser(userEmail, userPassword);
+      const { error } = await updateUser(userEmail, userPassword);
 
       if (error) {
-        console.error("password reset error:", error.message);
-        alert(error.message);
         throw new Error(error.message);
       }
 
-      console.log(dataObject);
-      alert("password updated successfully");
+      toast.success("password updated successfully");
       navigate({ to: "/auth/login", replace: true });
-      console.log(data);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(error.message);
+        toast.error(error.message);
       }
     } finally {
       setIsLoading(false);

@@ -2,6 +2,9 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import React, { useState } from "react";
 import { FaGoogle } from "react-icons/fa6";
 import { loginUser, signInWithGoogle } from "../../../utils/auth";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../store/authSlice";
 
 export const Route = createFileRoute("/auth/login/")({
   component: RouteComponent,
@@ -10,21 +13,21 @@ export const Route = createFileRoute("/auth/login/")({
 function RouteComponent() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   async function handleGoogleLogin() {
     try {
       setIsLoading(true);
-      const { data, error } = await signInWithGoogle();
+      const { error } = await signInWithGoogle();
       if (error) {
-        alert(error.message);
+        toast(error.message);
         console.error("error signing in with google : ", error?.message);
         throw new Error(error.message);
       }
-      console.log(data);
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error("error logging in with google : ", error.message);
-        alert(error.message);
+        toast(error.message);
         throw new Error(error.message);
       }
     } finally {
@@ -45,24 +48,26 @@ function RouteComponent() {
       const { data, error } = await loginUser(userEmail, password);
 
       if (error) {
-        console.error("login error error:", error.message);
-        alert(error.message);
         throw new Error(error.message);
       }
-      console.log(dataObject);
-      alert("Login successful, i think...");
+
+      if (!data.user || !data.session) {
+        throw new Error("Login failed: no user or session returned");
+      }
+
+      dispatch(setUser({ user: data.user, session: data.session }));
+      toast.success("Login successful!");
       navigate({ to: "/dashboard/overview", replace: true });
-      console.log(data);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(error.message);
+        toast.error(error.message);
       }
     } finally {
       setIsLoading(false);
     }
   }
   return (
-    <div className="flex min-h-[calc(100dvh-150px)] flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <form
         action=""
         onSubmit={handleSubmit}
