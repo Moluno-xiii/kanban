@@ -1,7 +1,9 @@
+import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { IoClose } from "react-icons/io5";
+import { useNavbarContext } from "../contexts/NavContext";
 import NavLink from "./NavLink";
 import Modal from "./ui/Modal";
-import { useNavigate } from "@tanstack/react-router";
 
 export interface LinkType {
   name: string;
@@ -27,6 +29,7 @@ const navLinks: LinkType[] = [
 ];
 const SideBar: React.FC = () => {
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
+  const { handleNavbarState } = useNavbarContext();
 
   const handleLogoutModal = (state: boolean) => {
     setOpenLogoutModal(state);
@@ -35,8 +38,12 @@ const SideBar: React.FC = () => {
   const navigate = useNavigate();
   const date = new Date();
   return (
-    <nav className="bg-secondary relative flex h-full flex-col rounded-lg">
-      <ul className="flex flex-col gap-y-5 p-3">
+    <nav className="bg-secondary relative flex h-full flex-col gap-y-4 rounded-lg p-3 transition-all duration-500 ease-in-out">
+      <IoClose
+        onClick={() => handleNavbarState(false)}
+        className="text-error block cursor-pointer self-end lg:hidden"
+      />
+      <ul className="flex flex-col gap-y-5">
         {navLinks.map((link) => (
           <li key={link.name} className="w-full">
             <NavLink key={link.name} link={link} />

@@ -1,7 +1,8 @@
 interface Todo {
-  name: string;
+  title: string;
   id: string;
-  completed: boolean;
+  completed: "no" | "yes";
+  dateCreated: string;
 }
 
 interface Project {
@@ -9,15 +10,27 @@ interface Project {
   projectId: string;
   descripton: string;
   dateCreated: string;
+  todos?: Todo[];
 }
 
 async function loadProjects() {
+  await new Promise((resolve) => setTimeout(resolve, 5000));
   const projects = localStorage.getItem("projects");
   if (!projects) {
     localStorage.setItem("projects", JSON.stringify([]));
     return [];
   }
   return JSON.parse(projects);
+}
+async function loadProject(id: string) {
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  const projects = localStorage.getItem("projects");
+  if (!projects) {
+    localStorage.setItem("projects", JSON.stringify([]));
+    return [];
+  }
+  const project = JSON.parse(projects).find((p: Project) => p.projectId === id);
+  return project;
 }
 
 async function addProject(formData: Project) {
@@ -34,10 +47,7 @@ async function deleteProject(projectId: string) {
   localStorage.setItem("projects", JSON.stringify(updatedProjects));
 }
 
-async function addTodo(
-  projectId: string,
-  todoFormData: { title: string; id: string; completed: boolean },
-) {
+async function addTodo(projectId: string, todoFormData: Todo) {
   const projects = await loadProjects();
   const project = projects.find((p: Project) => p.projectId === projectId);
 
@@ -72,5 +82,12 @@ async function deleteTodo(projectId: string, todoId: string) {
   localStorage.setItem("projects", JSON.stringify(projects));
 }
 
-export { loadProjects, addProject, deleteProject, addTodo, deleteTodo };
+export {
+  loadProjects,
+  loadProject,
+  addProject,
+  deleteProject,
+  addTodo,
+  deleteTodo,
+};
 export type { Project, Todo };

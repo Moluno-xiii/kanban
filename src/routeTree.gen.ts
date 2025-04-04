@@ -11,7 +11,6 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AboutImport } from './routes/about'
 import { Route as DashboardRouteImport } from './routes/dashboard/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardProfileIndexImport } from './routes/dashboard/profile/index'
@@ -23,12 +22,6 @@ import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
 import { Route as DashboardPersonalprojectsProjectidImport } from './routes/dashboard/personal_projects/$project_id'
 
 // Create/Update Routes
-
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const DashboardRouteRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -103,13 +96,6 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRoute
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
     '/dashboard/personal_projects/$project_id': {
@@ -190,7 +176,6 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
-  '/about': typeof AboutRoute
   '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
@@ -203,7 +188,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
-  '/about': typeof AboutRoute
   '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
@@ -217,7 +201,6 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
-  '/about': typeof AboutRoute
   '/dashboard/personal_projects/$project_id': typeof DashboardPersonalprojectsProjectidRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/auth/signup/': typeof AuthSignupIndexRoute
@@ -232,7 +215,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
-    | '/about'
     | '/dashboard/personal_projects/$project_id'
     | '/auth/login'
     | '/auth/signup'
@@ -244,7 +226,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
-    | '/about'
     | '/dashboard/personal_projects/$project_id'
     | '/auth/login'
     | '/auth/signup'
@@ -256,7 +237,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
-    | '/about'
     | '/dashboard/personal_projects/$project_id'
     | '/auth/login/'
     | '/auth/signup/'
@@ -270,7 +250,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
-  AboutRoute: typeof AboutRoute
   AuthLoginIndexRoute: typeof AuthLoginIndexRoute
   AuthSignupIndexRoute: typeof AuthSignupIndexRoute
 }
@@ -278,7 +257,6 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
-  AboutRoute: AboutRoute,
   AuthLoginIndexRoute: AuthLoginIndexRoute,
   AuthSignupIndexRoute: AuthSignupIndexRoute,
 }
@@ -295,7 +273,6 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/dashboard",
-        "/about",
         "/auth/login/",
         "/auth/signup/"
       ]
@@ -312,9 +289,6 @@ export const routeTree = rootRoute
         "/dashboard/personal_projects/",
         "/dashboard/profile/"
       ]
-    },
-    "/about": {
-      "filePath": "about.tsx"
     },
     "/dashboard/personal_projects/$project_id": {
       "filePath": "dashboard/personal_projects/$project_id.tsx",
