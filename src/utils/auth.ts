@@ -32,9 +32,10 @@ async function logoutUser() {
 async function getUser() {
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser();
   console.log(user);
-  return user;
+  return { user, error };
 }
 
 async function resetPassword(email: string) {
@@ -61,6 +62,10 @@ async function signInWithGoogle() {
   });
   return { data, error };
 }
+async function getSession() {
+  const { data, error } = await supabase.auth.getSession();
+  return { data, error };
+}
 
 export {
   signUpNewUser,
@@ -70,4 +75,5 @@ export {
   resetPassword,
   updateUser,
   signInWithGoogle,
+  getSession,
 };

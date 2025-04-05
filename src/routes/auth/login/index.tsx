@@ -1,10 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import React, { useState } from "react";
-import { FaGoogle } from "react-icons/fa6";
-import { loginUser, signInWithGoogle } from "../../../utils/auth";
 import toast from "react-hot-toast";
+import { FaGoogle } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../store/authSlice";
+import { loginUser, signInWithGoogle } from "../../../utils/auth";
 
 export const Route = createFileRoute("/auth/login/")({
   component: RouteComponent,
@@ -67,7 +67,7 @@ function RouteComponent() {
     }
   }
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center p-3">
       <form
         action=""
         onSubmit={handleSubmit}

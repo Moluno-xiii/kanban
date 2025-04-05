@@ -25,7 +25,9 @@ export const initializeUser = createAsyncThunk(
     } = await supabase.auth.getSession();
 
     if (sessionError || !session) {
-      return thunkAPI.rejectWithValue("No active session");
+      console.warn(sessionError?.message);
+
+      return thunkAPI.rejectWithValue(sessionError?.message);
     }
 
     const {
@@ -37,7 +39,7 @@ export const initializeUser = createAsyncThunk(
       return thunkAPI.rejectWithValue("Failed to fetch user");
     }
 
-    return { session, user };
+    return { session, user, sessionError };
   },
 );
 
@@ -61,6 +63,10 @@ const authSlice = createSlice({
       state.user = null;
       state.session = null;
     },
+    setError: (state, action: PayloadAction<{ message: string }>) => {
+      state.error = action.payload.message;
+      state.loading = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -77,12 +83,13 @@ const authSlice = createSlice({
         },
       )
       .addCase(initializeUser.rejected, (state, action) => {
+        console.warn(action.payload as string);
         state.loading = false;
         state.error = action.payload as string;
       });
   },
 });
 
-export const { setUser, clearUser, logout } = authSlice.actions;
+export const { setUser, clearUser, logout, setError } = authSlice.actions;
 
 export default authSlice.reducer;
