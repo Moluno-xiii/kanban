@@ -23,6 +23,8 @@ import { Route as AuthResetPasswordIndexImport } from './routes/auth/reset-passw
 import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
 import { Route as AuthForgotPasswordIndexImport } from './routes/auth/forgot-password/index'
 import { Route as DashboardPersonalprojectsProjectidImport } from './routes/dashboard/personal_projects/$project_id'
+import { Route as DashboardOrganizationsOrganizationidIndexImport } from './routes/dashboard/organizations/$organization_id/index'
+import { Route as DashboardOrganizationsOrganizationidMembersImport } from './routes/dashboard/organizations/$organization_id/members'
 
 // Create/Update Routes
 
@@ -98,6 +100,20 @@ const DashboardPersonalprojectsProjectidRoute =
   DashboardPersonalprojectsProjectidImport.update({
     id: '/personal_projects/$project_id',
     path: '/personal_projects/$project_id',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+
+const DashboardOrganizationsOrganizationidIndexRoute =
+  DashboardOrganizationsOrganizationidIndexImport.update({
+    id: '/organizations/$organization_id/',
+    path: '/organizations/$organization_id/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+
+const DashboardOrganizationsOrganizationidMembersRoute =
+  DashboardOrganizationsOrganizationidMembersImport.update({
+    id: '/organizations/$organization_id/members',
+    path: '/organizations/$organization_id/members',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
 
@@ -189,6 +205,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardProfileIndexImport
       parentRoute: typeof DashboardRouteImport
     }
+    '/dashboard/organizations/$organization_id/members': {
+      id: '/dashboard/organizations/$organization_id/members'
+      path: '/organizations/$organization_id/members'
+      fullPath: '/dashboard/organizations/$organization_id/members'
+      preLoaderRoute: typeof DashboardOrganizationsOrganizationidMembersImport
+      parentRoute: typeof DashboardRouteImport
+    }
+    '/dashboard/organizations/$organization_id/': {
+      id: '/dashboard/organizations/$organization_id/'
+      path: '/organizations/$organization_id'
+      fullPath: '/dashboard/organizations/$organization_id'
+      preLoaderRoute: typeof DashboardOrganizationsOrganizationidIndexImport
+      parentRoute: typeof DashboardRouteImport
+    }
   }
 }
 
@@ -218,6 +248,8 @@ interface DashboardRouteRouteChildren {
   DashboardOverviewIndexRoute: typeof DashboardOverviewIndexRoute
   DashboardPersonalprojectsIndexRoute: typeof DashboardPersonalprojectsIndexRoute
   DashboardProfileIndexRoute: typeof DashboardProfileIndexRoute
+  DashboardOrganizationsOrganizationidMembersRoute: typeof DashboardOrganizationsOrganizationidMembersRoute
+  DashboardOrganizationsOrganizationidIndexRoute: typeof DashboardOrganizationsOrganizationidIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
@@ -227,6 +259,10 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardOverviewIndexRoute: DashboardOverviewIndexRoute,
   DashboardPersonalprojectsIndexRoute: DashboardPersonalprojectsIndexRoute,
   DashboardProfileIndexRoute: DashboardProfileIndexRoute,
+  DashboardOrganizationsOrganizationidMembersRoute:
+    DashboardOrganizationsOrganizationidMembersRoute,
+  DashboardOrganizationsOrganizationidIndexRoute:
+    DashboardOrganizationsOrganizationidIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
@@ -246,6 +282,8 @@ export interface FileRoutesByFullPath {
   '/dashboard/overview': typeof DashboardOverviewIndexRoute
   '/dashboard/personal_projects': typeof DashboardPersonalprojectsIndexRoute
   '/dashboard/profile': typeof DashboardProfileIndexRoute
+  '/dashboard/organizations/$organization_id/members': typeof DashboardOrganizationsOrganizationidMembersRoute
+  '/dashboard/organizations/$organization_id': typeof DashboardOrganizationsOrganizationidIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -261,6 +299,8 @@ export interface FileRoutesByTo {
   '/dashboard/overview': typeof DashboardOverviewIndexRoute
   '/dashboard/personal_projects': typeof DashboardPersonalprojectsIndexRoute
   '/dashboard/profile': typeof DashboardProfileIndexRoute
+  '/dashboard/organizations/$organization_id/members': typeof DashboardOrganizationsOrganizationidMembersRoute
+  '/dashboard/organizations/$organization_id': typeof DashboardOrganizationsOrganizationidIndexRoute
 }
 
 export interface FileRoutesById {
@@ -277,6 +317,8 @@ export interface FileRoutesById {
   '/dashboard/overview/': typeof DashboardOverviewIndexRoute
   '/dashboard/personal_projects/': typeof DashboardPersonalprojectsIndexRoute
   '/dashboard/profile/': typeof DashboardProfileIndexRoute
+  '/dashboard/organizations/$organization_id/members': typeof DashboardOrganizationsOrganizationidMembersRoute
+  '/dashboard/organizations/$organization_id/': typeof DashboardOrganizationsOrganizationidIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -294,6 +336,8 @@ export interface FileRouteTypes {
     | '/dashboard/overview'
     | '/dashboard/personal_projects'
     | '/dashboard/profile'
+    | '/dashboard/organizations/$organization_id/members'
+    | '/dashboard/organizations/$organization_id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -308,6 +352,8 @@ export interface FileRouteTypes {
     | '/dashboard/overview'
     | '/dashboard/personal_projects'
     | '/dashboard/profile'
+    | '/dashboard/organizations/$organization_id/members'
+    | '/dashboard/organizations/$organization_id'
   id:
     | '__root__'
     | '/'
@@ -322,6 +368,8 @@ export interface FileRouteTypes {
     | '/dashboard/overview/'
     | '/dashboard/personal_projects/'
     | '/dashboard/profile/'
+    | '/dashboard/organizations/$organization_id/members'
+    | '/dashboard/organizations/$organization_id/'
   fileRoutesById: FileRoutesById
 }
 
@@ -371,7 +419,9 @@ export const routeTree = rootRoute
         "/dashboard/organizations/",
         "/dashboard/overview/",
         "/dashboard/personal_projects/",
-        "/dashboard/profile/"
+        "/dashboard/profile/",
+        "/dashboard/organizations/$organization_id/members",
+        "/dashboard/organizations/$organization_id/"
       ]
     },
     "/dashboard/personal_projects/$project_id": {
@@ -408,6 +458,14 @@ export const routeTree = rootRoute
     },
     "/dashboard/profile/": {
       "filePath": "dashboard/profile/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/organizations/$organization_id/members": {
+      "filePath": "dashboard/organizations/$organization_id/members.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/organizations/$organization_id/": {
+      "filePath": "dashboard/organizations/$organization_id/index.tsx",
       "parent": "/dashboard"
     }
   }

@@ -15,11 +15,7 @@ export const Route = createFileRoute("/dashboard")({
 function RouteComponent() {
   const { user } = useSelector((state: RootState) => state.auth);
   const { isNavBarOpen } = useNavbarContext();
-  const { loading, error } = useAuthGuard();
-
-  if (loading) {
-    return <Loading message="Loading dashboard data" />;
-  }
+  const { error } = useAuthGuard();
 
   if (error) {
     return <Error errorMessage={error} />;

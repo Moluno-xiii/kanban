@@ -1,7 +1,7 @@
-import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
-import { IoMdArrowBack } from "react-icons/io";
-import { loadProject, Project, Todo } from "../../../utils/helperFunctions";
+import { createFileRoute, getRouteApi } from "@tanstack/react-router";
+import GoBack from "../../../components/ui/GoBack";
 import Loading from "../../../components/ui/Loading";
+import { loadProject, Project, Todo } from "../../../utils/helperFunctions";
 
 export const Route = createFileRoute(
   "/dashboard/personal_projects/$project_id",
@@ -18,14 +18,7 @@ function RouteComponent() {
   const project: Project = routeApi.useLoaderData();
   return (
     <div className="flex flex-col gap-y-6">
-      <Link
-        aria-label="go back"
-        to="/dashboard/personal_projects"
-        className="text-secondary hover:text-primary/70 flex w-fit flex-row items-center gap-x-3 transition-all duration-300"
-      >
-        <IoMdArrowBack />
-        Go Back
-      </Link>
+      <GoBack route={"/dashboard/personal_projects"} />
       <div className="flex flex-col gap-y-3">
         <span className="text-xl">Project name : {project.projectName}</span>
         <span>Project Id : {project_id}</span>

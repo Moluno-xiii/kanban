@@ -34,10 +34,7 @@ export default function useAuthGuard() {
           );
         }
         if (!isEmailVerified || !isAuthenticated) {
-          if (
-            !pathname.startsWith("/auth/login") &&
-            !pathname.startsWith("/auth/signup")
-          ) {
+          if (!pathname.startsWith("/auth") && !pathname.startsWith("/auth")) {
             toast.error("You must be logged in to access this page");
             navigate({ to: "/auth/login", replace: true });
           }
