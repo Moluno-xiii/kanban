@@ -49,6 +49,41 @@ export const organizationsData: OrganizationType[] = [
     numberOfMembers: 4,
     createdBy: "helenOfTroy@siren.com",
   },
+  {
+    id: "6",
+    title: "organization 6",
+    dateCreated: "October 15 2025",
+    numberOfMembers: 4,
+    createdBy: "helenOfTroy@siren.com",
+  },
+  {
+    id: "7",
+    title: "organization 7",
+    dateCreated: "May 25 2025",
+    numberOfMembers: 4,
+    createdBy: "helenOfTroy@siren.com",
+  },
+  {
+    id: "8",
+    title: "organization 8",
+    dateCreated: "May 25 2025",
+    numberOfMembers: 4,
+    createdBy: "helenOfTroy@siren.com",
+  },
+  {
+    id: "9",
+    title: "organization 9",
+    dateCreated: "May 25 2025",
+    numberOfMembers: 4,
+    createdBy: "helenOfTroy@siren.com",
+  },
+  {
+    id: "10",
+    title: "organization 10",
+    dateCreated: "May 25 2025",
+    numberOfMembers: 4,
+    createdBy: "helenOfTroy@siren.com",
+  },
 ];
 
 export const Route = createFileRoute("/dashboard/organizations/")({

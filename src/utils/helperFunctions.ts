@@ -36,6 +36,7 @@ async function loadProject(id: string) {
 async function addProject(formData: Project) {
   const projects = await loadProjects();
   projects.push(formData);
+  console.log(formData);
   localStorage.setItem("projects", JSON.stringify(projects));
 }
 

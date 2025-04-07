@@ -32,7 +32,7 @@ const AddTodoForm = ({
         />
       </div>
       <input type="hidden" name="id" value={crypto.randomUUID()} />
-      <input type="hidden" name="dateCreated" value={date.toDateString()} />
+      <input type="hidden" name="dateCreated" value={date.toLocaleString()} />
       <input type="hidden" name="completed" value={"no"} />
       <button aria-label="submit button" type="submit" className="btn">
         Submit

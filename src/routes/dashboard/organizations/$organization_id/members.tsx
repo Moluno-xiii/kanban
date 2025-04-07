@@ -19,7 +19,7 @@ function RouteComponent() {
         {membersData.map((member) => (
           <li
             key={member.name}
-            className="border-primary flex flex-row items-center justify-between rounded-md border p-2 drop-shadow-2xl"
+            className="border-secondary flex flex-row items-center justify-between rounded-md border p-2 drop-shadow-2xl"
           >
             <span>{member.name}</span>
             <div className="flex flex-row items-center gap-x-3">
