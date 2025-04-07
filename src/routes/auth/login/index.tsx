@@ -71,15 +71,30 @@ function RouteComponent() {
       <form
         action=""
         onSubmit={handleSubmit}
+        aria-label="login form"
         className="border-secondary flex flex-col gap-y-4 rounded-md border-2 p-3"
       >
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" required minLength={3} />
+          <label aria-label="email input box title" htmlFor="email">
+            Email
+          </label>
+          <input
+            disabled={isLoading}
+            aria-label="email input box"
+            type="email"
+            id="email"
+            name="email"
+            required
+            minLength={3}
+          />
         </div>
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="password">Password</label>
+          <label aria-label="password input box title" htmlFor="password">
+            Password
+          </label>
           <input
+            disabled={isLoading}
+            aria-label="password input box"
             type="password"
             id="password"
             name="password"
@@ -89,17 +104,19 @@ function RouteComponent() {
         </div>
         <div className="flex flex-row items-center justify-center gap-x-3">
           <span>Continue with Google</span>
-          <button
+          <span
             onClick={handleGoogleLogin}
             className="border-primary hover:bg-primary cursor-pointer rounded-md border p-2"
+            aria-label="login with google"
           >
-            <FaGoogle size={16} />
-          </button>
+            <FaGoogle aria-label="google icon" size={16} />
+          </span>
         </div>
 
         <div className="text-center">
           <span>Don't have an account?</span>
           <Link
+            aria-label="link to signup page"
             to="/auth/signup"
             className="text-secondary mx-2 underline hover:no-underline"
           >
@@ -109,13 +126,19 @@ function RouteComponent() {
         <div className="text-center">
           <span>Forgot your password? Don't fret</span>
           <Link
+            aria-label="link to forgot password page"
             to="/auth/forgot-password"
             className="text-secondary mx-2 underline hover:no-underline"
           >
             Reset my password
           </Link>
         </div>
-        <button className="btn" type="submit">
+        <button
+          disabled={isLoading}
+          aria-label="login button"
+          className="btn"
+          type="submit"
+        >
           {isLoading ? "Logging in..." : "Login"}
         </button>
       </form>

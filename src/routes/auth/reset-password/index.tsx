@@ -38,14 +38,18 @@ function RouteComponent() {
   return (
     <div className="flex min-h-[calc(100dvh-150px)] flex-col items-center justify-center">
       <form
-        action=""
+        aria-label="reset password form"
         onSubmit={handleSubmit}
         className="border-secondary flex flex-col gap-y-4 rounded-md border-2 p-3"
       >
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="email">Email</label>
+          <label aria-label="email input title" htmlFor="email">
+            Email
+          </label>
           <input
-            placeholder="e.g genghisthepillager@gmail.com"
+            disabled={isLoading}
+            aria-label="email input box"
+            placeholder="e.g GenghisThePillager@gmail.com"
             type="email"
             id="email"
             name="email"
@@ -54,8 +58,12 @@ function RouteComponent() {
           />
         </div>
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="password">New Password</label>
+          <label aria-label="new password input box title" htmlFor="password">
+            New Password
+          </label>
           <input
+            disabled={isLoading}
+            aria-label="new password input box"
             type="password"
             id="password"
             name="password"
@@ -65,8 +73,15 @@ function RouteComponent() {
           />
         </div>
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="repeatPassword">Repeat Password</label>
+          <label
+            aria-label="repeat password input box title"
+            htmlFor="repeatPassword"
+          >
+            Repeat Password
+          </label>
           <input
+            disabled={isLoading}
+            aria-label="repeat password input box"
             type="password"
             id="repeatPassword"
             name="repeatPassword"
@@ -75,7 +90,12 @@ function RouteComponent() {
             placeholder="Repeat new password"
           />
         </div>
-        <button className="btn" type="submit">
+        <button
+          disabled={isLoading}
+          aria-label="submit button"
+          className="btn"
+          type="submit"
+        >
           {isLoading ? "Loading..." : "Reset password"}
         </button>
       </form>

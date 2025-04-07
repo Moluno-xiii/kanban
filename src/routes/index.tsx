@@ -10,8 +10,10 @@ function RouteComponent() {
       <p className="text-3xl">Welcome to tasksphere</p>
       <div className="flex flex-col gap-y-3">
         <span>Organization solution for teams and personal projects</span>
-        <button className="btn self-center">
-          <Link to={"/auth/signup"}>Get started</Link>
+        <button className="btn self-center" aria-label="get started button">
+          <Link aria-label="link to signup page" to={"/auth/signup"}>
+            Get started
+          </Link>
         </button>
       </div>
     </div>

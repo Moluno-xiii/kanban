@@ -38,10 +38,15 @@ function RouteComponent() {
         action=""
         onSubmit={handleSubmit}
         className="border-secondary flex flex-col gap-y-4 rounded-md border-2 p-3"
+        aria-label="forgot password form"
       >
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="email">Email</label>
+          <label aria-label="email header" htmlFor="email">
+            Email
+          </label>
           <input
+            disabled={isLoading}
+            aria-label="emeil input box"
             placeholder="e.g genghisthepillager@gmail.com"
             type="email"
             id="email"
@@ -50,7 +55,12 @@ function RouteComponent() {
             minLength={3}
           />
         </div>
-        <button className="btn" type="submit">
+        <button
+          disabled={isLoading}
+          aria-label="submit button"
+          className="btn"
+          type="submit"
+        >
           {isLoading ? "Loading..." : "Send reset instructions"}
         </button>
       </form>

@@ -1,6 +1,7 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useSelector } from "react-redux";
 import SideBar from "../../components/SideBar";
+import Error from "../../components/ui/Error";
 import Loading from "../../components/ui/Loading";
 import { useNavbarContext } from "../../contexts/NavContext";
 import useAuthGuard from "../../hooks/useAuthGuard";
@@ -15,24 +16,13 @@ function RouteComponent() {
   const { user } = useSelector((state: RootState) => state.auth);
   const { isNavBarOpen } = useNavbarContext();
   const { loading, error } = useAuthGuard();
-  const navigate = useNavigate();
 
   if (loading) {
     return <Loading message="Loading dashboard data" />;
   }
 
   if (error) {
-    return (
-      <div className="flex min-h-dvh min-w-dvw flex-col items-center justify-center gap-y-4 text-red-600">
-        <p>Something went wrong: {error}</p>
-        <span
-          className="btn"
-          onClick={() => navigate({ to: "/auth/login", replace: true })}
-        >
-          Reload the page and try again.
-        </span>
-      </div>
-    );
+    return <Error errorMessage={error} />;
   }
 
   return (
@@ -42,7 +32,7 @@ function RouteComponent() {
       }`}
     >
       {isNavBarOpen && (
-        <aside className="overflow-hidden">
+        <aside aria-label="sidebar navigation" className="overflow-hidden">
           <SideBar />
         </aside>
       )}

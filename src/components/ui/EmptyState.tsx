@@ -14,7 +14,11 @@ const EmptyState: React.FC<EmptyStateProps> = ({
       <p className="text-2xl">
         You have no projects yet, projects you create will appear here
       </p>
-      <button onClick={() => handleModal(true)} className="btn">
+      <button
+        aria-label="add project button"
+        onClick={() => handleModal(true)}
+        className="btn"
+      >
         Add a project
       </button>
       {isModalOpen && (

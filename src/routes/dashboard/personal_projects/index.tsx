@@ -46,7 +46,11 @@ function RouteComponent() {
     <div className="flex flex-col gap-y-6">
       <div className="flex flex-row items-center justify-between gap-3">
         <p className="text-xl md:text-2xl">My Projects ({projects.length})</p>
-        <button className="btn" onClick={() => handleProjectModalState(true)}>
+        <button
+          aria-label="add project button"
+          className="btn"
+          onClick={() => handleProjectModalState(true)}
+        >
           Add Projects
         </button>
       </div>
@@ -59,7 +63,10 @@ function RouteComponent() {
         </Modal>
       )}
 
-      <ul className="grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      <ul
+        className="grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+        aria-label="projects list"
+      >
         {projects.map((project: ProjectTypes) => (
           <Project
             key={project.projectId}

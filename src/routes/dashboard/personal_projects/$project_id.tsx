@@ -19,6 +19,7 @@ function RouteComponent() {
   return (
     <div className="flex flex-col gap-y-6">
       <Link
+        aria-label="go back"
         to="/dashboard/personal_projects"
         className="text-secondary hover:text-primary/70 flex w-fit flex-row items-center gap-x-3 transition-all duration-300"
       >
@@ -37,7 +38,7 @@ function RouteComponent() {
               key={todo.id}
               className="border-secondary flex w-fit flex-col gap-y-2 rounded-md border p-2"
             >
-              <span>{todo.title}</span>
+              <span aria-label="todo title">{todo.title}</span>
               <span>Completed : {todo.completed}</span>
               <span>Date created : {todo.dateCreated}</span>
             </li>

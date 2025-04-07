@@ -9,11 +9,12 @@ const Modal: React.FC<ModalProps> = ({ children, title, handleClose }) => {
     <div className="fixed inset-0 z-2 flex items-center justify-center bg-white/10 backdrop-blur-sm">
       <div className="text-text bg-background flex flex-col items-center gap-y-4 rounded-md p-4 drop-shadow-2xl">
         <IoCloseSharp
+          aria-label="Close modal button"
           className="cursor-pointer self-end"
           onClick={handleClose}
           size={16}
         />
-        <p>{title}</p>
+        <p aria-label="Modal title">{title}</p>
         {children}
       </div>
     </div>

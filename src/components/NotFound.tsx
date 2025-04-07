@@ -7,6 +7,7 @@ const NotFound = () => {
       <h1 className="text-error text-4xl font-bold">404 - Page Not Found</h1>
       <p className="text-text mt-2">Sorry, this page doesn't exist.</p>
       <button
+        aria-label="link to homepage"
         className="bg-secondary text-text mt-4 rounded px-4 py-2"
         onClick={() => navigate({ to: ".", replace: true })}
       >

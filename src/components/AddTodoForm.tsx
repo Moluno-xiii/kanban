@@ -18,8 +18,11 @@ const AddTodoForm = ({
   return (
     <form className="flex flex-col gap-y-4" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-y-2">
-        <label htmlFor="title">Todo title</label>
+        <label aria-label="Input todo title" htmlFor="title">
+          Todo title
+        </label>
         <input
+          aria-label="Todo title input box"
           required
           minLength={3}
           placeholder="e.g Clean the kitchen..."
@@ -31,7 +34,7 @@ const AddTodoForm = ({
       <input type="hidden" name="id" value={crypto.randomUUID()} />
       <input type="hidden" name="dateCreated" value={date.toDateString()} />
       <input type="hidden" name="completed" value={"no"} />
-      <button type="submit" className="btn">
+      <button aria-label="submit button" type="submit" className="btn">
         Submit
       </button>
     </form>

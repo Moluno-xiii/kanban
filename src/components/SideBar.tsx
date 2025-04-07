@@ -7,7 +7,9 @@ import Modal from "./ui/Modal";
 import { logoutUser } from "../utils/auth";
 import toast from "react-hot-toast";
 import { useAppDispatch } from "../store/hooks";
-import { logout } from "../store/authSlice";
+import { logout, setLoading } from "../store/authSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 export interface LinkType {
   name: string;
@@ -33,6 +35,7 @@ const navLinks: LinkType[] = [
 ];
 const SideBar: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { loading } = useSelector((state: RootState) => state.auth);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const { handleNavbarState } = useNavbarContext();
 
@@ -41,17 +44,28 @@ const SideBar: React.FC = () => {
   };
 
   async function handleLogout() {
-    await logoutUser();
-    navigate({ to: "/", replace: true });
-    toast.success("Logout successful");
-    dispatch(logout());
+    try {
+      dispatch(setLoading({ loadingState: true }));
+      await logoutUser();
+      navigate({ to: "/", replace: true });
+      toast.success("Logout successful");
+      dispatch(logout());
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "An unknown error occured";
+      toast.error(message);
+    }
   }
 
   const navigate = useNavigate();
   const date = new Date();
   return (
-    <nav className="bg-secondary relative flex h-full flex-col gap-y-4 rounded-lg p-3 transition-all duration-500 ease-in-out">
+    <nav
+      className="bg-secondary relative flex h-full flex-col gap-y-4 rounded-lg p-3 transition-all duration-500 ease-in-out"
+      aria-label="navigation links menu"
+    >
       <IoClose
+        aria-label="close sidebar button"
         onClick={() => handleNavbarState(false)}
         className="text-error block cursor-pointer self-end lg:hidden"
       />
@@ -70,7 +84,11 @@ const SideBar: React.FC = () => {
         >
           &copy; Moluno {date.getFullYear()}
         </a>
-        <button onClick={() => handleLogoutModal(true)} className="btn-error">
+        <button
+          aria-label="logout button"
+          onClick={() => handleLogoutModal(true)}
+          className="btn-error"
+        >
           Logout
         </button>
         {openLogoutModal && (
@@ -79,10 +97,20 @@ const SideBar: React.FC = () => {
             handleClose={() => handleLogoutModal(false)}
           >
             <div className="flex flex-row items-center justify-end gap-x-2">
-              <button className="btn-error" onClick={handleLogout}>
-                Yes
+              <button
+                disabled={loading}
+                aria-label="Yes, i want to logout button"
+                className="btn-error"
+                onClick={handleLogout}
+              >
+                {!loading ? "Yes" : "Logging out"}
               </button>
-              <button className="btn" onClick={() => handleLogoutModal(false)}>
+              <button
+                disabled={loading}
+                aria-label="No, i don't want to logout button"
+                className="btn"
+                onClick={() => handleLogoutModal(false)}
+              >
                 No
               </button>
             </div>

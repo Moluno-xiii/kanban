@@ -1,55 +1,17 @@
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { setError, setLoading, setUser } from "../store/authSlice";
 import { useAppDispatch } from "../store/hooks";
-import { initializeUser, setError } from "../store/authSlice";
-
-// export default function useAuthGuard() {
-//   const dispatch = useAppDispatch();
-//   const navigate = useNavigate();
-//   const { loading, error, user } = useSelector(
-//     (state: RootState) => state.auth,
-//   );
-
-//   useEffect(() => {
-//     async function initAndGuard() {
-//       try {
-//         console.log("trying auth check");
-//         const result = await dispatch(initializeUser()).unwrap();
-//         const isAuthenticated = result.user?.aud === "authenticated";
-//         const isEmailVerified = result.user?.user_metadata?.email_verified;
-//         console.log("auth check completed");
-//         if (!isAuthenticated || !isEmailVerified) {
-//           toast.error("You must be logged in to access this page");
-//           console.log("no user");
-//           navigate({ to: "/auth/login", replace: true });
-//         }
-//       } catch (err: unknown) {
-//         const message =
-//           err instanceof Error ? err.message : "Something went wrong";
-//         console.warn("Auth Guard Error:", message);
-//         dispatch(setError({ message }));
-//         toast.error(message);
-//         navigate({ to: "/auth/login", replace: true });
-//       }
-//     }
-
-//     initAndGuard();
-//   }, [dispatch, navigate]);
-
-//   return { loading, error, user };
-// }
-
-import { useRouterState } from "@tanstack/react-router";
+import { getSession } from "../utils/auth";
 
 export default function useAuthGuard() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const route = useRouterState();
   const pathname = route.location.pathname;
-
   const { loading, error, user } = useSelector(
     (state: RootState) => state.auth,
   );
@@ -57,11 +19,21 @@ export default function useAuthGuard() {
   useEffect(() => {
     async function initAndGuard() {
       try {
-        const result = await dispatch(initializeUser()).unwrap();
-        const isAuthenticated = result.user?.aud === "authenticated";
-        const isEmailVerified = result.user?.user_metadata?.email_verified;
-
-        if (!isAuthenticated || !isEmailVerified) {
+        dispatch(setLoading({ loadingState: true }));
+        const userSession = await getSession();
+        const isEmailVerified =
+          userSession.data.session?.user?.user_metadata?.email_verified;
+        const isAuthenticated =
+          userSession.data.session?.user?.aud === "authenticated";
+        if (userSession.data.session?.user) {
+          dispatch(
+            setUser({
+              user: userSession.data.session?.user,
+              session: userSession.data.session,
+            }),
+          );
+        }
+        if (!isEmailVerified || !isAuthenticated) {
           if (
             !pathname.startsWith("/auth/login") &&
             !pathname.startsWith("/auth/signup")
@@ -81,6 +53,8 @@ export default function useAuthGuard() {
         ) {
           navigate({ to: "/auth/login", replace: true });
         }
+      } finally {
+        dispatch(setLoading({ loadingState: false }));
       }
     }
 
