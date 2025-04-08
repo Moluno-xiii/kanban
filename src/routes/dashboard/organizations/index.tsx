@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import Organization from "../../../components/Organization";
 import { Dispatch, SetStateAction, useState } from "react";
 import Modal from "../../../components/ui/Modal";
-import AddOrganizationForm from "../../../components/AddOrganizationForm";
+import AddOrganizationForm from "../../../components/forms/AddOrganizationForm";
 
 export interface OrganizationType {
   id: string;
@@ -104,7 +104,7 @@ function RouteComponent() {
       <button onClick={() => setOrganizationModal(true)} className="btn w-fit">
         Add Organization
       </button>
-      {organizationModal && (
+      {organizationModal ? (
         <Modal
           handleClose={() => setOrganizationModal(false)}
           title="Add Organization"
@@ -113,7 +113,7 @@ function RouteComponent() {
             handleModal={() => setOrganizationModal(false)}
           />
         </Modal>
-      )}
+      ) : null}
       <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {organizationsData.map((organization) => (
           <Organization organization={organization} key={organization.id} />
@@ -138,7 +138,7 @@ const EmptyState = ({
       <button onClick={() => setOrganizationModal(true)} className="btn">
         Add Organization
       </button>
-      {organizationModal && (
+      {organizationModal ? (
         <Modal
           handleClose={() => setOrganizationModal(false)}
           title="Add Organization"
@@ -147,7 +147,7 @@ const EmptyState = ({
             handleModal={() => setOrganizationModal(false)}
           />
         </Modal>
-      )}
+      ) : null}
     </div>
   );
 };

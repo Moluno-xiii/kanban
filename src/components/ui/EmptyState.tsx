@@ -1,4 +1,4 @@
-import AddProjectForm from "../AddProjectForm";
+import AddProjectForm from "../forms/AddProjectForm";
 import Modal from "./Modal";
 
 interface EmptyStateProps {

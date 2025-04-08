@@ -3,7 +3,7 @@ import GoBack from "../../../../components/ui/GoBack";
 import { organizationsData } from "..";
 import { useState } from "react";
 import Modal from "../../../../components/ui/Modal";
-import AddMemberForm from "../../../../components/AddMemberForm";
+import AddMemberForm from "../../../../components/forms/AddMemberForm";
 
 export const Route = createFileRoute(
   "/dashboard/organizations/$organization_id/",
@@ -75,20 +75,20 @@ function RouteComponent() {
           Add Members
         </button>
 
-        {addMemberModal && (
+        {addMemberModal ? (
           <Modal
             handleClose={() => handleAddMemberModal(false)}
             title="Add Member Form"
           >
             <AddMemberForm handleModal={() => handleAddMemberModal(false)} />
           </Modal>
-        )}
+        ) : null}
       </div>
       <span>Admin : {data.createdBy}</span>
       <div className="border-primary flex flex-col gap-y-2 rounded-md border p-2 shadow-sm">
         <div className="flex flex-row items-center justify-between gap-3">
           <span className="text-xl md:text-2xl">Members</span>
-          {membersData.length > 5 && (
+          {membersData.length > 5 ? (
             <Link
               className="text-primary hover:text-primary/70 transition-all duration-300 hover:underline"
               params={{ organization_id: data.id }}
@@ -96,7 +96,7 @@ function RouteComponent() {
             >
               View all members
             </Link>
-          )}
+          ) : null}
         </div>
         <ul className="flex flex-col gap-y-2">
           {membersData.slice(0, 5).map((member) => (

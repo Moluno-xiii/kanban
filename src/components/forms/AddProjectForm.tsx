@@ -1,4 +1,4 @@
-import { addProject, Project } from "../utils/helperFunctions";
+import { addProject, Project } from "../../utils/helperFunctions";
 
 const AddProjectForm = ({
   handleModal,

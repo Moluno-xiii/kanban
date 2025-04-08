@@ -10,6 +10,7 @@ Kanban board project
 - [Tailwind CSS](https://tailwindcss.com/)
 - [TanStack Router](https://tanstack.com/router/latest/docs/framework/react/overview)
 - [Supabase](https://supabase.com/)
+- [Cloudinary](https://cloudinary.com/)
 
 To run locally :
 

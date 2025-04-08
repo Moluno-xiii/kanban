@@ -1,6 +1,6 @@
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
-import AddProjectForm from "../../../components/AddProjectForm";
+import AddProjectForm from "../../../components/forms/AddProjectForm";
 import Project from "../../../components/Project";
 import EmptyState from "../../../components/ui/EmptyState";
 import Loading from "../../../components/ui/Loading";

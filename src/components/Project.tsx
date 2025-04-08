@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { IoMdArrowForward } from "react-icons/io";
 import { Project as ProjectTypes } from "../utils/helperFunctions";
-import AddTodoForm from "./AddTodoForm";
+import AddTodoForm from "./forms/AddTodoForm";
 import Modal from "./ui/Modal";
 
 interface ProjectProps {

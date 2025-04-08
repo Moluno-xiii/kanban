@@ -41,46 +41,48 @@ const ThemeSwitcher = () => {
         className="text-secondary hover:text-secondary/70 size-8 cursor-pointer self-end transition-all duration-300 hover:rotate-180"
         aria-label="change theme button"
       />
-      <div
-        ref={dropdownRef}
-        className={`bg-secondary absolute top-40 right-0 flex max-h-0 -translate-y-2 transform flex-col items-center gap-y-3 overflow-hidden rounded-md p-4 capitalize opacity-0 transition-all duration-500 ease-in-out`}
-      >
-        <button
-          aria-label="light theme button"
-          className="btn"
-          onClick={() => handleTheme("light")}
+      {isDropDownOpen ? (
+        <div
+          ref={dropdownRef}
+          className={`bg-secondary absolute top-40 right-0 flex max-h-0 -translate-y-2 transform flex-col items-center gap-y-3 overflow-hidden rounded-md p-4 capitalize opacity-0 transition-all duration-500 ease-in-out`}
         >
-          Light Theme
-        </button>
-        <button
-          aria-label="dark theme button"
-          className="btn"
-          onClick={() => handleTheme("dark")}
-        >
-          Dark Theme
-        </button>
-        <button
-          aria-label="red theme button"
-          className="btn"
-          onClick={() => handleTheme("red")}
-        >
-          Red Theme
-        </button>
-        <button
-          aria-label="blue theme button"
-          className="btn"
-          onClick={() => handleTheme("blue")}
-        >
-          Blue Theme
-        </button>
-        <button
-          aria-label="mixed theme button"
-          className="btn"
-          onClick={() => handleTheme("mixed")}
-        >
-          Mixed Theme
-        </button>
-      </div>
+          <button
+            aria-label="light theme button"
+            className="btn"
+            onClick={() => handleTheme("light")}
+          >
+            Light Theme
+          </button>
+          <button
+            aria-label="dark theme button"
+            className="btn"
+            onClick={() => handleTheme("dark")}
+          >
+            Dark Theme
+          </button>
+          <button
+            aria-label="red theme button"
+            className="btn"
+            onClick={() => handleTheme("red")}
+          >
+            Red Theme
+          </button>
+          <button
+            aria-label="blue theme button"
+            className="btn"
+            onClick={() => handleTheme("blue")}
+          >
+            Blue Theme
+          </button>
+          <button
+            aria-label="mixed theme button"
+            className="btn"
+            onClick={() => handleTheme("mixed")}
+          >
+            Mixed Theme
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };

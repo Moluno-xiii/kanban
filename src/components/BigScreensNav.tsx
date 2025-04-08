@@ -60,7 +60,7 @@ const BigScreensNav = ({
           Logout
         </button>
 
-        {openLogoutModal && (
+        {openLogoutModal ? (
           <Modal
             title="Are you sure you want to Logout?"
             handleClose={() => handleLogoutModal(false)}
@@ -72,7 +72,7 @@ const BigScreensNav = ({
                 className="btn-error"
                 onClick={handleLogout}
               >
-                {!loading ? "Yes" : "Logging out"}
+                {!loading ? "Yes" : "Logging out..."}
               </button>
               <button
                 disabled={loading}
@@ -84,7 +84,7 @@ const BigScreensNav = ({
               </button>
             </div>
           </Modal>
-        )}
+        ) : null}
       </div>
     </nav>
   );

@@ -71,7 +71,7 @@ const SideBar: React.FC = () => {
         loading={loading}
         handleLogout={handleLogout}
       />
-      {isNavBarOpen && (
+      {isNavBarOpen ? (
         <SmallScreensNav
           navLinks={navLinks}
           handleNavbarState={handleNavbarState}
@@ -83,6 +83,8 @@ const SideBar: React.FC = () => {
           handleLogout={handleLogout}
           isNavBarOpen={isNavBarOpen}
         />
+      ) : (
+        ""
       )}
     </div>
   );
