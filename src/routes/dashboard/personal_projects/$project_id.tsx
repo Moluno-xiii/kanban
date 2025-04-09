@@ -20,7 +20,10 @@ function RouteComponent() {
     <div className="flex flex-col gap-y-6">
       <GoBack route={"/dashboard/personal_projects"} />
       <div className="flex flex-col gap-y-3">
-        <span className="text-xl">Project name : {project.projectName}</span>
+        <div className="flex flex-row items-center justify-between">
+          <span className="text-xl">Project name : {project.projectName}</span>
+          <button className="btn">add todo</button>
+        </div>
         <span>Project Id : {project_id}</span>
         <span>Number of Todos : {project.todos?.length || 0}</span>
         <span>Date created : {project.dateCreated}</span>

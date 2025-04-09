@@ -18,6 +18,7 @@ import { Route as DashboardProfileIndexImport } from './routes/dashboard/profile
 import { Route as DashboardPersonalprojectsIndexImport } from './routes/dashboard/personal_projects/index'
 import { Route as DashboardOverviewIndexImport } from './routes/dashboard/overview/index'
 import { Route as DashboardOrganizationsIndexImport } from './routes/dashboard/organizations/index'
+import { Route as DashboardNotificationsIndexImport } from './routes/dashboard/notifications/index'
 import { Route as AuthSignupIndexImport } from './routes/auth/signup/index'
 import { Route as AuthResetPasswordIndexImport } from './routes/auth/reset-password/index'
 import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
@@ -69,6 +70,13 @@ const DashboardOrganizationsIndexRoute =
   DashboardOrganizationsIndexImport.update({
     id: '/organizations/',
     path: '/organizations/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+
+const DashboardNotificationsIndexRoute =
+  DashboardNotificationsIndexImport.update({
+    id: '/notifications/',
+    path: '/notifications/',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
 
@@ -177,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupIndexImport
       parentRoute: typeof AuthRouteImport
     }
+    '/dashboard/notifications/': {
+      id: '/dashboard/notifications/'
+      path: '/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof DashboardNotificationsIndexImport
+      parentRoute: typeof DashboardRouteImport
+    }
     '/dashboard/organizations/': {
       id: '/dashboard/organizations/'
       path: '/organizations'
@@ -244,6 +259,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface DashboardRouteRouteChildren {
   DashboardPersonalprojectsProjectidRoute: typeof DashboardPersonalprojectsProjectidRoute
+  DashboardNotificationsIndexRoute: typeof DashboardNotificationsIndexRoute
   DashboardOrganizationsIndexRoute: typeof DashboardOrganizationsIndexRoute
   DashboardOverviewIndexRoute: typeof DashboardOverviewIndexRoute
   DashboardPersonalprojectsIndexRoute: typeof DashboardPersonalprojectsIndexRoute
@@ -255,6 +271,7 @@ interface DashboardRouteRouteChildren {
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardPersonalprojectsProjectidRoute:
     DashboardPersonalprojectsProjectidRoute,
+  DashboardNotificationsIndexRoute: DashboardNotificationsIndexRoute,
   DashboardOrganizationsIndexRoute: DashboardOrganizationsIndexRoute,
   DashboardOverviewIndexRoute: DashboardOverviewIndexRoute,
   DashboardPersonalprojectsIndexRoute: DashboardPersonalprojectsIndexRoute,
@@ -278,6 +295,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/reset-password': typeof AuthResetPasswordIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
+  '/dashboard/notifications': typeof DashboardNotificationsIndexRoute
   '/dashboard/organizations': typeof DashboardOrganizationsIndexRoute
   '/dashboard/overview': typeof DashboardOverviewIndexRoute
   '/dashboard/personal_projects': typeof DashboardPersonalprojectsIndexRoute
@@ -295,6 +313,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/reset-password': typeof AuthResetPasswordIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
+  '/dashboard/notifications': typeof DashboardNotificationsIndexRoute
   '/dashboard/organizations': typeof DashboardOrganizationsIndexRoute
   '/dashboard/overview': typeof DashboardOverviewIndexRoute
   '/dashboard/personal_projects': typeof DashboardPersonalprojectsIndexRoute
@@ -313,6 +332,7 @@ export interface FileRoutesById {
   '/auth/login/': typeof AuthLoginIndexRoute
   '/auth/reset-password/': typeof AuthResetPasswordIndexRoute
   '/auth/signup/': typeof AuthSignupIndexRoute
+  '/dashboard/notifications/': typeof DashboardNotificationsIndexRoute
   '/dashboard/organizations/': typeof DashboardOrganizationsIndexRoute
   '/dashboard/overview/': typeof DashboardOverviewIndexRoute
   '/dashboard/personal_projects/': typeof DashboardPersonalprojectsIndexRoute
@@ -332,6 +352,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/auth/signup'
+    | '/dashboard/notifications'
     | '/dashboard/organizations'
     | '/dashboard/overview'
     | '/dashboard/personal_projects'
@@ -348,6 +369,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/auth/signup'
+    | '/dashboard/notifications'
     | '/dashboard/organizations'
     | '/dashboard/overview'
     | '/dashboard/personal_projects'
@@ -364,6 +386,7 @@ export interface FileRouteTypes {
     | '/auth/login/'
     | '/auth/reset-password/'
     | '/auth/signup/'
+    | '/dashboard/notifications/'
     | '/dashboard/organizations/'
     | '/dashboard/overview/'
     | '/dashboard/personal_projects/'
@@ -416,6 +439,7 @@ export const routeTree = rootRoute
       "filePath": "dashboard/route.tsx",
       "children": [
         "/dashboard/personal_projects/$project_id",
+        "/dashboard/notifications/",
         "/dashboard/organizations/",
         "/dashboard/overview/",
         "/dashboard/personal_projects/",
@@ -443,6 +467,10 @@ export const routeTree = rootRoute
     "/auth/signup/": {
       "filePath": "auth/signup/index.tsx",
       "parent": "/auth"
+    },
+    "/dashboard/notifications/": {
+      "filePath": "dashboard/notifications/index.tsx",
+      "parent": "/dashboard"
     },
     "/dashboard/organizations/": {
       "filePath": "dashboard/organizations/index.tsx",

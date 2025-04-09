@@ -32,7 +32,7 @@ function RouteComponent() {
       >
         <SideBar />
       </aside>
-      <main className="mx-auto w-full max-w-7xl overflow-y-scroll rounded-lg">
+      <main className="mx-auto w-full max-w-7xl overflow-y-scroll rounded-lg px-1">
         <Outlet />
       </main>
     </div>

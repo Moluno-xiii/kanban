@@ -14,7 +14,7 @@ interface Project {
 }
 
 async function loadProjects() {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   const projects = localStorage.getItem("projects");
   if (!projects) {
     localStorage.setItem("projects", JSON.stringify([]));
@@ -23,7 +23,7 @@ async function loadProjects() {
   return JSON.parse(projects);
 }
 async function loadProject(id: string) {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   const projects = localStorage.getItem("projects");
   if (!projects) {
     localStorage.setItem("projects", JSON.stringify([]));

@@ -1,13 +1,12 @@
-import { CiMenuBurger } from "react-icons/ci";
-import ThemeSwitcher from "./ThemeSwitcher";
-import { useNavbarContext } from "../contexts/NavContext";
 import { Link } from "@tanstack/react-router";
-import { RootState } from "../store";
-import { useSelector } from "react-redux";
+import { CiMenuBurger } from "react-icons/ci";
+import { useNavbarContext } from "../contexts/NavContext";
+import useAuthGuard from "../hooks/useAuthGuard";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const Header: React.FC = () => {
   const { handleNavbarState } = useNavbarContext();
-  const { profileData } = useSelector((state: RootState) => state.userData);
+  const { profileData } = useAuthGuard();
   return (
     <div className="border-secondary bg-background sticky top-1 z-10 mx-3 mt-3 flex flex-row items-center justify-between rounded-xl border p-3 md:mx-6 md:mt-5">
       <Link

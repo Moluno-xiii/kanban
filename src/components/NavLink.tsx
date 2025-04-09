@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { LinkType } from "./SideBar";
+import { notificationsData } from "../routes/dashboard/notifications";
 
 interface NavLinkType {
   link: LinkType;
@@ -15,6 +16,9 @@ const NavLink = ({ link, onClick }: NavLinkType) => {
       to={link.route}
     >
       {link.name}
+      {notificationsData.length > 0 && link.name === "notifications" ? (
+        <span className="bg-text absolute right-4 size-2 rounded-full"></span>
+      ) : null}
     </Link>
   );
 };

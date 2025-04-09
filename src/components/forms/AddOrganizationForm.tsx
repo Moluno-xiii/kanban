@@ -39,7 +39,7 @@ const AddOrganizationForm = ({ handleModal }: { handleModal: () => void }) => {
         />
       </div>
       <input type="hidden" name="id" value={crypto.randomUUID()} />
-      <input type="hidden" name="dateCreated" value={date.toDateString()} />
+      <input type="hidden" name="dateCreated" value={date.toLocaleString()} />
       <button aria-label="submit button" type="submit" className="btn">
         Submit
       </button>

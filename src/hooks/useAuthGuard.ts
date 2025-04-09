@@ -17,6 +17,7 @@ export default function useAuthGuard() {
   const { loading, error, user } = useSelector(
     (state: RootState) => state.auth,
   );
+  const { profileData } = useSelector((state: RootState) => state.userData);
 
   useEffect(() => {
     async function initAndGuard() {
@@ -67,5 +68,5 @@ export default function useAuthGuard() {
     initAndGuard();
   }, [dispatch]);
 
-  return { loading, error, user };
+  return { loading, error, user, profileData };
 }

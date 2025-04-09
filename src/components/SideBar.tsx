@@ -31,6 +31,10 @@ const navLinks: LinkType[] = [
     name: "organizations",
     route: "/dashboard/organizations",
   },
+  {
+    name: "notifications",
+    route: "/dashboard/notifications",
+  },
 ];
 
 const SideBar: React.FC = () => {
