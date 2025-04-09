@@ -10,6 +10,8 @@ export const Route = createFileRoute("/auth/signup/")({
 
 function RouteComponent() {
   const [isLoading, setIsLoading] = useState(false);
+  const [formError, setFormError] = useState("");
+
   async function handleGoogleLogin() {
     try {
       setIsLoading(true);
@@ -29,9 +31,15 @@ function RouteComponent() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     try {
       setIsLoading(true);
+      setFormError("");
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
       const dataObject = Object.fromEntries(formData);
+
+      if (dataObject.password !== dataObject.repeatPassword) {
+        setFormError("password fields to not match");
+        throw new Error("password fields do not match");
+      }
 
       const userEmail = dataObject.email as string;
       const password = dataObject.password as string;
@@ -99,7 +107,11 @@ function RouteComponent() {
             required
             minLength={8}
           />
+          {formError ? (
+            <span className="text-error text-xs md:text-sm">{formError}</span>
+          ) : null}
         </div>
+
         <div className="flex flex-row items-center justify-center gap-x-3">
           <span>Continue with Google</span>
           <span

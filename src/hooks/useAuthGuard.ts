@@ -6,8 +6,6 @@ import { RootState } from "../store";
 import { setError, setLoading, setUser } from "../store/authSlice";
 import { useAppDispatch } from "../store/hooks";
 import { getSession } from "../utils/auth";
-import { getUserProfile } from "../utils/profile";
-import { setUserData } from "../store/userDataSlice";
 
 export default function useAuthGuard() {
   const dispatch = useAppDispatch();
@@ -17,7 +15,6 @@ export default function useAuthGuard() {
   const { loading, error, user } = useSelector(
     (state: RootState) => state.auth,
   );
-  const { profileData } = useSelector((state: RootState) => state.userData);
 
   useEffect(() => {
     async function initAndGuard() {
@@ -28,14 +25,8 @@ export default function useAuthGuard() {
           userSession.data.session?.user?.user_metadata?.email_verified;
         const isAuthenticated =
           userSession.data.session?.user?.aud === "authenticated";
+
         if (userSession.data.session?.user) {
-          const { user_details, error } = await getUserProfile(
-            userSession.data.session?.user.id,
-          );
-          if (error) throw new Error(error.message);
-          if (user_details) {
-            dispatch(setUserData({ data: user_details[0] }));
-          }
           dispatch(
             setUser({
               user: userSession.data.session?.user,
@@ -43,6 +34,7 @@ export default function useAuthGuard() {
             }),
           );
         }
+
         if (!isEmailVerified || !isAuthenticated) {
           if (!pathname.startsWith("/auth") && !pathname.startsWith("/auth")) {
             toast.error("You must be logged in to access this page");
@@ -68,5 +60,5 @@ export default function useAuthGuard() {
     initAndGuard();
   }, [dispatch]);
 
-  return { loading, error, user, profileData };
+  return { loading, error, user };
 }

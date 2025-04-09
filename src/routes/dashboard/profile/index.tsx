@@ -2,19 +2,28 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import UserProfileForm from "../../../components/forms/UserProfileForm";
+import useUserProfile from "../../../hooks/useUserProfile";
+import Loading from "../../../components/ui/Loading";
+import Error from "../../../components/ui/Error";
 
 export const Route = createFileRoute("/dashboard/profile/")({
   component: RouteComponent,
 });
-//  fetch all needed data for this component from one bucket only.
-// use cloudinary to store user profile pictures. only save to cloudinary when user submits.
-// if selected image exists, display preview image.
+
 function RouteComponent() {
   const { user } = useSelector((state: RootState) => state.auth);
-  const { profileData } = useSelector((state: RootState) => state.userData);
+  // const { profileData } = useSelector((state: RootState) => state.userData);
+  const {
+    data: profileData,
+    isLoading,
+    error,
+  } = useUserProfile(user?.id as string);
   const profile_picture =
     user?.user_metadata.avatar_url.length ||
     String(profileData?.profile_picture).length > 1;
+
+  if (isLoading) return <Loading message="Loading user details" />;
+  if (error) return <Error errorMessage={error.message} />;
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex flex-row items-center justify-between gap-3">

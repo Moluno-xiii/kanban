@@ -9,13 +9,22 @@ export const Route = createFileRoute("/auth/reset-password/")({
 
 function RouteComponent() {
   const [isLoading, setIsLoading] = useState(false);
+  const [formError, setFormError] = useState("");
   const navigate = useNavigate();
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     try {
       setIsLoading(true);
+      setFormError("");
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
       const dataObject = Object.fromEntries(formData);
+
+      if (dataObject.password !== dataObject.repeatPassword) {
+        setFormError("password fields to not match");
+        throw new Error("password fields do not match");
+      }
+
       const userEmail = dataObject.email as string;
       const userPassword = dataObject.password as string;
 
@@ -89,6 +98,9 @@ function RouteComponent() {
             minLength={8}
             placeholder="Repeat new password"
           />
+          {formError ? (
+            <span className="text-error text-xs md:text-sm">{formError}</span>
+          ) : null}
         </div>
         <button
           disabled={isLoading}

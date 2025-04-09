@@ -130,7 +130,7 @@ function RouteComponent() {
             to="/auth/forgot-password"
             className="text-secondary mx-2 underline hover:no-underline"
           >
-            Reset my password
+            Forgot my password
           </Link>
         </div>
         <button

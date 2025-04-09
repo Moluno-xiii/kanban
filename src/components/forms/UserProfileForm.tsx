@@ -1,49 +1,53 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import useUserProfile from "../../hooks/useUserProfile";
 import { RootState } from "../../store";
 import { setError } from "../../store/authSlice";
 import { useAppDispatch } from "../../store/hooks";
 import { upsertUserProfile } from "../../utils/profile";
 import ImageUpload from "../ImageUpload";
-import { setUserData } from "../../store/userDataSlice";
+import Error from "../ui/Error";
 
 const UserProfileForm: React.FC = () => {
+  const dispatch = useAppDispatch();
   const { user, error } = useSelector((state: RootState) => state.auth);
-  const { profileData } = useSelector((state: RootState) => state.userData);
+  const { data: profileData, error: profileDataError } = useUserProfile(
+    user?.id as string,
+  );
   const [imageUrl, setImageUrl] = useState<string>(
     (profileData?.profile_picture as string) || user?.user_metadata.avatar_url,
   );
-  const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useAppDispatch();
 
-  const submitProfileForm = async (event: React.FormEvent<HTMLFormElement>) => {
-    try {
-      setIsLoading(true);
-      dispatch(setError({ message: "" }));
-      event.preventDefault();
-      const formData = new FormData(event.currentTarget);
-      const dataObject = Object.fromEntries(formData) as {
-        profile_picture: string;
-        display_name: string;
-        id: string;
-      };
-      const finalData = { ...dataObject, profile_picture: imageUrl };
-      const { data, error: supabaseError } = await upsertUserProfile(finalData);
-      if (data) {
-        dispatch(setUserData({ data: data[0] }));
-      }
-      if (supabaseError) throw new Error(supabaseError.message);
-      toast.success("profile updated successfully!!");
-    } catch (error: unknown) {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: upsertUserProfile,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-profile", user?.id] });
+    },
+    onError: (err: { message: string }) => {
       const message =
-        error instanceof Error
-          ? error.message
-          : "An unexpected error occured, try again";
-      dispatch(setError({ message }));
-    } finally {
-      setIsLoading(false);
-    }
+        err instanceof Error ? err.message : "An unexpected error occured";
+      dispatch(setError({ message: message }));
+    },
+  });
+
+  if (profileDataError)
+    return <Error errorMessage={profileDataError.message} />;
+
+  const submitProfileForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    dispatch(setError({ message: "" }));
+    const formData = new FormData(event.currentTarget);
+    const dataObject = Object.fromEntries(formData) as {
+      profile_picture: string;
+      display_name: string;
+      id: string;
+    };
+    const finalData = { ...dataObject, profile_picture: imageUrl };
+    mutation.mutate(finalData);
   };
 
   return (
@@ -75,7 +79,7 @@ const UserProfileForm: React.FC = () => {
       </div>
       <input type="hidden" name="id" id="id" defaultValue={user?.id} />
       <button aria-label="submit button" type="submit" className="btn w-fit">
-        {isLoading ? "Uploading changes..." : "Save changes"}
+        {mutation.isPending ? "Uploading changes..." : "Save changes"}
       </button>
     </form>
   );

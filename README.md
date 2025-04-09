@@ -4,13 +4,14 @@ Kanban board project
 
 ## Technologies used
 
-- [React](https://react.dev/)
-- [Vite](https://vite.dev/guide/)
-- [Typescript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [TanStack Router](https://tanstack.com/router/latest/docs/framework/react/overview)
-- [Supabase](https://supabase.com/)
 - [Cloudinary](https://cloudinary.com/)
+- [React](https://react.dev/)
+- [Supabase](https://supabase.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Tanstack Query](https://tanstack.com/query/latest)
+- [TanStack Router](https://tanstack.com/router/latest/docs/framework/react/overview)
+- [Typescript](https://www.typescriptlang.org/)
+- [Vite](https://vite.dev/guide/)
 
 To run locally :
 
