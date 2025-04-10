@@ -1,18 +1,42 @@
-import { addProject, Project } from "../../utils/helperFunctions";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { upsertUserProject } from "../../utils/project";
 
 const AddProjectForm = ({
   handleModal,
 }: {
   handleModal: (state: boolean) => void;
 }) => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: upsertUserProject,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-projects", user?.id] });
+      handleModal(false);
+      toast.success("Project created successfully!");
+    },
+    onError: (err: { message: string }) => {
+      const message =
+        err instanceof Error ? err.message : "An unexpected error occured";
+      toast.error(message);
+    },
+  });
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const dataObject = Object.fromEntries(formData) as unknown as Project;
-    addProject(dataObject);
-    handleModal(false);
+    const dataObject = Object.fromEntries(formData) as unknown as {
+      projectName: string;
+      description: string;
+      owner_id: string;
+    };
+    const finalData = { ...dataObject, owner_id: user?.id as string };
+    mutation.mutate(finalData);
   };
-  const date = new Date();
+
   return (
     <form
       aria-label="add project form"
@@ -48,10 +72,8 @@ const AddProjectForm = ({
           required
         ></textarea>
       </div>
-      <input type="hidden" name="projectId" value={crypto.randomUUID()} />
-      <input type="hidden" name="dateCreated" value={date.toLocaleString()} />
       <button aria-label="submit button" type="submit" className="btn">
-        Submit
+        {mutation.isPending ? "Creating Project..." : "Submit"}
       </button>
     </form>
   );

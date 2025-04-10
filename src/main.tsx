@@ -8,6 +8,7 @@ import NavbarContextProvider from "./contexts/NavContext.tsx";
 import "./index.css";
 import { routeTree } from "./routeTree.gen.ts";
 import { store } from "./store/index.ts";
+import { ProjectModalContextProvider } from "./contexts/ProjectModalContext.tsx";
 
 const router = createRouter({ routeTree, defaultNotFoundComponent: NotFound });
 declare module "@tanstack/react-router" {
@@ -26,12 +27,14 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <NavbarContextProvider>
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-        </QueryClientProvider>
-      </Provider>
-    </NavbarContextProvider>
+    <Provider store={store}>
+      <ProjectModalContextProvider>
+        <NavbarContextProvider>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+          </QueryClientProvider>
+        </NavbarContextProvider>
+      </ProjectModalContextProvider>
+    </Provider>
   </StrictMode>,
 );

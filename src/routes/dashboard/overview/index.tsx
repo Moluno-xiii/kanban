@@ -17,7 +17,7 @@ function RouteComponent() {
         aria-label="welcome message with"
         className="text-secondary text-xl capitalize md:text-2xl"
       >
-        Welcome, {profileData.display_name || "User"}
+        Welcome, {profileData?.display_name || "User"}
       </span>
     </div>
   );

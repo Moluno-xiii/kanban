@@ -15,7 +15,9 @@ Kanban board project
 
 To run locally :
 
-```js
+```bash
+git clone https://github.com/Moluno-xiii/kanban.git
+cd kanban
 pnpm install
 pnpm run dev
 ```

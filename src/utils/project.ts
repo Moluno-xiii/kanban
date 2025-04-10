@@ -8,30 +8,41 @@ async function getUserProjects(userId: string) {
   return { projects, error };
 }
 
+async function getUserProject(projectId: string) {
+  const { data: project, error } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("project_id", projectId);
+  console.log(project);
+  return { project, error };
+}
+
 async function upsertUserProject(formData: {
   owner_id: string;
-  project_name: string;
+  projectName: string;
+  description: string;
 }) {
   const { data: projects, error } = await supabase
     .from("projects")
     .upsert([
       {
         owner_id: formData.owner_id,
-        project_name: formData.project_name,
+        project_name: formData.projectName,
+        description: formData.description,
       },
     ])
     .select();
-
+  console.log(projects);
   return { projects, error };
 }
 
 async function deleteUserProject(projectId: string) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("projects")
     .delete()
     .eq("project_id", projectId);
 
-  return { error };
+  return { data, error };
 }
 
 async function updateUserProject(
@@ -58,4 +69,5 @@ export {
   upsertUserProject,
   deleteUserProject,
   updateUserProject,
+  getUserProject,
 };

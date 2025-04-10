@@ -1,43 +1,42 @@
-import { createFileRoute, getRouteApi } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useSelector } from "react-redux";
 import AddProjectForm from "../../../components/forms/AddProjectForm";
 import Project from "../../../components/Project";
 import EmptyState from "../../../components/ui/EmptyState";
 import Loading from "../../../components/ui/Loading";
 import Modal from "../../../components/ui/Modal";
-import {
-  loadProjects,
-  Project as ProjectTypes,
-} from "../../../utils/helperFunctions";
+import { useProjectModalContext } from "../../../contexts/ProjectModalContext";
+import useUserProjects from "../../../hooks/useUserProjects";
+import { RootState } from "../../../store";
+import { Project as ProjectTypes } from "../../../utils/helperFunctions";
 
 export const Route = createFileRoute("/dashboard/personal_projects/")({
   component: RouteComponent,
-  loader: async () => await loadProjects(),
   pendingComponent: () => Loading({ message: "Loading Projects" }),
 });
 
 function RouteComponent() {
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
-  const [isTodoModalOpen, setIsTodoModalOpen] = useState(false);
-  const [modalProjectId, setModalProjectId] = useState<string | null>(null);
-  const routeApi = getRouteApi("/dashboard/personal_projects/");
-  const projects = routeApi.useLoaderData();
-
-  function handleProjectModalState(state: boolean) {
-    setIsProjectModalOpen(state);
-  }
-
+  const { isProjectModalOpen, handleProjectModal, handleTodoModal } =
+    useProjectModalContext();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const {
+    isPending,
+    error,
+    data: projects,
+  } = useUserProjects(user?.id as string);
   function handleTodoModalState(state: boolean, projectId?: string | null) {
-    setIsTodoModalOpen(state);
+    handleTodoModal(state);
     if (projectId) {
-      setModalProjectId(projectId);
+      handleProjectModal(false, projectId);
+      console.log(projectId);
     }
   }
-
-  if (projects.length < 1)
+  if (isPending) return <span>Loading projects...</span>;
+  if (error) return <span>An error occured</span>;
+  if (!projects || projects?.length < 1)
     return (
       <EmptyState
-        handleModal={handleProjectModalState}
+        handleModal={handleProjectModal}
         isModalOpen={isProjectModalOpen}
       />
     );
@@ -49,17 +48,17 @@ function RouteComponent() {
         <button
           aria-label="add project button"
           className="btn"
-          onClick={() => handleProjectModalState(true)}
+          onClick={() => handleProjectModal(true)}
         >
           Add Projects
         </button>
       </div>
       {isProjectModalOpen && (
         <Modal
-          handleClose={() => handleProjectModalState(false)}
+          handleClose={() => handleProjectModal(false)}
           title="Add Project Form"
         >
-          <AddProjectForm handleModal={handleProjectModalState} />
+          <AddProjectForm handleModal={handleProjectModal} />
         </Modal>
       )}
 
@@ -69,11 +68,9 @@ function RouteComponent() {
       >
         {projects.map((project: ProjectTypes) => (
           <Project
-            key={project.projectId}
+            key={project.project_id}
             project={project}
             handleModal={handleTodoModalState}
-            isModalOpen={isTodoModalOpen}
-            modalProjectId={modalProjectId}
           />
         ))}
       </ul>

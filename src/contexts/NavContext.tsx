@@ -9,7 +9,7 @@ const NavbarContext = createContext<NavbarContextTypes>({
 });
 
 const NavbarContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [isNavBarOpen, setIsNavbarOpen] = useState(true);
+  const [isNavBarOpen, setIsNavbarOpen] = useState(false);
 
   function handleNavbarState(state: boolean) {
     setIsNavbarOpen(state);

@@ -12,7 +12,6 @@ export const Route = createFileRoute("/dashboard/profile/")({
 
 function RouteComponent() {
   const { user } = useSelector((state: RootState) => state.auth);
-  // const { profileData } = useSelector((state: RootState) => state.userData);
   const {
     data: profileData,
     isLoading,
@@ -29,7 +28,7 @@ function RouteComponent() {
       <div className="flex flex-row items-center justify-between gap-3">
         <span aria-label="user's email">{user?.email}</span>
         {profile_picture ? (
-          <div className="ring-primary m-2 size-20 rounded-full ring-2 ring-offset-2">
+          <div className="ring-secondary m-2 size-20 rounded-full ring-2 ring-offset-2">
             <img
               src={
                 profileData?.profile_picture || user?.user_metadata.avatar_url

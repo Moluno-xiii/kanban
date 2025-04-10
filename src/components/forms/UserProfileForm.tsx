@@ -76,6 +76,9 @@ const UserProfileForm: React.FC = () => {
           storedImgUrl={imageUrl}
           onImageUpload={setImageUrl}
         />
+        <span aria-label="upload instruction" className="text-xs sm:text-sm">
+          Click on box above to upload image
+        </span>
       </div>
       <input type="hidden" name="id" id="id" defaultValue={user?.id} />
       <button aria-label="submit button" type="submit" className="btn w-fit">

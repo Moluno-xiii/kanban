@@ -49,7 +49,7 @@ const SmallScreensNav = ({
         ))}
       </ul>
 
-      <div className="absolute bottom-5 flex flex-col gap-y-3 self-center text-xl md:text-2xl">
+      <div className="absolute bottom-5 flex flex-col gap-y-1 self-center text-xl md:text-2xl">
         <p className="text-base">{user?.email}</p>
 
         <a

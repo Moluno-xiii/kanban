@@ -10,8 +10,8 @@ async function getProjectTodos(project_id: string) {
 
 async function upsertProjectTodo(formData: {
   owner_id: string;
-  name: string;
-  is_finished: boolean;
+  title: string;
+  is_finished: "yes" | "no";
   project_id: string;
 }) {
   const { data: todos, error } = await supabase
@@ -19,7 +19,7 @@ async function upsertProjectTodo(formData: {
     .upsert([
       {
         owner_id: formData.owner_id,
-        name: formData.name,
+        title: formData.title,
         is_finished: formData.is_finished,
         project_id: formData.project_id,
       },
@@ -29,8 +29,12 @@ async function upsertProjectTodo(formData: {
   return { todos, error };
 }
 
-async function deleteProjectTodo(id: string) {
-  const { error } = await supabase.from("Todos").delete().eq("id", id);
+async function deleteProjectTodo(id: string, project_id: string) {
+  const { error } = await supabase
+    .from("Todos")
+    .delete()
+    .eq("id", id)
+    .eq("project_id", project_id);
 
   return { error };
 }
@@ -57,16 +61,12 @@ async function updateProjectTodo(
 
   return { projects, error };
 }
-async function markProjectAsFinished(
-  id: string,
-  formData: {
-    is_finished: boolean;
-  },
-) {
+
+async function updateTodoStatus(id: string, is_finished: "yes" | "no") {
   const { data: projects, error } = await supabase
     .from("Todos")
     .update({
-      is_finished: formData.is_finished,
+      is_finished: is_finished,
     })
     .eq("id", id)
     .select();
@@ -79,5 +79,5 @@ export {
   upsertProjectTodo,
   deleteProjectTodo,
   updateProjectTodo,
-  markProjectAsFinished,
+  updateTodoStatus,
 };
