@@ -1,4 +1,8 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import toast from "react-hot-toast";
+import DeleteProjectModal from "../../../components/DeleteProjectModal";
+import DeleteTodoModal from "../../../components/DeleteTodoModal";
 import AddTodoForm from "../../../components/forms/AddTodoForm";
 import Error from "../../../components/ui/Error";
 import GoBack from "../../../components/ui/GoBack";
@@ -9,8 +13,6 @@ import useDeleteTodo from "../../../hooks/useDeleteTodo";
 import useProject from "../../../hooks/useProject";
 import useProjectTodos from "../../../hooks/useProjectTodos";
 import { dateToString, Todo } from "../../../utils/helperFunctions";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 import { updateTodoStatus } from "../../../utils/todo";
 
 export const Route = createFileRoute(
@@ -22,6 +24,15 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { project_id } = Route.useParams();
+  const {
+    isDeleteProjectModalOpen,
+    isDeleteTodoModalOpen,
+    isTodoModalOpen,
+    setIsDeleteProjectModalOpen,
+    setIsDeleteTodoModalOpen,
+    handleProjectModal,
+    handleTodoModal,
+  } = useProjectModalContext();
   const queryClient = useQueryClient();
   const { data: project, isPending, error } = useProject(project_id);
   const {
@@ -29,9 +40,9 @@ function RouteComponent() {
     isPending: loadingTodos,
     error: todoError,
   } = useProjectTodos(project_id);
-  const deleteMutation = useDeleteTodo(project_id);
+  const deleteTodoMutation = useDeleteTodo(project_id);
 
-  const mutation = useMutation({
+  const updateTodoStatusMutation = useMutation({
     onSuccess: () => {
       toast.success("Todo status updated successfully!");
       queryClient.invalidateQueries({ queryKey: ["todo", project_id] });
@@ -47,14 +58,6 @@ function RouteComponent() {
       is_finished: "yes" | "no";
     }) => updateTodoStatus(id, is_finished),
   });
-
-  const {
-    handleTodoModal,
-    handleProjectModal,
-    isTodoModalOpen,
-    isDeleteTodoModalOpen,
-    setIsDeleteTodoModalOpen,
-  } = useProjectModalContext();
 
   const onOpenTodoModal = () => {
     handleTodoModal(true);
@@ -110,14 +113,14 @@ function RouteComponent() {
                   className="hover:text-error/60 text-error w-fit cursor-pointer transition-all duration-200 hover:underline"
                   onClick={() => setIsDeleteTodoModalOpen(true)}
                 >
-                  {deleteMutation.isPending
+                  {deleteTodoMutation.isPending
                     ? "Deleting todo..."
                     : "Delete Todo"}
                 </button>
                 <button
                   className="hover:text-secondary/60 text-secondary w-fit cursor-pointer transition-all duration-200 hover:underline"
                   onClick={() =>
-                    mutation.mutate({
+                    updateTodoStatusMutation.mutate({
                       id: todo.id,
                       is_finished: todo.is_finished === "yes" ? "no" : "yes",
                     })
@@ -135,36 +138,23 @@ function RouteComponent() {
               </div>
 
               {isDeleteTodoModalOpen ? (
-                <Modal
-                  title="Are you sure you want to Delete this project??"
-                  handleClose={() => setIsDeleteTodoModalOpen(false)}
-                >
-                  <div className="flex flex-row items-center justify-end gap-x-2">
-                    <button
-                      aria-label="Yes, i want to delete todo button"
-                      className="btn-error"
-                      onClick={() =>
-                        deleteMutation.mutate({
-                          todoId: todo.id,
-                        })
-                      }
-                    >
-                      {deleteMutation.isPending ? "Deleting todo..." : "Yes"}
-                    </button>
-                    <button
-                      aria-label="No, i don't want to delete todo button"
-                      className="btn"
-                      onClick={() => setIsDeleteTodoModalOpen(false)}
-                    >
-                      No
-                    </button>
-                  </div>
-                </Modal>
+                <DeleteTodoModal projectId={project_id} todoId={todo.id} />
               ) : null}
             </li>
           ))}
         </ul>
       </div>
+      <button
+        aria-label="delete project button"
+        className="btn-error self-end"
+        onClick={() => {
+          handleProjectModal(false, project.project_id);
+          setIsDeleteProjectModalOpen(true);
+        }}
+      >
+        Delete Project
+      </button>
+      {isDeleteProjectModalOpen ? <DeleteProjectModal nested={true} /> : null}
     </div>
   );
 }

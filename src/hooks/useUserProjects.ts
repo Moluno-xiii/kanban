@@ -8,7 +8,7 @@ function useUserProjects(userId: string) {
     enabled: !!userId,
     select: (res) => res.projects,
     staleTime: Infinity,
-    refetchOnMount: false,
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
 }

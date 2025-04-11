@@ -1,26 +1,47 @@
 import { Link } from "@tanstack/react-router";
-
-import type { OrganizationType } from "../routes/dashboard/organizations/index";
+import { useState } from "react";
+import { dateToString, OrganizationType } from "../utils/helperFunctions";
+import DeleteOrganizationModal from "./DeleteOrganizationModal";
 
 interface Proptypes {
   organization: OrganizationType;
 }
+
 const Organization: React.FC<Proptypes> = ({ organization }) => {
+  const [deleteOrgModal, setDeleteOrgModal] = useState(false);
+
   return (
-    <li className="border-secondary mx-auto flex w-full max-w-lg flex-col gap-y-2 rounded-md border p-2 drop-shadow-2xl">
-      <div className="flex flex-row items-center justify-between">
-        <span className="text-2xl capitalize">{organization.title}</span>
-        <Link
-          className="text-primary hover:text-primary/70 transition-all duration-300 hover:underline"
-          params={{ organization_id: organization.id }}
-          to="/dashboard/organizations/$organization_id"
+    <>
+      <li className="border-secondary mx-auto flex w-full max-w-lg flex-col gap-y-2 rounded-md border p-2 drop-shadow-2xl">
+        <div className="flex flex-row items-center justify-between">
+          <span className="text-2xl capitalize">{organization.name}</span>
+          <Link
+            className="text-primary hover:text-primary/70 transition-all duration-300 hover:underline"
+            params={{ organization_id: organization.id }}
+            to="/dashboard/organizations/$organization_id"
+          >
+            View details
+          </Link>
+        </div>
+        <span>
+          Description :{" "}
+          {organization.description.split(" ").slice(0, 5).join(" ") + "..."}
+        </span>
+        <span>Date Created : {dateToString(organization.created_at)}</span>
+        <button
+          onClick={() => setDeleteOrgModal(true)}
+          className="btn-error w-fit self-end"
         >
-          View details
-        </Link>
-      </div>
-      <span>Number of members : {organization.numberOfMembers}</span>
-      <span>Date Created : {organization.dateCreated}</span>
-    </li>
+          Delete Organization
+        </button>
+      </li>
+      {deleteOrgModal ? (
+        <DeleteOrganizationModal
+          organization_id={organization.id}
+          setDeleteOrgModal={setDeleteOrgModal}
+        />
+      ) : null}
+    </>
   );
 };
 

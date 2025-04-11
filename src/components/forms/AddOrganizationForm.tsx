@@ -1,25 +1,41 @@
-const AddOrganizationForm = ({ handleModal }: { handleModal: () => void }) => {
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import useAddOrganization from "../../hooks/useAddOrganization";
+
+const AddOrganizationForm = ({
+  handleCloseModal,
+}: {
+  handleCloseModal: () => void;
+}) => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const addOrganizationMutation = useAddOrganization({ handleCloseModal });
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    console.log(formData);
-    handleModal();
+    const dataObject = Object.fromEntries(formData);
+    const finalData = { ...dataObject, super_admin_id: user?.id } as {
+      super_admin_id: string;
+      name: string;
+      description: string;
+    };
+    console.log(finalData);
+    addOrganizationMutation.mutate(finalData);
   };
-  const date = new Date();
   return (
     <form className="flex flex-col gap-y-4" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-y-2">
-        <label aria-label="Organization title label title" htmlFor="title">
-          Organization title
+        <label aria-label="Organization name label title" htmlFor="name">
+          Organization name
         </label>
         <input
-          aria-label="organization title input box"
+          aria-label="organization name input box"
           required
           minLength={3}
           placeholder="e.g Facebook Incorporated"
           type="text"
-          id="title"
-          name="title"
+          id="name"
+          name="name"
         />
       </div>
       <div className="flex flex-col gap-y-2">
@@ -38,10 +54,10 @@ const AddOrganizationForm = ({ handleModal }: { handleModal: () => void }) => {
           name="description"
         />
       </div>
-      <input type="hidden" name="id" value={crypto.randomUUID()} />
-      <input type="hidden" name="dateCreated" value={date.toLocaleString()} />
       <button aria-label="submit button" type="submit" className="btn">
-        Submit
+        {addOrganizationMutation.isPending
+          ? "Creating organization..."
+          : "Submit"}
       </button>
     </form>
   );

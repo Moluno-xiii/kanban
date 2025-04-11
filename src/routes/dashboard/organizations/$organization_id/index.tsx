@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import GoBack from "../../../../components/ui/GoBack";
-import { organizationsData } from "..";
+// import { organizationsData } from "../route";
 import { useState } from "react";
 import Modal from "../../../../components/ui/Modal";
 import AddMemberForm from "../../../../components/forms/AddMemberForm";
@@ -47,34 +47,35 @@ export const membersData = [
 ];
 function RouteComponent() {
   const { organization_id } = Route.useParams();
-  const data = organizationsData[Number(organization_id) - 1];
+  // const data = organizationsData[Number(organization_id) - 1];
   const [addMemberModal, setAddMemberModal] = useState(false);
 
   const handleAddMemberModal = (state: boolean) => {
     setAddMemberModal(state);
   };
 
-  if (
-    Number(organization_id) < 1 ||
-    Number(organization_id) > organizationsData.length
-  )
-    return (
-      <div>
-        <GoBack route={"/dashboard/organizations"} />
-        Data not found.
-      </div>
-    );
+  // if (
+  //   Number(organization_id) < 1
+  //    ||
+  //   Number(organization_id) > organizationsData.length
+  // )
+  //   return (
+  //     <div>
+  //       <GoBack route={"/dashboard/organizations"} />
+  //       Data not found.
+  //     </div>
+  //   );
   return (
+    // I HAVE TO MOVE THIS TO THE /MY_ORGANIZATIONS, COS OF THE ADD MEMBERS FUNCTIONALITY.
     <div className="flex flex-col gap-y-5">
       <div className="flex flex-row items-center justify-between">
-        <GoBack route={"/dashboard/organizations"} />
+        <GoBack route={"/dashboard/organizations/my_organizations"} />
       </div>
       <div className="flex flex-row items-center justify-between gap-3">
-        <span className="text-xl capitalize md:text-2xl">{data.title}</span>
+        {/* <span className="text-xl capitalize md:text-2xl">{data.title}</span> */}
         <button className="btn" onClick={() => handleAddMemberModal(true)}>
           Add Members
         </button>
-
         {addMemberModal ? (
           <Modal
             handleClose={() => handleAddMemberModal(false)}
@@ -84,9 +85,10 @@ function RouteComponent() {
           </Modal>
         ) : null}
       </div>
-      <span>Admin : {data.createdBy}</span>
+      Organization ID : {organization_id}
+      {/* <span>Admin : {data.createdBy}</span> */}
       <div className="border-primary flex flex-col gap-y-2 rounded-md border p-2 shadow-sm">
-        <div className="flex flex-row items-center justify-between gap-3">
+        {/* <div className="flex flex-row items-center justify-between gap-3">
           <span className="text-xl md:text-2xl">Members</span>
           {membersData.length > 5 ? (
             <Link
@@ -97,7 +99,7 @@ function RouteComponent() {
               View all members
             </Link>
           ) : null}
-        </div>
+        </div> */}
         <ul className="flex flex-col gap-y-2">
           {membersData.slice(0, 5).map((member) => (
             <li

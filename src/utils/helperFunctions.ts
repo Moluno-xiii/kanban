@@ -15,8 +15,16 @@ interface Project {
   description: string;
 }
 
+interface OrganizationType {
+  id: string;
+  created_at: string;
+  super_admin_id: string;
+  name: string;
+  description: string;
+}
+
 export function dateToString(date: string) {
   const dateString = new Date(date).toLocaleString();
   return dateString;
 }
-export type { Project, Todo };
+export type { Project, Todo, OrganizationType };

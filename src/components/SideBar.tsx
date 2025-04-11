@@ -29,7 +29,7 @@ const navLinks: LinkType[] = [
   },
   {
     name: "organizations",
-    route: "/dashboard/organizations",
+    route: "/dashboard/organizations/",
   },
   {
     name: "notifications",

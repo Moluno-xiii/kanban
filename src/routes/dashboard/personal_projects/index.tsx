@@ -36,9 +36,20 @@ function RouteComponent() {
   if (!projects || projects?.length < 1)
     return (
       <EmptyState
-        handleModal={handleProjectModal}
-        isModalOpen={isProjectModalOpen}
-      />
+        handleClick={handleProjectModal}
+        button={true}
+        buttonText="Add project"
+        emptyStateText="  You have no projects yet, projects you create will appear here."
+      >
+        {isProjectModalOpen && (
+          <Modal
+            handleClose={() => handleProjectModal(false)}
+            title="Add Project Form"
+          >
+            <AddProjectForm handleModal={handleProjectModal} />
+          </Modal>
+        )}
+      </EmptyState>
     );
 
   return (
