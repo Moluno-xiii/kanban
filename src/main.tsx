@@ -10,10 +10,13 @@ import { routeTree } from "./routeTree.gen.ts";
 import { store } from "./store/index.ts";
 import { ProjectModalContextProvider } from "./contexts/ProjectModalContext.tsx";
 
-const router = createRouter({ routeTree, defaultNotFoundComponent: NotFound });
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
+    context: {
+      queryClient: QueryClient;
+      store: typeof store;
+    };
   }
 }
 
@@ -22,6 +25,15 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: Infinity,
     },
+  },
+});
+
+export const router = createRouter({
+  routeTree,
+  defaultNotFoundComponent: NotFound,
+  context: {
+    queryClient,
+    store,
   },
 });
 

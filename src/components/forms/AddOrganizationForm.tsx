@@ -19,7 +19,6 @@ const AddOrganizationForm = ({
       name: string;
       description: string;
     };
-    console.log(finalData);
     addOrganizationMutation.mutate(finalData);
   };
   return (

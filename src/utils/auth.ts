@@ -34,7 +34,6 @@ async function getUser() {
     data: { user },
     error,
   } = await supabase.auth.getUser();
-  console.log(user);
   return { user, error };
 }
 

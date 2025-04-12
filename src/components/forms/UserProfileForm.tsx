@@ -8,6 +8,7 @@ import { useAppDispatch } from "../../store/hooks";
 import { upsertUserProfile } from "../../utils/profile";
 import ImageUpload from "../ImageUpload";
 import Error from "../ui/Error";
+import toast from "react-hot-toast";
 
 const UserProfileForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ const UserProfileForm: React.FC = () => {
     mutationFn: upsertUserProfile,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-profile", user?.id] });
+      toast.success("Profile updated successfully!");
     },
     onError: (err: { message: string }) => {
       const message =

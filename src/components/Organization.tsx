@@ -16,7 +16,7 @@ const Organization: React.FC<Proptypes> = ({ organization }) => {
         <div className="flex flex-row items-center justify-between">
           <span className="text-2xl capitalize">{organization.name}</span>
           <Link
-            className="text-primary hover:text-primary/70 transition-all duration-300 hover:underline"
+            className="text-secondary hover:text-secondary/70 transition-all duration-300 hover:underline"
             params={{ organization_id: organization.id }}
             to="/dashboard/organizations/$organization_id"
           >

@@ -1,12 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { getUserProfile } from "../utils/profile";
 
 function useUserProfile(userId: string) {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ["user-profile", userId],
     queryFn: () => getUserProfile(userId),
-    enabled: !!userId,
     select: (res) => res.user_details?.[0],
+    staleTime: Infinity,
+    refetchOnMount: false,
   });
 }
 

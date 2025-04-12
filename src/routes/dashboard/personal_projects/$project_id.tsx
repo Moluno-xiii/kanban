@@ -1,4 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import toast from "react-hot-toast";
 import DeleteProjectModal from "../../../components/DeleteProjectModal";
@@ -13,12 +17,32 @@ import useDeleteTodo from "../../../hooks/useDeleteTodo";
 import useProject from "../../../hooks/useProject";
 import useProjectTodos from "../../../hooks/useProjectTodos";
 import { dateToString, Todo } from "../../../utils/helperFunctions";
-import { updateTodoStatus } from "../../../utils/todo";
+import { getProjectTodos, updateTodoStatus } from "../../../utils/todo";
+import { getUserProject } from "../../../utils/project";
 
 export const Route = createFileRoute(
   "/dashboard/personal_projects/$project_id",
 )({
   component: RouteComponent,
+  loader: async ({ context, params }) => {
+    const { queryClient } = context as {
+      queryClient: QueryClient;
+    };
+
+    const [todos, project] = await Promise.all([
+      queryClient.ensureQueryData({
+        queryKey: ["todo", params.project_id],
+        queryFn: () => getProjectTodos(params.project_id),
+      }),
+      queryClient.ensureQueryData({
+        queryKey: ["project", params.project_id],
+        queryFn: () => getUserProject(params.project_id),
+      }),
+    ]);
+
+    return { todos, project };
+  },
+  pendingComponent: () => Loading({ message: "Loading project data" }),
   errorComponent: () => <div>Could not Load page content, try again.</div>,
 });
 

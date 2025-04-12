@@ -13,7 +13,6 @@ async function getUserProject(projectId: string) {
     .from("projects")
     .select("*")
     .eq("project_id", projectId);
-  console.log(project);
   return { project, error };
 }
 
@@ -32,7 +31,6 @@ async function upsertUserProject(formData: {
       },
     ])
     .select();
-  console.log(projects);
   return { projects, error };
 }
 

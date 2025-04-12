@@ -7,12 +7,30 @@ import Loading from "../../../components/ui/Loading";
 import Modal from "../../../components/ui/Modal";
 import { useProjectModalContext } from "../../../contexts/ProjectModalContext";
 import useUserProjects from "../../../hooks/useUserProjects";
-import { RootState } from "../../../store";
+import { AppDispatch, RootState } from "../../../store";
 import { Project as ProjectTypes } from "../../../utils/helperFunctions";
+import { User } from "@supabase/supabase-js";
+import { QueryClient } from "@tanstack/react-query";
+import { getUserProjects } from "../../../utils/project";
 
 export const Route = createFileRoute("/dashboard/personal_projects/")({
   component: RouteComponent,
-  pendingComponent: () => Loading({ message: "Loading Projects" }),
+  loader: async ({ context }) => {
+    const { queryClient, store } = context as {
+      queryClient: QueryClient;
+      store: {
+        getState: () => { auth: { user: User } };
+        dispatch: AppDispatch;
+      };
+    };
+    const state = store.getState();
+    const user = state.auth.user;
+    return await queryClient.ensureQueryData({
+      queryKey: ["user-projects", user.id],
+      queryFn: () => getUserProjects(user.id),
+    });
+  },
+  pendingComponent: () => Loading({ message: "Loading user Projects" }),
 });
 
 function RouteComponent() {
@@ -28,7 +46,6 @@ function RouteComponent() {
     handleTodoModal(state);
     if (projectId) {
       handleProjectModal(false, projectId);
-      console.log(projectId);
     }
   }
   if (isPending) return <span>Loading projects...</span>;

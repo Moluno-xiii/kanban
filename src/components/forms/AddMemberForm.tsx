@@ -6,7 +6,8 @@ const AddMemberForm = ({
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    console.log(formData);
+    const dataObject = Object.fromEntries(formData);
+    console.log(dataObject);
     handleModal(false);
   };
   const date = new Date();

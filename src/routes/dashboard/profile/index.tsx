@@ -1,13 +1,32 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import { AppDispatch, RootState } from "../../../store";
 import UserProfileForm from "../../../components/forms/UserProfileForm";
 import useUserProfile from "../../../hooks/useUserProfile";
 import Loading from "../../../components/ui/Loading";
 import Error from "../../../components/ui/Error";
+import { User } from "@supabase/supabase-js";
+import { QueryClient } from "@tanstack/react-query";
+import { getUserProfile } from "../../../utils/profile";
 
 export const Route = createFileRoute("/dashboard/profile/")({
   component: RouteComponent,
+  loader: async ({ context }) => {
+    const { queryClient, store } = context as {
+      queryClient: QueryClient;
+      store: {
+        getState: () => { auth: { user: User } };
+        dispatch: AppDispatch;
+      };
+    };
+    const state = store.getState();
+    const user = state.auth.user;
+    return await queryClient.ensureQueryData({
+      queryKey: ["user-profile", user?.id],
+      queryFn: () => getUserProfile(user?.id as string),
+    });
+  },
+  pendingComponent: () => <Loading message="Loading user profile" />,
 });
 
 function RouteComponent() {
