@@ -5,6 +5,7 @@ import { FaGoogle } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../store/authSlice";
 import { loginUser, signInWithGoogle } from "../../../utils/auth";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export const Route = createFileRoute("/auth/login/")({
   component: RouteComponent,
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/auth/login/")({
 
 function RouteComponent() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -88,19 +90,28 @@ function RouteComponent() {
             minLength={3}
           />
         </div>
-        <div className="flex flex-col gap-y-2">
+        <div className="relative flex flex-col gap-y-2">
           <label aria-label="password input box title" htmlFor="password">
             Password
           </label>
           <input
             disabled={isLoading}
             aria-label="password input box"
-            type="password"
+            type={!showPassword ? "password" : "text"}
             id="password"
             name="password"
             required
             minLength={8}
           />
+          <div className="text-secondary hover:text-secondary/70 absolute top-11 right-2 cursor-pointer transition-all duration-200">
+            {!showPassword ? (
+              <FaEye onClick={() => setShowPassword((password) => !password)} />
+            ) : (
+              <FaEyeSlash
+                onClick={() => setShowPassword((password) => !password)}
+              />
+            )}
+          </div>
         </div>
         <div className="flex flex-row items-center justify-center gap-x-3">
           <span>Continue with Google</span>

@@ -35,7 +35,7 @@ const Project: React.FC<ProjectProps> = ({ project, handleModal }) => {
           <Link
             to="/dashboard/personal_projects/$project_id"
             params={{ project_id: String(project.project_id) }}
-            className="text-text flex flex-row items-center gap-x-1 hover:underline"
+            className="text-secondary flex flex-row items-center gap-x-1 hover:underline"
             aria-label="View project details"
           >
             View details
