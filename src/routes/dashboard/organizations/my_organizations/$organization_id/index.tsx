@@ -1,12 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
-import GoBack from "../../../../components/ui/GoBack";
-// import { organizationsData } from "../route";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import Modal from "../../../../components/ui/Modal";
-import AddMemberForm from "../../../../components/forms/AddMemberForm";
+import AddMemberForm from "../../../../../components/forms/AddMemberForm";
+import GoBack from "../../../../../components/ui/GoBack";
+import Loading from "../../../../../components/ui/Loading";
+import Modal from "../../../../../components/ui/Modal";
+import useGetAdminOrganization from "../../../../../hooks/useGetAdminOrganization";
+import { dateToString } from "../../../../../utils/helperFunctions";
 
 export const Route = createFileRoute(
-  "/dashboard/organizations/$organization_id/",
+  "/dashboard/organizations/my_organizations/$organization_id/",
 )({
   component: RouteComponent,
 });
@@ -47,32 +49,43 @@ export const membersData = [
 ];
 function RouteComponent() {
   const { organization_id } = Route.useParams();
-  // const data = organizationsData[Number(organization_id) - 1];
+  const {
+    data: organization,
+    isPending,
+    isError,
+  } = useGetAdminOrganization(organization_id);
   const [addMemberModal, setAddMemberModal] = useState(false);
 
   const handleAddMemberModal = (state: boolean) => {
     setAddMemberModal(state);
   };
 
-  // if (
-  //   Number(organization_id) < 1
-  //    ||
-  //   Number(organization_id) > organizationsData.length
-  // )
-  //   return (
-  //     <div>
-  //       <GoBack route={"/dashboard/organizations"} />
-  //       Data not found.
-  //     </div>
-  //   );
+  if (isPending) {
+    return <Loading message="Loading organizations" />;
+  }
+  if (isError) {
+    return (
+      <span className="h-full w-full items-center justify-center text-center">
+        An Error occured, reload the page and try again.
+      </span>
+    );
+  }
+  if (!organization || organization.length < 1)
+    return (
+      <div>
+        <GoBack route={"/dashboard/organizations"} />
+        Data not found.
+      </div>
+    );
   return (
-    // I HAVE TO MOVE THIS TO THE /MY_ORGANIZATIONS, COS OF THE ADD MEMBERS FUNCTIONALITY.
     <div className="flex flex-col gap-y-5">
       <div className="flex flex-row items-center justify-between">
         <GoBack route={"/dashboard/organizations/my_organizations"} />
       </div>
       <div className="flex flex-row items-center justify-between gap-3">
-        {/* <span className="text-xl capitalize md:text-2xl">{data.title}</span> */}
+        <span className="text-xl capitalize md:text-2xl">
+          {organization.name}
+        </span>
         <button className="btn" onClick={() => handleAddMemberModal(true)}>
           Add Members
         </button>
@@ -81,25 +94,31 @@ function RouteComponent() {
             handleClose={() => handleAddMemberModal(false)}
             title="Add Member Form"
           >
-            <AddMemberForm handleModal={() => handleAddMemberModal(false)} />
+            <AddMemberForm
+              organization_id={organization.id}
+              organization_name={organization.name}
+              handleModal={() => handleAddMemberModal(false)}
+            />
           </Modal>
         ) : null}
       </div>
-      Organization ID : {organization_id}
-      {/* <span>Admin : {data.createdBy}</span> */}
-      <div className="border-primary flex flex-col gap-y-2 rounded-md border p-2 shadow-sm">
-        {/* <div className="flex flex-row items-center justify-between gap-3">
+      <div className="flex flex-col gap-y-2">
+        <span>Date Created : {dateToString(organization.created_at)}</span>
+        <span>Description : {organization.description}</span>
+      </div>
+      <div className="border-secondary flex flex-col gap-y-2 rounded-md border p-2 shadow-sm">
+        <div className="flex flex-row items-center justify-between gap-3">
           <span className="text-xl md:text-2xl">Members</span>
           {membersData.length > 5 ? (
             <Link
-              className="text-primary hover:text-primary/70 transition-all duration-300 hover:underline"
-              params={{ organization_id: data.id }}
-              to="/dashboard/organizations/$organization_id/members"
+              className="text-secondary hover:text-secondary/70 transition-all duration-300 hover:underline"
+              params={{ organization_id }}
+              to="/dashboard/organizations/my_organizations/$organization_id/members"
             >
               View all members
             </Link>
           ) : null}
-        </div> */}
+        </div>
         <ul className="flex flex-col gap-y-2">
           {membersData.slice(0, 5).map((member) => (
             <li

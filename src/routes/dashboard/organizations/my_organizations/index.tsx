@@ -23,8 +23,7 @@ export const Route = createFileRoute(
         dispatch: AppDispatch;
       };
     };
-    const state = store.getState();
-    const user = state.auth.user;
+    const user = store.getState().auth.user;
     return await queryClient.ensureQueryData({
       queryFn: () => getAdminUserOrganizations(user?.id as string),
       queryKey: ["organizations", user?.id as string],
@@ -46,6 +45,7 @@ function RouteComponent() {
       </span>
     );
   }
+
   if (!organizations || organizations.length < 1)
     return (
       <EmptyState

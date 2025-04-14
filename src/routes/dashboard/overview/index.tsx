@@ -17,8 +17,7 @@ export const Route = createFileRoute("/dashboard/overview/")({
         dispatch: AppDispatch;
       };
     };
-    const state = store.getState();
-    const user = state.auth.user;
+    const user = store.getState().auth.user;
     return await queryClient.ensureQueryData({
       queryKey: ["user-profile", user?.id],
       queryFn: () => getUserProfile(user?.id as string),

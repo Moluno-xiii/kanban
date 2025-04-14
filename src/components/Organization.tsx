@@ -18,7 +18,7 @@ const Organization: React.FC<Proptypes> = ({ organization }) => {
           <Link
             className="text-secondary hover:text-secondary/70 transition-all duration-300 hover:underline"
             params={{ organization_id: organization.id }}
-            to="/dashboard/organizations/$organization_id"
+            to="/dashboard/organizations/my_organizations/$organization_id"
             preload="render"
           >
             View details

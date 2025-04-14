@@ -9,6 +9,8 @@ import { useAppDispatch } from "../store/hooks";
 import { logoutUser } from "../utils/auth";
 import SmallScreensNav from "./SmallScreensNav";
 import BigScreensNav from "./BigScreensNav";
+import useGetUserNotifications from "../hooks/useGetUserInvitations";
+import useAuthGuard from "../hooks/useAuthGuard";
 
 export interface LinkType {
   name: string;
@@ -39,13 +41,15 @@ const navLinks: LinkType[] = [
 
 const SideBar: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { loading, user } = useSelector((state: RootState) => state.auth);
+  const { loading } = useSelector((state: RootState) => state.auth);
+  const { user } = useAuthGuard();
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const { handleNavbarState, isNavBarOpen } = useNavbarContext();
 
   const handleLogoutModal = (state: boolean) => {
     setOpenLogoutModal(state);
   };
+  const { data } = useGetUserNotifications();
 
   async function handleLogout() {
     try {
@@ -74,6 +78,7 @@ const SideBar: React.FC = () => {
         handleLogoutModal={handleLogoutModal}
         loading={loading}
         handleLogout={handleLogout}
+        notificationData={data || []}
       />
       {isNavBarOpen ? (
         <SmallScreensNav
@@ -86,6 +91,7 @@ const SideBar: React.FC = () => {
           loading={loading}
           handleLogout={handleLogout}
           isNavBarOpen={isNavBarOpen}
+          notificationData={data || []}
         />
       ) : (
         ""

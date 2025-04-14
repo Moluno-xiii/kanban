@@ -3,6 +3,7 @@ import { IoClose } from "react-icons/io5";
 import NavLink from "./NavLink";
 import Modal from "./ui/Modal";
 import { LinkType } from "./SideBar";
+import { InvitationNotification } from "../utils/helperFunctions";
 
 interface NavProps {
   handleNavbarState: (state: boolean) => void;
@@ -14,6 +15,7 @@ interface NavProps {
   handleLogout: () => void;
   navLinks: LinkType[];
   isNavBarOpen: boolean;
+  notificationData: InvitationNotification[];
 }
 
 const SmallScreensNav = ({
@@ -26,6 +28,7 @@ const SmallScreensNav = ({
   handleLogout,
   navLinks,
   isNavBarOpen,
+  notificationData,
 }: NavProps) => {
   return (
     <nav
@@ -44,6 +47,7 @@ const SmallScreensNav = ({
               onClick={() => handleNavbarState(false)}
               key={link.name}
               link={link}
+              notificationData={notificationData}
             />
           </li>
         ))}

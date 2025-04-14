@@ -1,7 +1,8 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-
+import Loading from "../../../components/ui/Loading";
 export const Route = createFileRoute("/dashboard/organizations")({
   component: RouteComponent,
+  pendingComponent: () => Loading({ message: "Loading dashboard data" }),
 });
 
 function RouteComponent() {

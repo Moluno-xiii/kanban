@@ -9,6 +9,19 @@ const getAdminUserOrganizations = async (user_id: string) => {
   return { organizations, error };
 };
 
+const getAdminUserOrganization = async (
+  user_id: string,
+  organization_id: string,
+) => {
+  const { data: organizations, error } = await supabase
+    .from("organizations")
+    .select("*")
+    .eq("super_admin_id", user_id)
+    .eq("id", organization_id);
+  if (error) throw new Error(error.message);
+  return { organizations };
+};
+
 const upsertAdminUserOrganization = async (formData: {
   super_admin_id: string;
   name: string;
@@ -44,6 +57,7 @@ export {
   getAdminUserOrganizations,
   upsertAdminUserOrganization,
   deleteAdminUserOrganization,
+  getAdminUserOrganization,
 };
 
 // id

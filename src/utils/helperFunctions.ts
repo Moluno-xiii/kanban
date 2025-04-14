@@ -23,8 +23,22 @@ interface OrganizationType {
   description: string;
 }
 
+interface InvitationNotification {
+  created_at: string;
+  id: string;
+  invited_by: string;
+  invitation_status: "pending" | "accepted" | "rejected";
+  invitee_email: string;
+  inviter_id: string;
+  message: string;
+  organization_id: string;
+  read: boolean;
+  role: "admin" | "member";
+  type: string;
+}
+
 export function dateToString(date: string) {
   const dateString = new Date(date).toLocaleString();
   return dateString;
 }
-export type { Project, Todo, OrganizationType };
+export type { Project, Todo, OrganizationType, InvitationNotification };

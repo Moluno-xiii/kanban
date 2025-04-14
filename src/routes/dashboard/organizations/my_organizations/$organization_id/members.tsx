@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { membersData } from ".";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import GoBack from "../../../../components/ui/GoBack";
+import { membersData } from ".";
+import GoBack from "../../../../../components/ui/GoBack";
 
 export const Route = createFileRoute(
-  "/dashboard/organizations/$organization_id/members",
+  "/dashboard/organizations/my_organizations/$organization_id/members",
 )({
   component: RouteComponent,
 });
@@ -13,7 +13,9 @@ function RouteComponent() {
   const { organization_id } = Route.useParams();
   return (
     <div className="flex flex-col gap-y-4">
-      <GoBack route={"/dashboard/organizations/$organization_id"} />
+      <GoBack
+        route={"/dashboard/organizations/my_organizations/$organization_id"}
+      />
       <span>Organization : {organization_id}</span>
       <ul className="flex flex-col gap-y-2">
         {membersData.map((member) => (

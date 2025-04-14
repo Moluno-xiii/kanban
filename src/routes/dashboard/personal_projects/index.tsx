@@ -23,8 +23,7 @@ export const Route = createFileRoute("/dashboard/personal_projects/")({
         dispatch: AppDispatch;
       };
     };
-    const state = store.getState();
-    const user = state.auth.user;
+    const user = store.getState().auth.user;
     return await queryClient.ensureQueryData({
       queryKey: ["user-projects", user?.id],
       queryFn: () => getUserProjects(user?.id),

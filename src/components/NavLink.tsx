@@ -1,13 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { LinkType } from "./SideBar";
-import { notificationsData } from "../routes/dashboard/notifications";
+import { InvitationNotification } from "../utils/helperFunctions";
 
 interface NavLinkType {
   link: LinkType;
   onClick?: () => void;
+  notificationData: InvitationNotification[];
 }
 
-const NavLink = ({ link, onClick }: NavLinkType) => {
+const NavLink = ({ link, onClick, notificationData }: NavLinkType) => {
   return (
     <Link
       onClick={onClick}
@@ -17,7 +18,7 @@ const NavLink = ({ link, onClick }: NavLinkType) => {
       preload="intent"
     >
       {link.name}
-      {notificationsData.length > 0 && link.name === "notifications" ? (
+      {notificationData.length > 0 && link.name === "organizations" ? (
         <span className="bg-text absolute right-4 size-2 rounded-full"></span>
       ) : null}
     </Link>

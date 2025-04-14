@@ -3,6 +3,7 @@ import { IoClose } from "react-icons/io5";
 import NavLink from "./NavLink";
 import Modal from "./ui/Modal";
 import { LinkType } from "./SideBar";
+import { InvitationNotification } from "../utils/helperFunctions";
 
 interface NavProps {
   handleNavbarState: (state: boolean) => void;
@@ -13,6 +14,7 @@ interface NavProps {
   loading: boolean;
   handleLogout: () => void;
   navLinks: LinkType[];
+  notificationData: InvitationNotification[];
 }
 const BigScreensNav = ({
   user,
@@ -23,6 +25,7 @@ const BigScreensNav = ({
   handleNavbarState,
   loading,
   navLinks,
+  notificationData,
 }: NavProps) => {
   return (
     <nav
@@ -37,7 +40,11 @@ const BigScreensNav = ({
       <ul className="flex flex-col gap-y-5">
         {navLinks.map((link) => (
           <li key={link.name} className="w-full">
-            <NavLink key={link.name} link={link} />
+            <NavLink
+              key={link.name}
+              link={link}
+              notificationData={notificationData}
+            />
           </li>
         ))}
       </ul>

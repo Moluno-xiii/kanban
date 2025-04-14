@@ -5,10 +5,10 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import NotFound from "./components/NotFound.tsx";
 import NavbarContextProvider from "./contexts/NavContext.tsx";
+import { ProjectModalContextProvider } from "./contexts/ProjectModalContext.tsx";
 import "./index.css";
 import { routeTree } from "./routeTree.gen.ts";
 import { store } from "./store/index.ts";
-import { ProjectModalContextProvider } from "./contexts/ProjectModalContext.tsx";
 
 declare module "@tanstack/react-router" {
   interface Register {
