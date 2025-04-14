@@ -15,7 +15,7 @@ const DeleteTodoModal: React.FC<DeleteTodoModalTypes> = ({
   const deleteTodoMutation = useDeleteTodo(projectId);
   return (
     <Modal
-      title="Are you sure you want to Delete this project??"
+      title="Are you sure you want to Delete this Todo??"
       handleClose={() => setIsDeleteTodoModalOpen(false)}
     >
       <div className="flex flex-row items-center justify-end gap-x-2">

@@ -7,7 +7,7 @@ function useUserProjects(userId: string) {
     queryFn: () => getUserProjects(userId),
     select: (res) => res.projects,
     staleTime: Infinity,
-    refetchOnMount: true,
+    refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
 }

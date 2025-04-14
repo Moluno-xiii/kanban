@@ -1,16 +1,16 @@
+import { User } from "@supabase/supabase-js";
+import { QueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useSelector } from "react-redux";
 import AddProjectForm from "../../../components/forms/AddProjectForm";
 import Project from "../../../components/Project";
 import EmptyState from "../../../components/ui/EmptyState";
 import Loading from "../../../components/ui/Loading";
 import Modal from "../../../components/ui/Modal";
 import { useProjectModalContext } from "../../../contexts/ProjectModalContext";
+import useAuthGuard from "../../../hooks/useAuthGuard";
 import useUserProjects from "../../../hooks/useUserProjects";
-import { AppDispatch, RootState } from "../../../store";
+import { AppDispatch } from "../../../store";
 import { Project as ProjectTypes } from "../../../utils/helperFunctions";
-import { User } from "@supabase/supabase-js";
-import { QueryClient } from "@tanstack/react-query";
 import { getUserProjects } from "../../../utils/project";
 
 export const Route = createFileRoute("/dashboard/personal_projects/")({
@@ -26,8 +26,8 @@ export const Route = createFileRoute("/dashboard/personal_projects/")({
     const state = store.getState();
     const user = state.auth.user;
     return await queryClient.ensureQueryData({
-      queryKey: ["user-projects", user.id],
-      queryFn: () => getUserProjects(user.id),
+      queryKey: ["user-projects", user?.id],
+      queryFn: () => getUserProjects(user?.id),
     });
   },
   pendingComponent: () => Loading({ message: "Loading user Projects" }),
@@ -36,7 +36,7 @@ export const Route = createFileRoute("/dashboard/personal_projects/")({
 function RouteComponent() {
   const { isProjectModalOpen, handleProjectModal, handleTodoModal } =
     useProjectModalContext();
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useAuthGuard();
   const {
     isPending,
     error,

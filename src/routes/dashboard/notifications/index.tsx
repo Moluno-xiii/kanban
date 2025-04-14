@@ -55,7 +55,7 @@ function RouteComponent() {
             <span className="first-letter:uppercase">
               {notification.message}
             </span>
-            <button className="text-primary w-fit text-sm transition-all duration-200 first-letter:capitalize hover:underline">
+            <button className="text-secondary w-fit cursor-pointer text-sm transition-all duration-200 first-letter:capitalize hover:underline">
               mark as read
             </button>
           </li>

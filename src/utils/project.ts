@@ -1,4 +1,5 @@
 import supabase from "../supabase";
+import { deleteAllProjectTodos } from "./todo";
 
 async function getUserProjects(userId: string) {
   const { data: projects, error } = await supabase
@@ -35,11 +36,14 @@ async function upsertUserProject(formData: {
 }
 
 async function deleteUserProject(projectId: string) {
+  const { error: todosError } = await deleteAllProjectTodos(projectId);
+  if (todosError) throw new Error(todosError?.message);
+
   const { data, error } = await supabase
     .from("projects")
     .delete()
     .eq("project_id", projectId);
-
+  if (error) throw new Error(error.message);
   return { data, error };
 }
 

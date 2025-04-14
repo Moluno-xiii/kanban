@@ -20,6 +20,7 @@ const OrganizationNav = () => {
         className="[&.active]:border-b-secondary [&.active]:text-secondary transition-all duration-300 [&.active]:border-b"
         to="/dashboard/organizations/my_organizations"
         aria-label="Link to my organizations"
+        preload="render"
       >
         My organizations
       </Link>
@@ -27,6 +28,7 @@ const OrganizationNav = () => {
         className="[&.active]:border-b-secondary [&.active]:text-secondary transition-all duration-300 [&.active]:border-b"
         to="/dashboard/organizations/other_organizations"
         aria-label="Link to other organizations i belong to"
+        preload="intent"
       >
         Other organizations
       </Link>
@@ -34,6 +36,7 @@ const OrganizationNav = () => {
         className="[&.active]:border-b-secondary [&.active]:text-secondary transition-all duration-300 [&.active]:border-b"
         to="/dashboard/organizations/invitations"
         aria-label="Link to other organizations i belong to"
+        preload="intent"
       >
         Invitations
       </Link>

@@ -18,6 +18,7 @@ const AddTodoForm = ({
   const mutation = useMutation({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todo", projectId] });
+      queryClient.refetchQueries({ queryKey: ["todo", projectId] });
       handleModal(false);
       toast.success("Todo added successfully!!");
     },
@@ -73,7 +74,7 @@ const AddTodoForm = ({
       </div>
 
       <button aria-label="submit button" type="submit" className="btn">
-        {mutation.isPending ? "Creating Todo" : " Submit"}
+        {mutation.isPending ? "Creating Todo..." : " Submit"}
       </button>
     </form>
   );

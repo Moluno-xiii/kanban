@@ -42,7 +42,7 @@ const BigScreensNav = ({
         ))}
       </ul>
 
-      <div className="absolute bottom-5 flex flex-col gap-y-2 self-center text-xl md:text-2xl">
+      <div className="absolute bottom-5 flex flex-col gap-y-2 self-center text-center text-xl">
         <p className="text-base">{user?.email}</p>
 
         <a

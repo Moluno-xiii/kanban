@@ -38,6 +38,14 @@ async function deleteProjectTodo(id: string, project_id: string) {
 
   return { error };
 }
+async function deleteAllProjectTodos(project_id: string) {
+  const { error } = await supabase
+    .from("Todos")
+    .delete()
+    .eq("project_id", project_id);
+
+  return { error };
+}
 
 async function updateProjectTodo(
   id: string,
@@ -80,4 +88,5 @@ export {
   deleteProjectTodo,
   updateProjectTodo,
   updateTodoStatus,
+  deleteAllProjectTodos,
 };

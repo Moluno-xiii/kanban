@@ -26,6 +26,7 @@ const UserProfileForm: React.FC = () => {
     mutationFn: upsertUserProfile,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-profile", user?.id] });
+      queryClient.refetchQueries({ queryKey: ["user-profile", user?.id] });
       toast.success("Profile updated successfully!");
     },
     onError: (err: { message: string }) => {

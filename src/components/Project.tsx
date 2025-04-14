@@ -28,8 +28,11 @@ const Project: React.FC<ProjectProps> = ({ project, handleModal }) => {
         key={project.project_id}
         className="bg-background border-secondary mx-auto flex w-full max-w-md flex-col gap-y-3 rounded-lg border-2 p-2 drop-shadow-xl"
       >
-        <div className="flex flex-row items-center justify-between">
-          <span className="text-lg uppercase" aria-label="Project name">
+        <div className="flex flex-row items-center justify-between gap-2">
+          <span
+            className="max-w-[64%] text-lg uppercase"
+            aria-label="Project name"
+          >
             {project.project_name}
           </span>
           <Link
@@ -37,6 +40,7 @@ const Project: React.FC<ProjectProps> = ({ project, handleModal }) => {
             params={{ project_id: String(project.project_id) }}
             className="text-secondary flex flex-row items-center gap-x-1 hover:underline"
             aria-label="View project details"
+            preload="render"
           >
             View details
             <IoMdArrowForward />
@@ -44,7 +48,7 @@ const Project: React.FC<ProjectProps> = ({ project, handleModal }) => {
         </div>
         <span aria-label="project ID" className="block">
           Description :{" "}
-          {project.description.split(" ").slice(0, 5).join(" ") + "..."}
+          {project.description.split(" ").slice(0, 6).join(" ") + "..."}
         </span>
         <span aria-label="Project's date added">
           Date Added : {dateToString(project.created_at)}

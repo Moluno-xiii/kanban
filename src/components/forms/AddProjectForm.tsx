@@ -15,6 +15,7 @@ const AddProjectForm = ({
     mutationFn: upsertUserProject,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-projects", user?.id] });
+      queryClient.refetchQueries({ queryKey: ["user-projects", user?.id] });
       handleModal(false);
       toast.success("Project created successfully!");
     },

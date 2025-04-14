@@ -70,6 +70,7 @@ function RouteComponent() {
     onSuccess: () => {
       toast.success("Todo status updated successfully!");
       queryClient.invalidateQueries({ queryKey: ["todo", project_id] });
+      queryClient.refetchQueries({ queryKey: ["todo", project_id] });
     },
     onError: (err: { message: string }) => {
       toast.error(err.message || "An unexpected error occured");

@@ -19,6 +19,9 @@ const useDeleteUserOrganization = ({
       queryClient.invalidateQueries({
         queryKey: ["organizations", user?.id as string],
       });
+      queryClient.refetchQueries({
+        queryKey: ["organizations", user?.id as string],
+      });
       toast.success("Organization deleted successfully!");
       handleCloseModal();
     },

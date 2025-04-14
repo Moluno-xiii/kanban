@@ -19,6 +19,9 @@ const useDeleteProject = ({ nested = false }: { nested: boolean }) => {
       queryClient.invalidateQueries({
         queryKey: ["user-projects", user?.id as string],
       });
+      queryClient.refetchQueries({
+        queryKey: ["user-projects", user?.id],
+      });
       setIsDeleteProjectModalOpen(false);
       setActiveProjectModalId("");
       toast.success("Project deleted successfully!");
@@ -30,7 +33,8 @@ const useDeleteProject = ({ nested = false }: { nested: boolean }) => {
     onError: (err: { message: string }) => {
       const message =
         err instanceof Error ? err.message : "An unexpected error occured";
-      toast.error(message);
+      console.error(message);
+      toast.error("Couldn't delete todo, try again.");
     },
   });
 };
