@@ -30,6 +30,7 @@ import { Route as DashboardOrganizationsInvitationsIndexImport } from './routes/
 import { Route as DashboardOrganizationsOtherorganizationsOrganizationidImport } from './routes/dashboard/organizations/other_organizations/$organization_id'
 import { Route as DashboardOrganizationsInvitationsInvitationidImport } from './routes/dashboard/organizations/invitations/$invitation_id'
 import { Route as DashboardOrganizationsMyorganizationsOrganizationidIndexImport } from './routes/dashboard/organizations/my_organizations/$organization_id/index'
+import { Route as DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsImport } from './routes/dashboard/organizations/my_organizations/$organization_id/sent_invitations'
 import { Route as DashboardOrganizationsMyorganizationsOrganizationidMembersImport } from './routes/dashboard/organizations/my_organizations/$organization_id/members'
 
 // Create/Update Routes
@@ -157,6 +158,15 @@ const DashboardOrganizationsMyorganizationsOrganizationidIndexRoute =
     path: '/my_organizations/$organization_id/',
     getParentRoute: () => DashboardOrganizationsRouteRoute,
   } as any)
+
+const DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsRoute =
+  DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsImport.update(
+    {
+      id: '/my_organizations/$organization_id/sent_invitations',
+      path: '/my_organizations/$organization_id/sent_invitations',
+      getParentRoute: () => DashboardOrganizationsRouteRoute,
+    } as any,
+  )
 
 const DashboardOrganizationsMyorganizationsOrganizationidMembersRoute =
   DashboardOrganizationsMyorganizationsOrganizationidMembersImport.update({
@@ -302,6 +312,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardOrganizationsMyorganizationsOrganizationidMembersImport
       parentRoute: typeof DashboardOrganizationsRouteImport
     }
+    '/dashboard/organizations/my_organizations/$organization_id/sent_invitations': {
+      id: '/dashboard/organizations/my_organizations/$organization_id/sent_invitations'
+      path: '/my_organizations/$organization_id/sent_invitations'
+      fullPath: '/dashboard/organizations/my_organizations/$organization_id/sent_invitations'
+      preLoaderRoute: typeof DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsImport
+      parentRoute: typeof DashboardOrganizationsRouteImport
+    }
     '/dashboard/organizations/my_organizations/$organization_id/': {
       id: '/dashboard/organizations/my_organizations/$organization_id/'
       path: '/my_organizations/$organization_id'
@@ -339,6 +356,7 @@ interface DashboardOrganizationsRouteRouteChildren {
   DashboardOrganizationsMyorganizationsIndexRoute: typeof DashboardOrganizationsMyorganizationsIndexRoute
   DashboardOrganizationsOtherorganizationsIndexRoute: typeof DashboardOrganizationsOtherorganizationsIndexRoute
   DashboardOrganizationsMyorganizationsOrganizationidMembersRoute: typeof DashboardOrganizationsMyorganizationsOrganizationidMembersRoute
+  DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsRoute: typeof DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsRoute
   DashboardOrganizationsMyorganizationsOrganizationidIndexRoute: typeof DashboardOrganizationsMyorganizationsOrganizationidIndexRoute
 }
 
@@ -356,6 +374,8 @@ const DashboardOrganizationsRouteRouteChildren: DashboardOrganizationsRouteRoute
       DashboardOrganizationsOtherorganizationsIndexRoute,
     DashboardOrganizationsMyorganizationsOrganizationidMembersRoute:
       DashboardOrganizationsMyorganizationsOrganizationidMembersRoute,
+    DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsRoute:
+      DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsRoute,
     DashboardOrganizationsMyorganizationsOrganizationidIndexRoute:
       DashboardOrganizationsMyorganizationsOrganizationidIndexRoute,
   }
@@ -409,6 +429,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/organizations/my_organizations': typeof DashboardOrganizationsMyorganizationsIndexRoute
   '/dashboard/organizations/other_organizations': typeof DashboardOrganizationsOtherorganizationsIndexRoute
   '/dashboard/organizations/my_organizations/$organization_id/members': typeof DashboardOrganizationsMyorganizationsOrganizationidMembersRoute
+  '/dashboard/organizations/my_organizations/$organization_id/sent_invitations': typeof DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsRoute
   '/dashboard/organizations/my_organizations/$organization_id': typeof DashboardOrganizationsMyorganizationsOrganizationidIndexRoute
 }
 
@@ -432,6 +453,7 @@ export interface FileRoutesByTo {
   '/dashboard/organizations/my_organizations': typeof DashboardOrganizationsMyorganizationsIndexRoute
   '/dashboard/organizations/other_organizations': typeof DashboardOrganizationsOtherorganizationsIndexRoute
   '/dashboard/organizations/my_organizations/$organization_id/members': typeof DashboardOrganizationsMyorganizationsOrganizationidMembersRoute
+  '/dashboard/organizations/my_organizations/$organization_id/sent_invitations': typeof DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsRoute
   '/dashboard/organizations/my_organizations/$organization_id': typeof DashboardOrganizationsMyorganizationsOrganizationidIndexRoute
 }
 
@@ -456,6 +478,7 @@ export interface FileRoutesById {
   '/dashboard/organizations/my_organizations/': typeof DashboardOrganizationsMyorganizationsIndexRoute
   '/dashboard/organizations/other_organizations/': typeof DashboardOrganizationsOtherorganizationsIndexRoute
   '/dashboard/organizations/my_organizations/$organization_id/members': typeof DashboardOrganizationsMyorganizationsOrganizationidMembersRoute
+  '/dashboard/organizations/my_organizations/$organization_id/sent_invitations': typeof DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsRoute
   '/dashboard/organizations/my_organizations/$organization_id/': typeof DashboardOrganizationsMyorganizationsOrganizationidIndexRoute
 }
 
@@ -481,6 +504,7 @@ export interface FileRouteTypes {
     | '/dashboard/organizations/my_organizations'
     | '/dashboard/organizations/other_organizations'
     | '/dashboard/organizations/my_organizations/$organization_id/members'
+    | '/dashboard/organizations/my_organizations/$organization_id/sent_invitations'
     | '/dashboard/organizations/my_organizations/$organization_id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -503,6 +527,7 @@ export interface FileRouteTypes {
     | '/dashboard/organizations/my_organizations'
     | '/dashboard/organizations/other_organizations'
     | '/dashboard/organizations/my_organizations/$organization_id/members'
+    | '/dashboard/organizations/my_organizations/$organization_id/sent_invitations'
     | '/dashboard/organizations/my_organizations/$organization_id'
   id:
     | '__root__'
@@ -525,6 +550,7 @@ export interface FileRouteTypes {
     | '/dashboard/organizations/my_organizations/'
     | '/dashboard/organizations/other_organizations/'
     | '/dashboard/organizations/my_organizations/$organization_id/members'
+    | '/dashboard/organizations/my_organizations/$organization_id/sent_invitations'
     | '/dashboard/organizations/my_organizations/$organization_id/'
   fileRoutesById: FileRoutesById
 }
@@ -589,6 +615,7 @@ export const routeTree = rootRoute
         "/dashboard/organizations/my_organizations/",
         "/dashboard/organizations/other_organizations/",
         "/dashboard/organizations/my_organizations/$organization_id/members",
+        "/dashboard/organizations/my_organizations/$organization_id/sent_invitations",
         "/dashboard/organizations/my_organizations/$organization_id/"
       ]
     },
@@ -650,6 +677,10 @@ export const routeTree = rootRoute
     },
     "/dashboard/organizations/my_organizations/$organization_id/members": {
       "filePath": "dashboard/organizations/my_organizations/$organization_id/members.tsx",
+      "parent": "/dashboard/organizations"
+    },
+    "/dashboard/organizations/my_organizations/$organization_id/sent_invitations": {
+      "filePath": "dashboard/organizations/my_organizations/$organization_id/sent_invitations.tsx",
       "parent": "/dashboard/organizations"
     },
     "/dashboard/organizations/my_organizations/$organization_id/": {

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import Modal from "./ui/Modal";
-import useDeleteUserOrganization from "../hooks/useDeleteUserOrganization";
+import Modal from "../ui/Modal";
+import useDeleteUserOrganization from "../../hooks/useDeleteUserOrganization";
 
 interface PropTypes {
   setDeleteOrgModal: Dispatch<SetStateAction<boolean>>;

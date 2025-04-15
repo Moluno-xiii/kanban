@@ -37,8 +37,17 @@ interface InvitationNotification {
   type: string;
 }
 
+interface Member {
+  created_at: string;
+  member_email: string;
+  member_id: string;
+  organization_id: string;
+  role: string;
+  super_admin_id: string;
+}
+
 export function dateToString(date: string) {
   const dateString = new Date(date).toLocaleString();
   return dateString;
 }
-export type { Project, Todo, OrganizationType, InvitationNotification };
+export type { Project, Todo, OrganizationType, InvitationNotification, Member };

@@ -1,18 +1,20 @@
 import { useSelector } from "react-redux";
-import { createOrganizationInvitation } from "../../utils/invitations";
+import useSendInvitation from "../../hooks/useSendInvitation";
 import { RootState } from "../../store";
 
 const AddMemberForm = ({
   handleModal,
   organization_id,
   organization_name,
-  // inviter_id
 }: {
   handleModal: (state: boolean) => void;
   organization_id: string;
   organization_name: string;
-  // inviter_id : string
 }) => {
+  const sendInvitationMutation = useSendInvitation(
+    handleModal,
+    organization_id,
+  );
   const invitation_message = `You've been invited to join ${organization_name}`;
 
   const { user } = useSelector((state: RootState) => state.auth);
@@ -20,16 +22,13 @@ const AddMemberForm = ({
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const dataObject = Object.fromEntries(formData);
-    console.log(dataObject);
-    await createOrganizationInvitation(
-      organization_id,
-      dataObject.email as string,
-      invitation_message,
-      dataObject.role as string,
-      user?.id as string,
-    );
 
-    handleModal(false);
+    sendInvitationMutation.mutate({
+      email: dataObject.email as string,
+      id: user?.id as string,
+      invitation_message,
+      role: dataObject.role as string,
+    });
   };
   return (
     <form className="flex flex-col gap-y-4" onSubmit={handleSubmit}>
@@ -64,21 +63,13 @@ const AddMemberForm = ({
           </option>
         </select>
       </div>
-      {/* <input
-        type="hidden"
-        name="inviter_id"
-        id="inviter_id"
-        value={inviter_id}
-      />  */}
       <button aria-label="submit button" type="submit" className="btn">
-        Submit
+        {sendInvitationMutation.isPending
+          ? "Sending invitation..."
+          : "  Submit"}
       </button>
     </form>
   );
 };
 
 export default AddMemberForm;
-// organization_id: string,
-// invitee_email: string,
-// message: string,
-// role: string,

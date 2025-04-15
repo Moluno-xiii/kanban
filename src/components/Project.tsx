@@ -5,7 +5,7 @@ import {
   dateToString,
   Project as ProjectTypes,
 } from "../utils/helperFunctions";
-import DeleteProjectModal from "./DeleteProjectModal";
+import DeleteProjectModal from "./modals/DeleteProjectModal";
 import AddTodoForm from "./forms/AddTodoForm";
 import Modal from "./ui/Modal";
 

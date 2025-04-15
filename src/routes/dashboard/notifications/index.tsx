@@ -45,7 +45,6 @@ const readMessages = [
 function RouteComponent() {
   const { data: notifications, isPending } = useGetUserNotifications();
   if (isPending) return <Loading message={"Loading user notifications"} />;
-  console.log(notifications);
 
   if (!notifications || notifications.length < 1)
     return (
@@ -72,7 +71,6 @@ function RouteComponent() {
             <span>Invitation role : {notification.role}</span>
             <span>{dateToString(notification.created_at)}</span>
             <span>Invite status : {notification.invitation_status}</span>
-            {/*  I could fetch all the notifications pertaining to invites using the 'type' property type = 'invitation'. */}
           </li>
         ))}
       </ul>

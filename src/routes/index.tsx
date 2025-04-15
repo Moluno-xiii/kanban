@@ -1,13 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import useAuthGuard from "../hooks/useAuthGuard";
 import useUserProfile from "../hooks/useUserProfile";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { user } = useAuthGuard();
+  const { user } = useSelector((state: RootState) => state.auth);
   const { data: profileData } = useUserProfile(user?.id as string);
   return (
     <div className="flex min-h-[calc(100dvh-150px)] flex-col items-center justify-center gap-y-6 text-center">

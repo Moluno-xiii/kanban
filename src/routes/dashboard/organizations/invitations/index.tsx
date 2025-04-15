@@ -4,6 +4,9 @@ import EmptyState from "../../../../components/ui/EmptyState";
 import Loading from "../../../../components/ui/Loading";
 import useGetUserNotifications from "../../../../hooks/useGetUserInvitations";
 import { dateToString } from "../../../../utils/helperFunctions";
+import { markInvitationAsRead } from "../../../../utils/invitations";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export const Route = createFileRoute("/dashboard/organizations/invitations/")({
   component: RouteComponent,
@@ -11,8 +14,20 @@ export const Route = createFileRoute("/dashboard/organizations/invitations/")({
 
 function RouteComponent() {
   const { data: notifications, isPending } = useGetUserNotifications();
+  const markAsRead = useMutation({
+    mutationFn: ({ notification_id }: { notification_id: string }) =>
+      markInvitationAsRead(notification_id),
+    onSuccess: () => {
+      toast.success("Invitation marked as read");
+    },
+    onError: (error: { message: string }) => {
+      toast.error(error.message || "An unexpected error occured, try again.");
+      console.error(error.message);
+    },
+  });
+
   if (isPending) return <Loading message={"Loading user notifications"} />;
-  console.log(notifications);
+
   if (!notifications || notifications.length < 1)
     return (
       <EmptyState
@@ -33,18 +48,25 @@ function RouteComponent() {
               <span className="text-lg first-letter:uppercase md:text-xl">
                 {notification.message}
               </span>
-              <button className="text-secondary w-fit cursor-pointer text-sm transition-all duration-200 first-letter:capitalize hover:underline">
+              <button
+                className="text-secondary w-fit cursor-pointer text-sm transition-all duration-200 first-letter:capitalize hover:underline"
+                onClick={() => {
+                  markAsRead.mutate({ notification_id: notification.id });
+                }}
+              >
                 mark as read
               </button>
             </div>
             <span>Invitation role : {notification.role}</span>
             <span>{dateToString(notification.created_at)}</span>
             <span>Invite status : {notification.invitation_status}</span>
-            {/*  I could fetch all the notifications pertaining to invites using the 'type' property type = 'invitation'. */}
             <Link
               to="/dashboard/organizations/invitations/$invitation_id"
               params={{ invitation_id: notification.id }}
               className="text-secondary hover:text-secondary/80 flex flex-row items-center justify-end gap-x-2 transition-all duration-200 hover:underline"
+              onClick={() => {
+                markAsRead.mutate({ notification_id: notification.id });
+              }}
             >
               View invitation
               <FaArrowRightLong size={15} />

@@ -5,9 +5,10 @@ const useGetInvitation = (invitation_id: string) => {
   return useQuery({
     queryKey: ["invitation", invitation_id],
     queryFn: () => getUserInvitation(invitation_id),
-    staleTime: Infinity,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    select: (res) => res[0],
   });
 };
 

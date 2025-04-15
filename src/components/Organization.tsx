@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { dateToString, OrganizationType } from "../utils/helperFunctions";
-import DeleteOrganizationModal from "./DeleteOrganizationModal";
+import DeleteOrganizationModal from "./modals/DeleteOrganizationModal";
 
 interface Proptypes {
   organization: OrganizationType;

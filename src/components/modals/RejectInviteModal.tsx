@@ -1,16 +1,13 @@
-import { useProjectModalContext } from "../contexts/ProjectModalContext";
-import useDeleteTodo from "../hooks/useDeleteTodo";
-import Modal from "./ui/Modal";
+import { useProjectModalContext } from "../../contexts/ProjectModalContext";
+import useDeleteTodo from "../../hooks/useDeleteTodo";
+import Modal from "../ui/Modal";
 
-interface DeleteTodoModalTypes {
+interface RejectInviteTypes {
   todoId: string;
   projectId: string;
 }
 
-const DeleteTodoModal: React.FC<DeleteTodoModalTypes> = ({
-  todoId,
-  projectId,
-}) => {
+const RejectInvite: React.FC<RejectInviteTypes> = ({ todoId, projectId }) => {
   const { setIsDeleteTodoModalOpen } = useProjectModalContext();
   const deleteTodoMutation = useDeleteTodo(projectId);
   return (
@@ -42,4 +39,4 @@ const DeleteTodoModal: React.FC<DeleteTodoModalTypes> = ({
   );
 };
 
-export default DeleteTodoModal;
+export default RejectInvite;

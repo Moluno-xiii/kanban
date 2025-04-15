@@ -1,6 +1,6 @@
-import { useProjectModalContext } from "../contexts/ProjectModalContext";
-import useDeleteProject from "../hooks/useDeleteProject";
-import Modal from "./ui/Modal";
+import { useProjectModalContext } from "../../contexts/ProjectModalContext";
+import useDeleteProject from "../../hooks/useDeleteProject";
+import Modal from "../ui/Modal";
 
 interface DeleteProjectModalTypes {
   nested: boolean;

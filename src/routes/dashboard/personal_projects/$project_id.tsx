@@ -5,8 +5,8 @@ import {
 } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import toast from "react-hot-toast";
-import DeleteProjectModal from "../../../components/DeleteProjectModal";
-import DeleteTodoModal from "../../../components/DeleteTodoModal";
+import DeleteProjectModal from "../../../components/modals/DeleteProjectModal";
+import DeleteTodoModal from "../../../components/modals/DeleteTodoModal";
 import AddTodoForm from "../../../components/forms/AddTodoForm";
 import Error from "../../../components/ui/Error";
 import GoBack from "../../../components/ui/GoBack";

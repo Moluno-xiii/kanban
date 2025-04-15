@@ -8,9 +8,9 @@ const useGetUserInvitations = () => {
   return useQuery({
     queryFn: () => getUserInvitations(user?.email as string),
     queryKey: ["user-notifications", user?.email],
-    staleTime: Infinity,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 };
 
