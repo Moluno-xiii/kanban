@@ -11,12 +11,14 @@ interface Props {
   role: string;
   invitation_id: string;
   super_admin_id: string;
+  organization_name: string;
 }
 const useAcceptInvitation = ({
   invitation_id,
   organization_id,
   role,
   super_admin_id,
+  organization_name,
 }: Props) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
@@ -30,6 +32,7 @@ const useAcceptInvitation = ({
         role,
         super_admin_id,
         user?.email as string,
+        organization_name,
       );
     },
     onSuccess: () => {

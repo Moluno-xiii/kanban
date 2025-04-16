@@ -12,9 +12,6 @@ const useDeleteInvitation = (organization_id: string) => {
       queryClient.refetchQueries({
         queryKey: ["sent-invitations", organization_id],
       });
-      //   queryClient.invalidateQueries({
-      //     queryKey: ["user-notifications", invitee_email],
-      //   });
       toast.success("Invitation deleted successfully");
     },
     mutationFn: (id: string) => cancelInvitation(id),

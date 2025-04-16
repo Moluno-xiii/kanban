@@ -44,7 +44,7 @@ const ThemeSwitcher = () => {
       {isDropDownOpen ? (
         <div
           ref={dropdownRef}
-          className={`bg-secondary absolute top-40 right-0 flex max-h-0 -translate-y-2 transform flex-col items-center gap-y-3 overflow-hidden rounded-md p-4 capitalize opacity-0 transition-all duration-500 ease-in-out`}
+          className={`bg-secondary absolute top-20 right-0 flex max-h-0 -translate-y-2 transform flex-col items-center gap-y-3 overflow-hidden rounded-md p-4 capitalize opacity-0 transition-all duration-500 ease-in-out`}
         >
           <button
             aria-label="light theme button"

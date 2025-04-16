@@ -28,6 +28,7 @@ const AddMemberForm = ({
       id: user?.id as string,
       invitation_message,
       role: dataObject.role as string,
+      organization_name,
     });
   };
   return (

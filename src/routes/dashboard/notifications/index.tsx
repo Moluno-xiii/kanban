@@ -1,51 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import useGetUserNotifications from "../../../hooks/useGetUserInvitations";
 import Loading from "../../../components/ui/Loading";
 import EmptyState from "../../../components/ui/EmptyState";
 import { dateToString } from "../../../utils/helperFunctions";
+import useGetUserNotifications from "../../../hooks/useGetUserNotifications";
 
 export const Route = createFileRoute("/dashboard/notifications/")({
   component: RouteComponent,
 });
 
-export const notificationsData = [
-  {
-    id: "1",
-    message: "something's happening",
-    read: true,
-  },
-  {
-    id: "2",
-    message: "something else's happening",
-    read: false,
-  },
-  {
-    id: "3",
-    message: "Nothing's happening",
-    read: true,
-  },
-];
-const readMessages = [
-  {
-    id: "1",
-    message: "something's happening",
-    read: true,
-  },
-  {
-    id: "2",
-    message: "something else's happening",
-    read: false,
-  },
-  {
-    id: "3",
-    message: "Nothing's happening",
-    read: true,
-  },
-];
 function RouteComponent() {
   const { data: notifications, isPending } = useGetUserNotifications();
   if (isPending) return <Loading message={"Loading user notifications"} />;
-
+  console.log(notifications);
   if (!notifications || notifications.length < 1)
     return (
       <EmptyState button={false} emptyStateText="You have no notifications." />
@@ -77,7 +43,7 @@ function RouteComponent() {
 
       <ul className="mt-6 flex flex-col gap-y-2">
         <span className="text-xl md:text-2xl">Read notifications</span>
-        {readMessages.map((notification) => (
+        {/* {readMessages.map((notification) => (
           <li
             key={notification.id}
             className="border-secondary flex flex-row items-center justify-between rounded-md border p-2"
@@ -86,7 +52,7 @@ function RouteComponent() {
               {notification.message}
             </span>
           </li>
-        ))}
+        ))} */}
       </ul>
     </div>
   );

@@ -30,7 +30,7 @@ const useAddOrganization = ({
       super_admin_id: string;
       name: string;
       description: string;
-    }) => upsertAdminUserOrganization(formData),
+    }) => upsertAdminUserOrganization(formData, user?.email as string),
   });
 };
 

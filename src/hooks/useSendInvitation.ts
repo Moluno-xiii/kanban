@@ -7,6 +7,7 @@ interface InvitationPayload {
   invitation_message: string;
   role: string;
   id: string;
+  organization_name: string;
 }
 
 const useSendInvitation = (
@@ -15,13 +16,20 @@ const useSendInvitation = (
 ) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ email, invitation_message, role, id }: InvitationPayload) =>
+    mutationFn: ({
+      email,
+      invitation_message,
+      role,
+      id,
+      organization_name,
+    }: InvitationPayload) =>
       createOrganizationInvitation(
         organization_id,
         email,
         invitation_message,
         role,
         id,
+        organization_name,
       ),
     onSuccess: () => {
       handleModal(false);

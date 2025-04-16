@@ -1,0 +1,36 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { sendNotification } from "../utils/notifications";
+
+interface NotificationPayload {
+  user_id: string;
+  title: string;
+  message: string;
+  email: string;
+}
+
+const useSendNotification = () =>
+  // handleModal?: (state: boolean) => void,
+  {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: ({ user_id, title, message, email }: NotificationPayload) =>
+        sendNotification(user_id, title, message, email),
+      onSuccess: () => {
+        //   handleModal(false);
+        toast.success("Notification sent successfully!");
+        queryClient.invalidateQueries({
+          queryKey: ["user-notifications"],
+        });
+        queryClient.refetchQueries({
+          queryKey: ["user-notifications"],
+        });
+      },
+      onError: (error: { message: string }) => {
+        toast.error(error.message || "An unexpected error occured");
+        console.error(error.message);
+      },
+    });
+  };
+
+export default useSendNotification;

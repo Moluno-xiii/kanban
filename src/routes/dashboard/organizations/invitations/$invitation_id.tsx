@@ -23,6 +23,7 @@ function RouteComponent() {
     role: data?.role as string,
     organization_id: data?.organization_id,
     super_admin_id: data?.inviter_id,
+    organization_name: data?.organization_name,
   });
 
   const rejectInvitation = useMutation({

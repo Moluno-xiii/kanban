@@ -6,6 +6,7 @@ async function createOrganizationInvitation(
   message: string,
   role: string,
   inviter_id: string,
+  organization_name: string,
 ) {
   const { data: organization, error } = await supabase
     .from("organization_invitations")
@@ -19,6 +20,7 @@ async function createOrganizationInvitation(
         invitation_status: "pending",
         role,
         inviter_id,
+        organization_name,
       },
     ])
     .select();
