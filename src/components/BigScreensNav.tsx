@@ -3,7 +3,10 @@ import { IoClose } from "react-icons/io5";
 import NavLink from "./NavLink";
 import Modal from "./ui/Modal";
 import { LinkType } from "./SideBar";
-import { InvitationNotification } from "../utils/helperFunctions";
+import {
+  InvitationNotification,
+  NotificationType,
+} from "../utils/helperFunctions";
 
 interface NavProps {
   handleNavbarState: (state: boolean) => void;
@@ -14,7 +17,8 @@ interface NavProps {
   loading: boolean;
   handleLogout: () => void;
   navLinks: LinkType[];
-  notificationData: InvitationNotification[];
+  invitations: InvitationNotification[];
+  notifications: NotificationType[];
 }
 const BigScreensNav = ({
   user,
@@ -25,7 +29,8 @@ const BigScreensNav = ({
   handleNavbarState,
   loading,
   navLinks,
-  notificationData,
+  invitations,
+  notifications,
 }: NavProps) => {
   return (
     <nav
@@ -43,7 +48,8 @@ const BigScreensNav = ({
             <NavLink
               key={link.name}
               link={link}
-              notificationData={notificationData}
+              invitations={invitations}
+              notifications={notifications}
             />
           </li>
         ))}

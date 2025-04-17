@@ -79,6 +79,7 @@ async function deleteMemberFromOrganization(
   member_role: string,
   member_id: string,
   super_admin_id: string,
+  organization_id: string,
   // add super_admin_id and if the user's id isn't the same, dont delete.
   // only super admins should be able to delete users.
   // admins can assign and reject or accept tasks, but can't delete members.
@@ -97,11 +98,40 @@ async function deleteMemberFromOrganization(
   const { error } = await supabase
     .from("organization_members")
     .delete()
-    .eq("member_id", member_id);
-
+    .eq("member_id", member_id)
+    .eq("organization_id", organization_id);
   if (error) {
     throw new Error(error.message);
     // Toast the error from the mutation
+  }
+}
+
+async function deleteOrganizationMembers(
+  deleter_id: string,
+  super_admin_id: string,
+  organization_id: string,
+) {
+  if (super_admin_id.toLowerCase() !== deleter_id) {
+    throw new Error("You're not authorized to make this action.");
+  }
+  const { error } = await supabase
+    .from("organization_members")
+    .delete()
+    .eq("organization_id", organization_id);
+  if (error) {
+    throw new Error(error.message);
+    // Toast the error from the mutation
+  }
+}
+
+async function leaveOrganization(deleter_id: string, organization_id: string) {
+  const { error } = await supabase
+    .from("organization_members")
+    .delete()
+    .eq("member_id", deleter_id)
+    .eq("organization_id", organization_id);
+  if (error) {
+    throw new Error(error.message);
   }
 }
 
@@ -111,4 +141,6 @@ export {
   getOrganizations,
   deleteMemberFromOrganization,
   getOrganizationMember,
+  deleteOrganizationMembers,
+  leaveOrganization,
 };

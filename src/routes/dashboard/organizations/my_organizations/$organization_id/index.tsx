@@ -39,7 +39,7 @@ function RouteComponent() {
   } = useGetOrganizationMembers(organization_id);
 
   if (isFetchingMembers)
-    return <Loading message="Loading organization invitations" />;
+    return <Loading message="Loading organization members" />;
 
   if (isPending) {
     return <Loading message="Loading organizations" />;

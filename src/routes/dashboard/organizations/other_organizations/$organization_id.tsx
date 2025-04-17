@@ -4,6 +4,8 @@ import useGetOrganizationMembers from "../../../../hooks/useGetOrganizationMembe
 import Loading from "../../../../components/ui/Loading";
 import Error from "../../../../components/ui/Error";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import LeaveOrganizationModal from "../../../../components/modals/LeaveOrganizationModal";
 
 export const Route = createFileRoute(
   "/dashboard/organizations/other_organizations/$organization_id",
@@ -18,6 +20,8 @@ function RouteComponent() {
     isPending,
     error,
   } = useGetOrganizationMembers(organization_id);
+  const [isLeaveOrganizationModalOpen, setIsLeaveOrganizationModalOpen] =
+    useState(false);
 
   if (isPending) return <Loading message={"Loading organization members"} />;
 
@@ -46,9 +50,22 @@ function RouteComponent() {
           >
             <span className="text-lg sm:text-xl">{member.member_email}</span>
             <span className="capitalize">{member.role}</span>
+            {isLeaveOrganizationModalOpen ? (
+              <LeaveOrganizationModal
+                closeModal={() => setIsLeaveOrganizationModalOpen(false)}
+                organization_id={member.organization_id}
+                user_id={member.member_id}
+              />
+            ) : null}
           </li>
         ))}
       </ul>
+      <button
+        className="btn-error self-end"
+        onClick={() => setIsLeaveOrganizationModalOpen(true)}
+      >
+        Leave organization
+      </button>
     </div>
   );
 }

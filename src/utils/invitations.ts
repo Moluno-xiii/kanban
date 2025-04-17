@@ -118,6 +118,19 @@ async function cancelInvitation(id: string) {
   return;
 }
 
+async function deleteOrganizationInvitations(organization_id: string) {
+  const { error } = await supabase
+    .from("organization_invitations")
+    .delete()
+    .eq("organization_id", organization_id);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
+  return;
+}
+
 export {
   createOrganizationInvitation,
   getUserInvitation,
@@ -126,4 +139,5 @@ export {
   cancelInvitation,
   markInvitationAsRead,
   updateInvitationStatus,
+  deleteOrganizationInvitations,
 };

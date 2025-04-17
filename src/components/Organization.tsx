@@ -40,6 +40,7 @@ const Organization: React.FC<Proptypes> = ({ organization }) => {
         <DeleteOrganizationModal
           organization_id={organization.id}
           setDeleteOrgModal={setDeleteOrgModal}
+          organization_name={organization.name}
         />
       ) : null}
     </>

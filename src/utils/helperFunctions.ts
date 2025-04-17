@@ -42,12 +42,31 @@ interface Member {
   member_email: string;
   member_id: string;
   organization_id: string;
+  organization_name: string;
+  primary_key: string;
   role: string;
   super_admin_id: string;
+}
+
+interface NotificationType {
+  created_at: string;
+  email: string;
+  has_read: boolean;
+  id: string;
+  message: string;
+  title: string;
+  user_id: string;
 }
 
 export function dateToString(date: string) {
   const dateString = new Date(date).toLocaleString();
   return dateString;
 }
-export type { Project, Todo, OrganizationType, InvitationNotification, Member };
+export type {
+  Project,
+  Todo,
+  OrganizationType,
+  InvitationNotification,
+  Member,
+  NotificationType,
+};

@@ -27,7 +27,7 @@ async function getUserNotifications(user_id: string) {
   const { data: notifications, error } = await supabase
     .from("notifications")
     .select("*")
-    .eq("email", user_id);
+    .eq("user_id", user_id);
 
   if (error) {
     console.error(error.message);
@@ -37,4 +37,18 @@ async function getUserNotifications(user_id: string) {
   return notifications;
 }
 
-export { getUserNotifications, sendNotification };
+async function deleteUserNotifications(user_id: string) {
+  const { data: notifications, error } = await supabase
+    .from("notifications")
+    .delete()
+    .eq("user_id", user_id);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
+
+  return notifications;
+}
+
+export { getUserNotifications, sendNotification, deleteUserNotifications };

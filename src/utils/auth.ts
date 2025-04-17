@@ -5,7 +5,7 @@ async function signUpNewUser(userEmail: string, userPassword: string) {
     email: userEmail,
     password: userPassword,
     options: {
-      emailRedirectTo: "http://localhost:5173/auth/login",
+      emailRedirectTo: "http://https://tasksphere-amber.vercel.app/auth/login",
     },
   });
 
@@ -39,7 +39,8 @@ async function getUser() {
 
 async function resetPassword(email: string) {
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: "http://localhost:5173/auth/reset-password",
+    redirectTo:
+      "http://https://tasksphere-amber.vercel.app/auth/reset-password",
   });
   return { data, error };
 }
@@ -56,7 +57,8 @@ async function signInWithGoogle() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "http://localhost:5173/dashboard/profile",
+      redirectTo:
+        "http://https://tasksphere-amber.vercel.app/dashboard/profile",
     },
   });
   return { data, error };

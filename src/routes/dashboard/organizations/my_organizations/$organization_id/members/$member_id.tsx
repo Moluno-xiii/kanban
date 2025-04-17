@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import DeleteMemberModal from "../../../../../../components/modals/DeleteUserModal";
 import EmptyState from "../../../../../../components/ui/EmptyState";
 import GoBack from "../../../../../../components/ui/GoBack";
 import Loading from "../../../../../../components/ui/Loading";
-import { getOrganizationMember } from "../../../../../../utils/members";
 import { dateToString } from "../../../../../../utils/helperFunctions";
-import useSendNotification from "../../../../../../hooks/useSendNotification";
+import { getOrganizationMember } from "../../../../../../utils/members";
 
 export const Route = createFileRoute(
   "/dashboard/organizations/my_organizations/$organization_id/members/$member_id",
@@ -15,6 +16,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { member_id, organization_id } = Route.useParams();
+  const [isDeleteMemberModalOpen, setIsDeleteMemberModalOpen] = useState(false);
 
   const {
     data: member,
@@ -29,7 +31,6 @@ function RouteComponent() {
     refetchOnWindowFocus: true,
   });
 
-  const sendNotificationMutation = useSendNotification();
   console.log(member);
   if (isPending) return <Loading message="Loading member data" />;
 
@@ -51,22 +52,20 @@ function RouteComponent() {
         // add member data like completed tasks, pending tasks, their numbers,
         e.t.c
       </span>
-      <button className="btn-error w-fit self-end">Delete user</button>
-      <button
-        onClick={() =>
-          sendNotificationMutation.mutate({
-            email: member.member_email,
-            title: "Deletion of account",
-            user_id: member.member_id,
-            message: `You have been removed from the Organization : ${member.organization_name}`,
-          })
-        }
-        className="btn-error w-fit self-end"
-      >
-        {sendNotificationMutation.isPending
-          ? "sending notification..."
-          : " send notification"}
-      </button>
+      {member.role !== "super admin" ? (
+        <button
+          onClick={() => setIsDeleteMemberModalOpen(true)}
+          className="btn-error w-fit self-end"
+        >
+          Delete user
+        </button>
+      ) : null}
+      {isDeleteMemberModalOpen ? (
+        <DeleteMemberModal
+          member={member}
+          closeModal={() => setIsDeleteMemberModalOpen(false)}
+        />
+      ) : null}
     </div>
   );
 }

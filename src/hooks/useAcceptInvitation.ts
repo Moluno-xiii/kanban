@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { updateInvitationStatus } from "../utils/invitations";
 import { useNavigate } from "@tanstack/react-router";
-import { addMemberToOrganization } from "../utils/members";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { updateInvitationStatus } from "../utils/invitations";
+import { addMemberToOrganization } from "../utils/members";
+import { sendNotification } from "../utils/notifications";
 
 interface Props {
   organization_id: string;
@@ -33,6 +34,12 @@ const useAcceptInvitation = ({
         super_admin_id,
         user?.email as string,
         organization_name,
+      );
+      await sendNotification(
+        user?.id as string,
+        "New organization",
+        `You joined a new Organization : ${organization_name}`,
+        user?.email as string,
       );
     },
     onSuccess: () => {
