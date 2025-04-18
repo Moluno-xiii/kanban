@@ -71,7 +71,9 @@ function RouteComponent() {
   return (
     <div className="flex flex-col gap-y-6">
       <div className="flex flex-row items-center justify-between gap-3">
-        <p className="text-xl md:text-2xl">My Projects ({projects.length})</p>
+        <p className="text-xl md:text-2xl">
+          My Personal Projects ({projects.length})
+        </p>
         <button
           aria-label="add project button"
           className="btn"

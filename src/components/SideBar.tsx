@@ -51,7 +51,7 @@ const SideBar: React.FC = () => {
     setOpenLogoutModal(state);
   };
   const { data: invitations } = useGetUserInvitations();
-  const { data: notifications } = useGetUserNotifications();
+  const { data: notifications } = useGetUserNotifications(false);
 
   async function handleLogout() {
     try {
