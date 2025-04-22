@@ -25,7 +25,6 @@ function RouteComponent() {
 
   if (isPending) return <Loading message={"loading organizations"} />;
 
-  console.log(data);
   if (!data || data.length < 1)
     return (
       <EmptyState

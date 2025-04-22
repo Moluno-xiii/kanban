@@ -1,16 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { FaArrowRight } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import AddMemberForm from "../../../../../components/forms/AddMemberForm";
+import CreateTeamModal from "../../../../../components/modals/CreateTeamModal";
 import Error from "../../../../../components/ui/Error";
 import GoBack from "../../../../../components/ui/GoBack";
 import Loading from "../../../../../components/ui/Loading";
 import Modal from "../../../../../components/ui/Modal";
 import useGetAdminOrganization from "../../../../../hooks/useGetAdminOrganization";
-import useGetOrganizationMembers from "../../../../../hooks/useGetOrganizationMembers";
 import { RootState } from "../../../../../store";
-import { dateToString, Member } from "../../../../../utils/helperFunctions";
+import { dateToString } from "../../../../../utils/helperFunctions";
+const OrganizationTeams = lazy(
+  () => import("../../../../../components/OrganizationTeams.tsx"),
+);
+const OrganizationMembers = lazy(
+  () => import("../../../../../components/OrganizationMembers.tsx"),
+);
 
 export const Route = createFileRoute(
   "/dashboard/organizations/my_organizations/$organization_id/",
@@ -24,44 +30,24 @@ function RouteComponent() {
   const {
     data: organization,
     isPending,
-    isError,
+    error,
   } = useGetAdminOrganization(organization_id);
   const [addMemberModal, setAddMemberModal] = useState(false);
+  const [createTeamModal, setCreateTeamModal] = useState(false);
 
   const handleAddMemberModal = (state: boolean) => {
     setAddMemberModal(state);
   };
 
-  const {
-    data: members,
-    isPending: isFetchingMembers,
-    error,
-  } = useGetOrganizationMembers(organization_id);
-
-  if (isFetchingMembers)
-    return <Loading message="Loading organization members" />;
-
   if (isPending) {
     return <Loading message="Loading organizations" />;
   }
 
-  if (isError) {
+  if (error) {
     return (
-      <span className="h-full w-full items-center justify-center text-center">
-        An Error occured, reload the page and try again.
-      </span>
+      <Error errorMessage={error.message || "An unexpected error occured."} />
     );
   }
-
-  if (error)
-    return (
-      <Error
-        errorMessage={
-          error.message ||
-          "An unexpected error occured, reload the page and try again"
-        }
-      />
-    );
 
   if (!organization || organization.length < 1)
     return (
@@ -86,13 +72,26 @@ function RouteComponent() {
           </Link>
         ) : null}
       </div>
-      <div className="flex flex-row items-center justify-between gap-3">
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <span className="text-xl capitalize md:text-2xl">
           {organization.name}
         </span>
-        <button className="btn" onClick={() => handleAddMemberModal(true)}>
-          Add Members
-        </button>
+        <div className="flex flex-row items-center justify-between gap-x-3">
+          <button className="btn" onClick={() => setCreateTeamModal(true)}>
+            Create team
+          </button>
+          <button className="btn" onClick={() => handleAddMemberModal(true)}>
+            Add Members
+          </button>
+          {createTeamModal ? (
+            <CreateTeamModal
+              handleCloseModal={() => setCreateTeamModal(false)}
+              organization_id={organization_id}
+              creator_id={user?.id as string}
+              super_admin_id={user?.id as string}
+            />
+          ) : null}
+        </div>
         {addMemberModal ? (
           <Modal
             handleClose={() => handleAddMemberModal(false)}
@@ -110,45 +109,28 @@ function RouteComponent() {
         <span>Date Created : {dateToString(organization.created_at)}</span>
         <span>Description : {organization.description}</span>
       </div>
-      {members.length >= 1 ? (
-        <div className="border-secondary mt-4 flex flex-col gap-y-2 rounded-md border p-2 shadow-sm">
-          <div className="flex flex-row items-center justify-between gap-3">
-            <span className="text-xl md:text-2xl">Members</span>
-            {members.length > 5 ? (
-              <Link
-                className="text-secondary hover:text-secondary/70 transition-all duration-300 hover:underline"
-                params={{ organization_id }}
-                to="/dashboard/organizations/my_organizations/$organization_id/members"
-              >
-                View all members
-              </Link>
-            ) : null}
-          </div>
-          <ul className="flex flex-col gap-y-2">
-            {members.slice(0, 5).map((member: Member) => (
-              <li
-                key={member.member_id}
-                className="flex flex-col justify-between sm:flex-row sm:items-center"
-              >
-                <span>{member.member_email}</span>
-                <div className="flex flex-row items-center gap-x-2">
-                  <span className="capitalize">{member.role}</span>
-                  <Link
-                    to="/dashboard/organizations/my_organizations/$organization_id/members/$member_id"
-                    params={{ member_id: member.member_id, organization_id }}
-                    className="hover:text-secondary/70 text-secondary flex cursor-pointer flex-row items-center gap-x-2 transition-all duration-200"
-                  >
-                    View member
-                    <FaArrowRight size={15} />
-                  </Link>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <span className="text-center text-lg sm:text-xl">No members yet</span>
-      )}
+
+      <Suspense
+        fallback={
+          <span className="text-secondary text-lg sm:text-xl">
+            Loading organization members...
+          </span>
+        }
+      >
+        <OrganizationMembers organization_id={organization_id} />
+      </Suspense>
+      <Suspense
+        fallback={
+          <span className="text-secondary text-lg sm:text-xl">
+            Loading organization teams...
+          </span>
+        }
+      >
+        <OrganizationTeams
+          organization_id={organization_id}
+          super_admin_id={user?.id as string}
+        />
+      </Suspense>
     </div>
   );
 }

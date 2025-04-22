@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { CiMenuBurger } from "react-icons/ci";
 import { useNavbarContext } from "../contexts/NavContext";
 import useAuthGuard from "../hooks/useAuthGuard";
@@ -9,6 +9,7 @@ const Header: React.FC = () => {
   const { handleNavbarState } = useNavbarContext();
   const { user } = useAuthGuard();
   const { data: profileData } = useUserProfile(user?.id as string);
+  const navigate = useNavigate();
 
   let userInitials = "";
   profileData?.display_name
@@ -28,13 +29,15 @@ const Header: React.FC = () => {
           <img
             src={profileData?.profile_picture}
             alt="User profile picture"
-            className="ring-secondary size-10 rounded-full ring-2 ring-offset-0"
+            className="ring-secondary size-10 cursor-pointer rounded-full ring-2 ring-offset-0 transition-all duration-300 hover:rotate-180"
+            onClick={() => navigate({ to: "/dashboard/profile" })}
           />
         ) : null}
         {userInitials.length > 0 ? (
           <span
             aria-label="user's display name"
-            className="text-secondary border-secondary hidden rounded-full border p-1 text-xl uppercase sm:inline-block md:text-2xl"
+            className="text-secondary border-secondary hidden cursor-pointer rounded-full border p-2 text-xl uppercase transition-all duration-300 hover:rotate-180 sm:inline-block md:text-2xl"
+            onClick={() => navigate({ to: "/dashboard/profile" })}
           >
             {userInitials}
           </span>
@@ -42,6 +45,7 @@ const Header: React.FC = () => {
           <span
             aria-label="user's display name"
             className="text-secondary hidden text-xl first-letter:capitalize sm:inline-block md:text-2xl"
+            onClick={() => navigate({ to: "/dashboard/profile" })}
           >
             {profileData?.display_name}
           </span>

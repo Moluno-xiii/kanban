@@ -24,7 +24,7 @@ const ReadNotifications: React.FC = () => {
           <span className="first-letter:uppercase">{notification.message}</span>
           <span>Dated {dateToString(notification.created_at)}</span>
           <span>
-            Notification status {notification.has_read ? "read" : "not read"}
+            Notification status : {notification.has_read ? "read" : "not read"}
           </span>
         </li>
       ))}

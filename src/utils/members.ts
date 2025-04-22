@@ -26,7 +26,6 @@ async function addMemberToOrganization(
     console.error(error.message);
     throw new Error(error.message);
   }
-  console.log(members);
   return members;
 }
 
@@ -80,9 +79,6 @@ async function deleteMemberFromOrganization(
   member_id: string,
   super_admin_id: string,
   organization_id: string,
-  // add super_admin_id and if the user's id isn't the same, dont delete.
-  // only super admins should be able to delete users.
-  // admins can assign and reject or accept tasks, but can't delete members.
 ) {
   if (deleter_id === member_id) {
     throw new Error("You cannot delete yourself from the organization");
@@ -102,7 +98,6 @@ async function deleteMemberFromOrganization(
     .eq("organization_id", organization_id);
   if (error) {
     throw new Error(error.message);
-    // Toast the error from the mutation
   }
 }
 
@@ -120,7 +115,6 @@ async function deleteOrganizationMembers(
     .eq("organization_id", organization_id);
   if (error) {
     throw new Error(error.message);
-    // Toast the error from the mutation
   }
 }
 
@@ -135,6 +129,20 @@ async function leaveOrganization(deleter_id: string, organization_id: string) {
   }
 }
 
+async function getMemberRole(member_id: string, organization_id: string) {
+  const { data: role, error } = await supabase
+    .from("organization_members")
+    .select("role")
+    .eq("member_id", member_id)
+    .eq("organization_id", organization_id);
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  console.log(role[0].role);
+  return role;
+}
+
 export {
   addMemberToOrganization,
   getOrganizationMembers,
@@ -143,4 +151,5 @@ export {
   getOrganizationMember,
   deleteOrganizationMembers,
   leaveOrganization,
+  getMemberRole,
 };

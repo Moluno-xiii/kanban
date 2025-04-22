@@ -71,6 +71,7 @@ function RouteComponent() {
       <button onClick={() => setOrganizationModal(true)} className="btn w-fit">
         Add Organization
       </button>
+
       {organizationModal ? (
         <Modal
           handleClose={() => setOrganizationModal(false)}

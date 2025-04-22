@@ -37,7 +37,6 @@ function RouteComponent() {
     );
   }
 
-  console.log(members);
   return (
     <div className="flex flex-col gap-y-4">
       <GoBack route="/dashboard/organizations/other_organizations" />

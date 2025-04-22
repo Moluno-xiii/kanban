@@ -31,7 +31,6 @@ function RouteComponent() {
     refetchOnWindowFocus: true,
   });
 
-  console.log(member);
   if (isPending) return <Loading message="Loading member data" />;
 
   if (!member || member.length < 1 || error)
@@ -48,10 +47,7 @@ function RouteComponent() {
       <span>Date joined : {dateToString(member.created_at)}</span>
       <span>Role : {member.role}</span>
 
-      <span>
-        // add member data like completed tasks, pending tasks, their numbers,
-        e.t.c
-      </span>
+      <span></span>
       {member.role !== "super admin" ? (
         <button
           onClick={() => setIsDeleteMemberModalOpen(true)}

@@ -26,7 +26,7 @@ interface OrganizationType {
 interface InvitationNotification {
   created_at: string;
   id: string;
-  invited_by: string;
+  invited_by: string | null;
   invitation_status: "pending" | "accepted" | "rejected";
   invitee_email: string;
   inviter_id: string;
@@ -58,6 +58,16 @@ interface NotificationType {
   user_id: string;
 }
 
+interface TeamType {
+  admin_id: string;
+  created_at: string;
+  description: string;
+  id: string;
+  name: string;
+  organization_id: string;
+  super_admin_id: string;
+}
+
 export function dateToString(date: string) {
   const dateString = new Date(date).toLocaleString();
   return dateString;
@@ -69,4 +79,5 @@ export type {
   InvitationNotification,
   Member,
   NotificationType,
+  TeamType,
 };
