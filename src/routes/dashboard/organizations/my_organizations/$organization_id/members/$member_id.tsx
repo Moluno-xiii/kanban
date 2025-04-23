@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import DeleteMemberModal from "../../../../../../components/modals/DeleteUserModal";
 import EmptyState from "../../../../../../components/ui/EmptyState";
 import GoBack from "../../../../../../components/ui/GoBack";
 import Loading from "../../../../../../components/ui/Loading";
+import { useModalContext } from "../../../../../../contexts/ModalContext";
 import { dateToString } from "../../../../../../utils/helperFunctions";
 import { getOrganizationMember } from "../../../../../../utils/members";
 
@@ -16,7 +16,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { member_id, organization_id } = Route.useParams();
-  const [isDeleteMemberModalOpen, setIsDeleteMemberModalOpen] = useState(false);
+  const { activeModal, handleActiveModal } = useModalContext();
 
   const {
     data: member,
@@ -50,16 +50,16 @@ function RouteComponent() {
       <span></span>
       {member.role !== "super admin" ? (
         <button
-          onClick={() => setIsDeleteMemberModalOpen(true)}
+          onClick={() => handleActiveModal("delete organization member")}
           className="btn-error w-fit self-end"
         >
-          Delete user
+          Delete member
         </button>
       ) : null}
-      {isDeleteMemberModalOpen ? (
+      {activeModal === "delete organization member" ? (
         <DeleteMemberModal
           member={member}
-          closeModal={() => setIsDeleteMemberModalOpen(false)}
+          closeModal={() => handleActiveModal(null)}
         />
       ) : null}
     </div>

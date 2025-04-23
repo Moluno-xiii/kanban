@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useModalContext } from "../contexts/ModalContext";
 import { dateToString, OrganizationType } from "../utils/helperFunctions";
 import DeleteOrganizationModal from "./modals/DeleteOrganizationModal";
 
@@ -8,7 +8,7 @@ interface Proptypes {
 }
 
 const Organization: React.FC<Proptypes> = ({ organization }) => {
-  const [deleteOrgModal, setDeleteOrgModal] = useState(false);
+  const { activeModal, handleActiveModal } = useModalContext();
 
   return (
     <>
@@ -30,16 +30,17 @@ const Organization: React.FC<Proptypes> = ({ organization }) => {
         </span>
         <span>Date Created : {dateToString(organization.created_at)}</span>
         <button
-          onClick={() => setDeleteOrgModal(true)}
+          onClick={() => handleActiveModal("delete organization")}
           className="btn-error w-fit self-end"
         >
           Delete Organization
         </button>
       </li>
-      {deleteOrgModal ? (
+      {activeModal === "delete organization" ? (
         <DeleteOrganizationModal
           organization_id={organization.id}
-          setDeleteOrgModal={setDeleteOrgModal}
+          closeModal={() => handleActiveModal(null)}
+          // setDeleteOrgModal={setDeleteOrgModal}
           organization_name={organization.name}
         />
       ) : null}

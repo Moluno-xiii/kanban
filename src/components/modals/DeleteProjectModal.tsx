@@ -1,4 +1,4 @@
-import { useProjectModalContext } from "../../contexts/ProjectModalContext";
+import { useModalContext } from "../../contexts/ModalContext";
 import useDeleteProject from "../../hooks/useDeleteProject";
 import Modal from "../ui/Modal";
 
@@ -7,39 +7,30 @@ interface DeleteProjectModalTypes {
 }
 const DeleteProjectModal: React.FC<DeleteProjectModalTypes> = ({ nested }) => {
   const deleteProjectMutation = useDeleteProject({ nested });
-  const {
-    activeProjectModalId,
-    setActiveProjectModalId,
-    setIsDeleteProjectModalOpen,
-  } = useProjectModalContext();
+  const { activeProjectModalId, handleActiveModal } = useModalContext();
 
-  const handleDeleteProject = (projectId: string) => {
-    setIsDeleteProjectModalOpen(true);
-    setActiveProjectModalId(projectId);
-    deleteProjectMutation.mutate(projectId);
+  const handleDeleteProject = () => {
+    if (activeProjectModalId) {
+      deleteProjectMutation.mutate(activeProjectModalId);
+    }
   };
-
   return (
     <Modal
       title="Are you sure you want to Delete this project??"
-      handleClose={() => setIsDeleteProjectModalOpen(false)}
+      handleClose={() => handleActiveModal(null)}
     >
       <div className="flex flex-row items-center justify-end gap-x-2">
         <button
           aria-label="Yes, i want to delete project button"
           className="btn-error"
-          onClick={() => {
-            if (activeProjectModalId) {
-              handleDeleteProject(activeProjectModalId);
-            }
-          }}
+          onClick={handleDeleteProject}
         >
           {deleteProjectMutation.isPending ? "Deleting Project..." : "Yes"}
         </button>
         <button
           aria-label="No, i don't want to delete project button"
           className="btn"
-          onClick={() => setIsDeleteProjectModalOpen(false)}
+          onClick={() => handleActiveModal(null)}
         >
           No
         </button>

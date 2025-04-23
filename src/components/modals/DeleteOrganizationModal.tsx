@@ -1,27 +1,26 @@
-import { Dispatch, SetStateAction } from "react";
-import Modal from "../ui/Modal";
 import useDeleteUserOrganization from "../../hooks/useDeleteUserOrganization";
+import Modal from "../ui/Modal";
 
 interface PropTypes {
-  setDeleteOrgModal: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
   organization_id: string;
   organization_name: string;
 }
 
 const DeleteOrganizationModal: React.FC<PropTypes> = ({
-  setDeleteOrgModal,
+  closeModal,
   organization_id,
   organization_name,
 }) => {
   const deleteOrganizationMutation = useDeleteUserOrganization({
     organization_id,
     organization_name,
-    handleCloseModal: () => setDeleteOrgModal(false),
+    handleCloseModal: () => closeModal(),
   });
   return (
     <Modal
       title="Are you sure you want to Delete this organization??"
-      handleClose={() => setDeleteOrgModal(false)}
+      handleClose={() => closeModal()}
     >
       <div className="flex flex-row items-center justify-end gap-x-2">
         <button
@@ -36,7 +35,7 @@ const DeleteOrganizationModal: React.FC<PropTypes> = ({
         <button
           aria-label="No, i don't want to delete organization button"
           className="btn"
-          onClick={() => setDeleteOrgModal(false)}
+          onClick={() => closeModal()}
         >
           No
         </button>

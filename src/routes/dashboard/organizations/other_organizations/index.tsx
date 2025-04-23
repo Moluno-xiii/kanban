@@ -29,7 +29,7 @@ function RouteComponent() {
     return (
       <EmptyState
         button={false}
-        emptyStateText="    You don't belong to any secondary organizations, secondary organizations
+        emptyStateText="You don't belong to any secondary organizations, secondary organizations
         you belong to will appear here."
       />
     );

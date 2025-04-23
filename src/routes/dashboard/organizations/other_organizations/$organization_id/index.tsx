@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import GoBack from "../../../../../components/ui/GoBack";
-import useGetOrganizationMembers from "../../../../../hooks/useGetOrganizationMembers";
-import Loading from "../../../../../components/ui/Loading";
-import Error from "../../../../../components/ui/Error";
+import { lazy, Suspense } from "react";
 import toast from "react-hot-toast";
-import { lazy, Suspense, useState } from "react";
 import LeaveOrganizationModal from "../../../../../components/modals/LeaveOrganizationModal";
+import Error from "../../../../../components/ui/Error";
+import GoBack from "../../../../../components/ui/GoBack";
+import Loading from "../../../../../components/ui/Loading";
+import { useModalContext } from "../../../../../contexts/ModalContext.tsx";
+import useGetOrganizationMembers from "../../../../../hooks/useGetOrganizationMembers";
 import useGetUserOrganizationRole from "../../../../../hooks/useGetUserOrganizationRole";
 import { Member } from "../../../../../utils/helperFunctions.ts";
 const AdminTeams = lazy(
@@ -24,14 +25,13 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { organization_id } = Route.useParams();
   const { data: userRole } = useGetUserOrganizationRole(organization_id);
-  console.log(userRole);
   const {
     data: members,
     isPending,
     error,
   } = useGetOrganizationMembers(organization_id);
-  const [isLeaveOrganizationModalOpen, setIsLeaveOrganizationModalOpen] =
-    useState(false);
+  console.log(userRole);
+  const { activeModal, handleActiveModal } = useModalContext();
 
   if (isPending) return <Loading message={"Loading organization members"} />;
 
@@ -59,9 +59,9 @@ function RouteComponent() {
           >
             <span className="text-lg sm:text-xl">{member.member_email}</span>
             <span className="capitalize">{member.role}</span>
-            {isLeaveOrganizationModalOpen ? (
+            {activeModal === "leave organization" ? (
               <LeaveOrganizationModal
-                closeModal={() => setIsLeaveOrganizationModalOpen(false)}
+                closeModal={() => handleActiveModal(null)}
                 organization_id={member.organization_id}
                 user_id={member.member_id}
               />
@@ -81,7 +81,7 @@ function RouteComponent() {
 
       <button
         className="btn-error self-end"
-        onClick={() => setIsLeaveOrganizationModalOpen(true)}
+        onClick={() => handleActiveModal("leave organization")}
       >
         Leave organization
       </button>

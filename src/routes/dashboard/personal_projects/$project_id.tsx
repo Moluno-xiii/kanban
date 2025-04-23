@@ -7,7 +7,7 @@ import Error from "../../../components/ui/Error";
 import GoBack from "../../../components/ui/GoBack";
 import Loading from "../../../components/ui/Loading";
 import Modal from "../../../components/ui/Modal";
-import { useProjectModalContext } from "../../../contexts/ProjectModalContext";
+import { useModalContext } from "../../../contexts/ModalContext";
 import useProject from "../../../hooks/useProject";
 import useProjectTodos from "../../../hooks/useProjectTodos";
 import { dateToString, Todo } from "../../../utils/helperFunctions";
@@ -43,12 +43,11 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { project_id } = Route.useParams();
   const {
-    isDeleteProjectModalOpen,
-    isTodoModalOpen,
-    setIsDeleteProjectModalOpen,
+    activeModal,
+    activeProjectModalId,
+    handleActiveModal,
     handleProjectModal,
-    handleTodoModal,
-  } = useProjectModalContext();
+  } = useModalContext();
 
   const { data: project, isPending, error } = useProject(project_id);
   const {
@@ -56,11 +55,6 @@ function RouteComponent() {
     isPending: loadingTodos,
     error: todoError,
   } = useProjectTodos(project_id);
-
-  const onOpenTodoModal = () => {
-    handleTodoModal(true);
-    handleProjectModal(false, project_id);
-  };
 
   if (isPending || loadingTodos)
     return <Loading message="loading project data" />;
@@ -72,17 +66,17 @@ function RouteComponent() {
       <GoBack route={"/dashboard/personal_projects"} />
       <div className="flex flex-col gap-y-3">
         <div className="flex flex-row items-center justify-between">
-          <span className="text-xl first-letter:capitalize">
-            Project name : {project.project_name}
+          <span className="text-xl first-letter:capitalize sm:text-2xl">
+            {project.project_name}
           </span>
-          <button className="btn" onClick={onOpenTodoModal}>
+          <button className="btn" onClick={() => handleActiveModal("add todo")}>
             add todo
           </button>
 
-          {isTodoModalOpen ? (
-            <Modal handleClose={() => handleTodoModal(false)} title="Add todo">
+          {activeModal === "add todo" ? (
+            <Modal handleClose={() => handleActiveModal(null)} title="Add todo">
               <AddTodoForm
-                handleModal={handleTodoModal}
+                handleModal={handleActiveModal}
                 projectId={project_id}
               />
             </Modal>
@@ -102,13 +96,16 @@ function RouteComponent() {
         aria-label="delete project button"
         className="btn-error self-end"
         onClick={() => {
-          handleProjectModal(false, project.project_id);
-          setIsDeleteProjectModalOpen(true);
+          handleActiveModal("delete project");
+          handleProjectModal(project.project_id);
         }}
       >
         Delete Project
       </button>
-      {isDeleteProjectModalOpen ? <DeleteProjectModal nested={true} /> : null}
+      {activeModal === "delete project" &&
+      activeProjectModalId === project.project_id ? (
+        <DeleteProjectModal nested={true} />
+      ) : null}
     </div>
   );
 }

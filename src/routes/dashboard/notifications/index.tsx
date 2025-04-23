@@ -1,15 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense } from "react";
+import DeleteUserNotificationsModal from "../../../components/modals/DeleteUserNotificationsModal";
 import EmptyState from "../../../components/ui/EmptyState";
 import Loading from "../../../components/ui/Loading";
+import { useModalContext } from "../../../contexts/ModalContext.tsx";
 import useGetUserNotifications from "../../../hooks/useGetUserNotifications";
+import useMarkNotificationAsRead from "../../../hooks/useMarkNotificationAsRead.ts";
 import { dateToString, NotificationType } from "../../../utils/helperFunctions";
-import DeleteUserNotificationsModal from "../../../components/modals/DeleteUserNotificationsModal";
 
 const ReadNotifications = lazy(
   () => import("../../../components/ReadNotifications.tsx"),
 );
-import useMarkNotificationAsRead from "../../../hooks/useMarkNotificationAsRead.ts";
 
 export const Route = createFileRoute("/dashboard/notifications/")({
   component: RouteComponent,
@@ -17,10 +18,7 @@ export const Route = createFileRoute("/dashboard/notifications/")({
 
 function RouteComponent() {
   const { data: notifications, isPending } = useGetUserNotifications(false);
-
-  const [isDeleteNotificationModalOpen, setIsDeleteNotificationModalOpen] =
-    useState(false);
-
+  const { activeModal, handleActiveModal } = useModalContext();
   const updateNotificationMutation = useMarkNotificationAsRead();
   if (isPending) return <Loading message={"Loading user notifications"} />;
   console.log(notifications);
@@ -36,7 +34,7 @@ function RouteComponent() {
           <span className="text-xl md:text-2xl">Notifications</span>
           {notifications.length ? (
             <button
-              onClick={() => setIsDeleteNotificationModalOpen(true)}
+              onClick={() => handleActiveModal("delete notification")}
               className="btn-error"
             >
               Delete all notifications
@@ -44,9 +42,9 @@ function RouteComponent() {
           ) : (
             <span>No unread notifications</span>
           )}
-          {isDeleteNotificationModalOpen ? (
+          {activeModal === "delete notification" ? (
             <DeleteUserNotificationsModal
-              closeModal={() => setIsDeleteNotificationModalOpen(false)}
+              closeModal={() => handleActiveModal(null)}
             />
           ) : null}
         </div>
