@@ -1,13 +1,13 @@
-import { useState } from "react";
-import useGetAdminTeams from "../hooks/useGetAdminTeams";
-import Error from "./ui/Error";
-import Loading from "./ui/Loading";
-import CreateTeamModal from "./modals/CreateTeamModal";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
-import { TeamType } from "../utils/helperFunctions";
 import { Link } from "@tanstack/react-router";
 import { FaArrowRight } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+import { useModalContext } from "../contexts/ModalContext";
+import useGetAdminTeams from "../hooks/useGetAdminTeams";
+import { RootState } from "../store";
+import { TeamType } from "../utils/helperFunctions";
+import CreateTeamModal from "./modals/CreateTeamModal";
+import Error from "./ui/Error";
+import Loading from "./ui/Loading";
 
 interface PropTypes {
   organization_id: string;
@@ -18,9 +18,8 @@ const OrganizationMembers: React.FC<PropTypes> = ({
   organization_id,
   super_admin_id,
 }) => {
-  const [isCreateTeamModalOpen, setIsCreateTeamModalOpen] = useState(false);
+  const { handleActiveModal, activeModal } = useModalContext();
   const { user } = useSelector((state: RootState) => state.auth);
-  console.log(isCreateTeamModalOpen);
   const { data: teams, error, isPending } = useGetAdminTeams(organization_id);
   console.log(teams);
   if (isPending) return <Loading message="Loading organization members" />;
@@ -39,7 +38,7 @@ const OrganizationMembers: React.FC<PropTypes> = ({
             <span className="text-xl md:text-2xl">Teams ({teams.length})</span>
             <button
               className="btn"
-              onClick={() => setIsCreateTeamModalOpen(true)}
+              onClick={() => handleActiveModal("add team")}
             >
               Add team
             </button>
@@ -73,17 +72,14 @@ const OrganizationMembers: React.FC<PropTypes> = ({
           <span className="text-center text-lg sm:text-xl">
             You haven't added any teams yet. Teams you add will appear here.
           </span>
-          <button
-            className="btn"
-            onClick={() => setIsCreateTeamModalOpen(true)}
-          >
+          <button className="btn" onClick={() => handleActiveModal("add team")}>
             Add team
           </button>
         </div>
       )}
-      {isCreateTeamModalOpen ? (
+      {activeModal === "add team" ? (
         <CreateTeamModal
-          handleCloseModal={() => setIsCreateTeamModalOpen(false)}
+          handleCloseModal={() => handleActiveModal(null)}
           organization_id={organization_id}
           creator_id={user?.id as string}
           super_admin_id={super_admin_id}

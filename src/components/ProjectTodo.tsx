@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { useProjectModalContext } from "../contexts/ProjectModalContext";
+import { useModalContext } from "../contexts/ModalContext";
 import useDeleteTodo from "../hooks/useDeleteTodo";
 import { dateToString, Todo } from "../utils/helperFunctions";
 import { updateTodoStatus } from "../utils/todo";
@@ -14,8 +14,8 @@ interface Props {
 const ProjectTodo: React.FC<Props> = ({ project_id, todo }) => {
   const queryClient = useQueryClient();
   const deleteTodoMutation = useDeleteTodo(project_id);
-  const { isDeleteTodoModalOpen, setIsDeleteTodoModalOpen } =
-    useProjectModalContext();
+  const { activeModal, activeTodoModalId, handleActiveModal, handleTodoModal } =
+    useModalContext();
 
   const updateTodoStatusMutation = useMutation({
     onSuccess: () => {
@@ -50,7 +50,10 @@ const ProjectTodo: React.FC<Props> = ({ project_id, todo }) => {
       <div className="flex flex-row items-center justify-between gap-2">
         <button
           className="hover:text-error/60 text-error w-fit cursor-pointer transition-all duration-200 hover:underline"
-          onClick={() => setIsDeleteTodoModalOpen(true)}
+          onClick={() => {
+            handleTodoModal(todo.id);
+            handleActiveModal("delete todo");
+          }}
         >
           {deleteTodoMutation.isPending ? "Deleting todo..." : "Delete Todo"}
         </button>
@@ -74,7 +77,7 @@ const ProjectTodo: React.FC<Props> = ({ project_id, todo }) => {
         </button>
       </div>
 
-      {isDeleteTodoModalOpen ? (
+      {activeModal === "delete todo" && todo.id === activeTodoModalId ? (
         <DeleteTodoModal projectId={project_id} todoId={todo.id} />
       ) : null}
     </li>

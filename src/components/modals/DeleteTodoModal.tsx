@@ -1,4 +1,4 @@
-import { useProjectModalContext } from "../../contexts/ProjectModalContext";
+import { useModalContext } from "../../contexts/ModalContext";
 import useDeleteTodo from "../../hooks/useDeleteTodo";
 import Modal from "../ui/Modal";
 
@@ -11,12 +11,12 @@ const DeleteTodoModal: React.FC<DeleteTodoModalTypes> = ({
   todoId,
   projectId,
 }) => {
-  const { setIsDeleteTodoModalOpen } = useProjectModalContext();
+  const { handleActiveModal } = useModalContext();
   const deleteTodoMutation = useDeleteTodo(projectId);
   return (
     <Modal
       title="Are you sure you want to Delete this Todo??"
-      handleClose={() => setIsDeleteTodoModalOpen(false)}
+      handleClose={() => handleActiveModal(null)}
     >
       <div className="flex flex-row items-center justify-end gap-x-2">
         <button
@@ -33,7 +33,7 @@ const DeleteTodoModal: React.FC<DeleteTodoModalTypes> = ({
         <button
           aria-label="No, i don't want to delete todo button"
           className="btn"
-          onClick={() => setIsDeleteTodoModalOpen(false)}
+          onClick={() => handleActiveModal(null)}
         >
           No
         </button>

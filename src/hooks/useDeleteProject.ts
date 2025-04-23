@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import { useProjectModalContext } from "../contexts/ProjectModalContext";
+import { useModalContext } from "../contexts/ModalContext";
 import { RootState } from "../store";
 import { deleteUserProject } from "../utils/project";
 
@@ -11,8 +11,8 @@ const useDeleteProject = ({ nested = false }: { nested: boolean }) => {
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
-  const { setIsDeleteProjectModalOpen, setActiveProjectModalId } =
-    useProjectModalContext();
+  const { handleActiveModal, handleProjectModal } = useModalContext();
+
   return useMutation({
     mutationFn: deleteUserProject,
     onSuccess: () => {
@@ -22,8 +22,9 @@ const useDeleteProject = ({ nested = false }: { nested: boolean }) => {
       queryClient.refetchQueries({
         queryKey: ["user-projects", user?.id],
       });
-      setIsDeleteProjectModalOpen(false);
-      setActiveProjectModalId("");
+      handleActiveModal(null);
+      handleProjectModal("");
+
       toast.success("Project deleted successfully!");
 
       if (nested) {
@@ -34,7 +35,7 @@ const useDeleteProject = ({ nested = false }: { nested: boolean }) => {
       const message =
         err instanceof Error ? err.message : "An unexpected error occured";
       console.error(message);
-      toast.error("Couldn't delete todo, try again.");
+      toast.error(message);
     },
   });
 };

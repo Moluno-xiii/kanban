@@ -9,7 +9,7 @@ const AddTodoForm = ({
   handleModal,
   projectId,
 }: {
-  handleModal: (state: boolean) => void;
+  handleModal: (state: null) => void;
   projectId: string;
 }) => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -19,7 +19,7 @@ const AddTodoForm = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todo", projectId] });
       queryClient.refetchQueries({ queryKey: ["todo", projectId] });
-      handleModal(false);
+      handleModal(null);
       toast.success("Todo added successfully!!");
     },
     mutationFn: upsertProjectTodo,
@@ -64,10 +64,10 @@ const AddTodoForm = ({
           id="no"
           className="border-secondary bg-background rounded-md border-2 p-2"
         >
-          <option id="no" value={"no"}>
+          <option id="no" value={"no"} tabIndex={1}>
             Unfinished
           </option>
-          <option id="yes" value={"yes"}>
+          <option id="yes" value={"yes"} tabIndex={2}>
             Finished
           </option>
         </select>

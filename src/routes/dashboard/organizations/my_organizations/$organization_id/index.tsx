@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense } from "react";
 import { FaArrowRight } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import AddMemberForm from "../../../../../components/forms/AddMemberForm";
@@ -8,6 +8,7 @@ import Error from "../../../../../components/ui/Error";
 import GoBack from "../../../../../components/ui/GoBack";
 import Loading from "../../../../../components/ui/Loading";
 import Modal from "../../../../../components/ui/Modal";
+import { useModalContext } from "../../../../../contexts/ModalContext.tsx";
 import useGetAdminOrganization from "../../../../../hooks/useGetAdminOrganization";
 import { RootState } from "../../../../../store";
 import { dateToString } from "../../../../../utils/helperFunctions";
@@ -32,12 +33,7 @@ function RouteComponent() {
     isPending,
     error,
   } = useGetAdminOrganization(organization_id);
-  const [addMemberModal, setAddMemberModal] = useState(false);
-  const [createTeamModal, setCreateTeamModal] = useState(false);
-
-  const handleAddMemberModal = (state: boolean) => {
-    setAddMemberModal(state);
-  };
+  const { activeModal, handleActiveModal } = useModalContext();
 
   if (isPending) {
     return <Loading message="Loading organizations" />;
@@ -77,30 +73,36 @@ function RouteComponent() {
           {organization.name}
         </span>
         <div className="flex flex-row items-center justify-between gap-x-3">
-          <button className="btn" onClick={() => setCreateTeamModal(true)}>
+          <button
+            className="btn"
+            onClick={() => handleActiveModal("create team")}
+          >
             Create team
           </button>
-          <button className="btn" onClick={() => handleAddMemberModal(true)}>
+          <button
+            className="btn"
+            onClick={() => handleActiveModal("add organization member")}
+          >
             Add Members
           </button>
-          {createTeamModal ? (
+          {activeModal === "create team" ? (
             <CreateTeamModal
-              handleCloseModal={() => setCreateTeamModal(false)}
+              handleCloseModal={() => handleActiveModal(null)}
               organization_id={organization_id}
               creator_id={user?.id as string}
               super_admin_id={user?.id as string}
             />
           ) : null}
         </div>
-        {addMemberModal ? (
+        {activeModal === "add organization member" ? (
           <Modal
-            handleClose={() => handleAddMemberModal(false)}
+            handleClose={() => handleActiveModal(null)}
             title="Add Member Form"
           >
             <AddMemberForm
               organization_id={organization.id}
               organization_name={organization.name}
-              handleModal={() => handleAddMemberModal(false)}
+              handleModal={() => handleActiveModal(null)}
             />
           </Modal>
         ) : null}

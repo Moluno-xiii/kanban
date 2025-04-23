@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import NotFound from "./components/NotFound.tsx";
 import NavbarContextProvider from "./contexts/NavContext.tsx";
-import { ProjectModalContextProvider } from "./contexts/ProjectModalContext.tsx";
+import { ModalContextProvider } from "./contexts/ModalContext.tsx";
 import "./index.css";
 import { routeTree } from "./routeTree.gen.ts";
 import { store } from "./store/index.ts";
@@ -40,13 +40,13 @@ export const router = createRouter({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <ProjectModalContextProvider>
+      <ModalContextProvider>
         <NavbarContextProvider>
           <QueryClientProvider client={queryClient}>
             <RouterProvider router={router} />
           </QueryClientProvider>
         </NavbarContextProvider>
-      </ProjectModalContextProvider>
+      </ModalContextProvider>
     </Provider>
   </StrictMode>,
 );

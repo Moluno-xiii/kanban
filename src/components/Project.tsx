@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { IoMdArrowForward } from "react-icons/io";
-import { useProjectModalContext } from "../contexts/ProjectModalContext";
+import { useModalContext } from "../contexts/ModalContext";
 import {
   dateToString,
   Project as ProjectTypes,
@@ -11,16 +11,14 @@ import Modal from "./ui/Modal";
 
 interface ProjectProps {
   project: ProjectTypes;
-  handleModal: (state: boolean, projectId?: string | null) => void;
 }
-const Project: React.FC<ProjectProps> = ({ project, handleModal }) => {
+const Project: React.FC<ProjectProps> = ({ project }) => {
   const {
+    activeModal,
     activeProjectModalId,
-    isDeleteProjectModalOpen,
-    isTodoModalOpen,
+    handleActiveModal,
     handleProjectModal,
-    setIsDeleteProjectModalOpen,
-  } = useProjectModalContext();
+  } = useModalContext();
 
   return (
     <>
@@ -58,8 +56,8 @@ const Project: React.FC<ProjectProps> = ({ project, handleModal }) => {
             aria-label="delete project button"
             className="btn-error"
             onClick={() => {
-              handleProjectModal(false, project.project_id);
-              setIsDeleteProjectModalOpen(true);
+              handleActiveModal("delete project");
+              handleProjectModal(project.project_id);
             }}
           >
             Delete Project
@@ -67,23 +65,26 @@ const Project: React.FC<ProjectProps> = ({ project, handleModal }) => {
           <button
             aria-label="Add todo button"
             className="btn"
-            onClick={() => handleModal(true, project.project_id)}
+            onClick={() => handleActiveModal("add todo")}
           >
             Add todo
           </button>
         </div>
       </li>
 
-      {isTodoModalOpen && activeProjectModalId === project.project_id ? (
-        <Modal title="Add Todo" handleClose={() => handleModal(false, null)}>
+      {activeModal === "add todo" ? (
+        <Modal title="Add Todo" handleClose={() => handleActiveModal(null)}>
           <AddTodoForm
-            handleModal={handleModal}
+            handleModal={handleActiveModal}
             projectId={project.project_id}
           />
         </Modal>
       ) : null}
 
-      {isDeleteProjectModalOpen ? <DeleteProjectModal nested={false} /> : null}
+      {activeModal === "delete project" &&
+      activeProjectModalId === project.project_id ? (
+        <DeleteProjectModal nested={false} />
+      ) : null}
     </>
   );
 };

@@ -7,7 +7,7 @@ import { upsertUserProject } from "../../utils/project";
 const AddProjectForm = ({
   handleModal,
 }: {
-  handleModal: (state: boolean) => void;
+  handleModal: (state: null) => void;
 }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const queryClient = useQueryClient();
@@ -16,7 +16,7 @@ const AddProjectForm = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-projects", user?.id] });
       queryClient.refetchQueries({ queryKey: ["user-projects", user?.id] });
-      handleModal(false);
+      handleModal(null);
       toast.success("Project created successfully!");
     },
     onError: (err: { message: string }) => {

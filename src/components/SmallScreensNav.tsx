@@ -7,13 +7,14 @@ import {
   InvitationNotification,
   NotificationType,
 } from "../utils/helperFunctions";
+import { useModalContext } from "../contexts/ModalContext";
 
 interface NavProps {
   handleNavbarState: (state: boolean) => void;
   user: User | null;
   date: Date;
-  openLogoutModal: boolean;
-  handleLogoutModal: (state: boolean) => void;
+  // openLogoutModal: boolean;
+  // handleLogoutModal: (state: boolean) => void;
   loading: boolean;
   handleLogout: () => void;
   navLinks: LinkType[];
@@ -26,8 +27,8 @@ const SmallScreensNav = ({
   handleNavbarState,
   user,
   date,
-  openLogoutModal,
-  handleLogoutModal,
+  // openLogoutModal,
+  // handleLogoutModal,
   loading,
   handleLogout,
   navLinks,
@@ -35,6 +36,8 @@ const SmallScreensNav = ({
   invitations,
   notifications,
 }: NavProps) => {
+  const { activeModal, handleActiveModal } = useModalContext();
+
   return (
     <nav
       className={`bg-secondary relative flex ${isNavBarOpen ? "h-full" : "h-0"} flex-col gap-y-4 overflow-y-hidden rounded-lg p-3 transition-all duration-500 ease-in-out lg:hidden`}
@@ -71,16 +74,16 @@ const SmallScreensNav = ({
         </a>
         <button
           aria-label="logout button"
-          onClick={() => handleLogoutModal(true)}
+          onClick={() => handleActiveModal("logout")}
           className="btn-error"
         >
           Logout
         </button>
 
-        {openLogoutModal ? (
+        {activeModal === "logout" ? (
           <Modal
             title="Are you sure you want to Logout?"
-            handleClose={() => handleLogoutModal(false)}
+            handleClose={() => handleActiveModal(null)}
           >
             <div className="flex flex-row items-center justify-end gap-x-2">
               <button
@@ -95,7 +98,7 @@ const SmallScreensNav = ({
                 disabled={loading}
                 aria-label="No, i don't want to logout button"
                 className="btn"
-                onClick={() => handleLogoutModal(false)}
+                onClick={() => handleActiveModal(null)}
               >
                 No
               </button>

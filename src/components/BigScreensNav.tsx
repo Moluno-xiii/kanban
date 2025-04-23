@@ -7,13 +7,12 @@ import {
   InvitationNotification,
   NotificationType,
 } from "../utils/helperFunctions";
+import { useModalContext } from "../contexts/ModalContext";
 
 interface NavProps {
   handleNavbarState: (state: boolean) => void;
   user: User | null;
   date: Date;
-  openLogoutModal: boolean;
-  handleLogoutModal: (state: boolean) => void;
   loading: boolean;
   handleLogout: () => void;
   navLinks: LinkType[];
@@ -23,15 +22,15 @@ interface NavProps {
 const BigScreensNav = ({
   user,
   date,
-  openLogoutModal,
   handleLogout,
-  handleLogoutModal,
   handleNavbarState,
   loading,
   navLinks,
   invitations,
   notifications,
 }: NavProps) => {
+  const { activeModal, handleActiveModal } = useModalContext();
+
   return (
     <nav
       className="bg-secondary relative hidden h-full flex-col gap-y-4 overflow-y-hidden rounded-lg p-3 transition-all duration-500 ease-in-out lg:flex"
@@ -67,16 +66,16 @@ const BigScreensNav = ({
         </a>
         <button
           aria-label="logout button"
-          onClick={() => handleLogoutModal(true)}
+          onClick={() => handleActiveModal("logout")}
           className="btn-error"
         >
           Logout
         </button>
 
-        {openLogoutModal ? (
+        {activeModal === "logout" ? (
           <Modal
             title="Are you sure you want to Logout?"
-            handleClose={() => handleLogoutModal(false)}
+            handleClose={() => handleActiveModal(null)}
           >
             <div className="flex flex-row items-center justify-end gap-x-2">
               <button
@@ -91,7 +90,7 @@ const BigScreensNav = ({
                 disabled={loading}
                 aria-label="No, i don't want to logout button"
                 className="btn"
-                onClick={() => handleLogoutModal(false)}
+                onClick={() => handleActiveModal(null)}
               >
                 No
               </button>
