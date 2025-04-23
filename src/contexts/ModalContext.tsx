@@ -13,6 +13,7 @@ type ActiveModal =
   | "delete organization"
   | "logout"
   | "delete notification"
+  | "delete all notifications"
   | "delete organization member";
 
 interface ModalTypes {
@@ -34,24 +35,22 @@ const ModalContext = createContext<ModalTypes>({
 });
 
 const ModalContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const [activeModal, setActiveModal] = useState<ActiveModal | null>(null);
   const [activeProjectModalId, setActiveProjectModalId] = useState<
     string | null
   >("");
   const [activeTodoModalId, setActiveTodoModalId] = useState<string | null>("");
-  useState(false);
-
-  const [activeModal, setActiveModal] = useState<ActiveModal | null>(null);
 
   const handleActiveModal = (state: ActiveModal | null) => {
     setActiveModal(state);
   };
 
-  const handleProjectModal = (projectId: string) => {
-    setActiveProjectModalId(projectId);
-  };
-
   const handleTodoModal = (todoId: string) => {
     setActiveTodoModalId(todoId);
+  };
+
+  const handleProjectModal = (projectId: string) => {
+    setActiveProjectModalId(projectId);
   };
 
   return (
@@ -74,7 +73,6 @@ export { ModalContextProvider, useModalContext };
 
 const useModalContext = () => {
   const context = useContext(ModalContext);
-  if (!context)
-    throw new Error("ProjectModalContext was used outside of it's scope.");
+  if (!context) throw new Error("ModalContext was used outside of it's scope.");
   return context;
 };

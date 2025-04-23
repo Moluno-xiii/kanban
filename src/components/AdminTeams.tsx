@@ -35,7 +35,9 @@ const OrganizationMembers: React.FC<PropTypes> = ({
       {teams.length >= 1 ? (
         <div className="border-secondary mt-4 flex flex-col gap-y-2 rounded-md border p-2 shadow-sm">
           <div className="flex flex-row items-center justify-between gap-3">
-            <span className="text-xl md:text-2xl">Teams ({teams.length})</span>
+            <span className="text-secondary text-xl md:text-2xl">
+              Teams ({teams.length})
+            </span>
             <button
               className="btn"
               onClick={() => handleActiveModal("add team")}

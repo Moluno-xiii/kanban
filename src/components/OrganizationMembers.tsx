@@ -24,7 +24,6 @@ const OrganizationMembers: React.FC<PropTypes> = ({ organization_id }) => {
     error,
   } = useGetOrganizationMembers(organization_id);
   const { data: userRole } = useGetUserOrganizationRole(organization_id);
-  console.log(userRole ? userRole[0].role : null);
   const user_role = userRole ? userRole[0].role.toLowerCase() : null;
   console.log(user_role);
   if (isFetchingMembers)
@@ -41,7 +40,7 @@ const OrganizationMembers: React.FC<PropTypes> = ({ organization_id }) => {
       {members.length >= 1 ? (
         <div className="border-secondary mt-4 flex flex-col gap-y-2 rounded-md border p-2 shadow-sm">
           <div className="flex flex-row items-center justify-between gap-3">
-            <span className="text-xl md:text-2xl">
+            <span className="text-secondary text-xl md:text-2xl">
               Members ({members.length})
             </span>
             {members.length > 5 &&

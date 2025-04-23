@@ -8,9 +8,11 @@ import Loading from "../../../../../components/ui/Loading";
 import { useModalContext } from "../../../../../contexts/ModalContext.tsx";
 import useGetOrganizationMembers from "../../../../../hooks/useGetOrganizationMembers";
 import useGetUserOrganizationRole from "../../../../../hooks/useGetUserOrganizationRole";
-import { Member } from "../../../../../utils/helperFunctions.ts";
 const AdminTeams = lazy(
   () => import("../../../../../components/AdminTeams.tsx"),
+);
+const MemberTeams = lazy(
+  () => import("../../../../../components/MemberTeams.tsx"),
 );
 const OrganizationMembers = lazy(
   () => import("../../../../../components/OrganizationMembers.tsx"),
@@ -32,6 +34,7 @@ function RouteComponent() {
   } = useGetOrganizationMembers(organization_id);
   console.log(userRole);
   const { activeModal, handleActiveModal } = useModalContext();
+  const user_role = userRole ? userRole[0].role.toLowerCase() : null;
 
   if (isPending) return <Loading message={"Loading organization members"} />;
 
@@ -50,34 +53,21 @@ function RouteComponent() {
   return (
     <div className="flex flex-col gap-y-4">
       <GoBack route="/dashboard/organizations/other_organizations" />
-      <ul className="flex flex-col gap-y-3">
-        Members
-        {members.map((member: Member) => (
-          <li
-            key={member.member_id}
-            className="border-secondary flex flex-row items-center justify-between rounded-md border p-2"
-          >
-            <span className="text-lg sm:text-xl">{member.member_email}</span>
-            <span className="capitalize">{member.role}</span>
-            {activeModal === "leave organization" ? (
-              <LeaveOrganizationModal
-                closeModal={() => handleActiveModal(null)}
-                organization_id={member.organization_id}
-                user_id={member.member_id}
-              />
-            ) : null}
-          </li>
-        ))}
-      </ul>
       <Suspense fallback={<span>Loading organization members...</span>}>
         <OrganizationMembers organization_id={organization_id} />
       </Suspense>
-      <Suspense fallback={<span>Loading your teams...</span>}>
-        <AdminTeams
-          super_admin_id={members[0].super_admin_id}
-          organization_id={organization_id}
-        />
-      </Suspense>
+      {user_role !== "member" ? (
+        <Suspense fallback={<span>Loading your teams...</span>}>
+          <AdminTeams
+            super_admin_id={members[0].super_admin_id}
+            organization_id={organization_id}
+          />
+        </Suspense>
+      ) : (
+        <Suspense fallback={<span>Loading teams...</span>}>
+          <MemberTeams organization_id={organization_id} />
+        </Suspense>
+      )}
 
       <button
         className="btn-error self-end"
@@ -85,6 +75,13 @@ function RouteComponent() {
       >
         Leave organization
       </button>
+      {activeModal === "leave organization" ? (
+        <LeaveOrganizationModal
+          closeModal={() => handleActiveModal(null)}
+          organization_id={members[0].organization_id}
+          user_id={members[0].member_id}
+        />
+      ) : null}
     </div>
   );
 }

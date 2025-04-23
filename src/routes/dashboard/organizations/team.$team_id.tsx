@@ -1,8 +1,9 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { IoMdArrowBack } from "react-icons/io";
+import { createFileRoute } from "@tanstack/react-router";
 import Error from "../../../components/ui/Error";
 import Loading from "../../../components/ui/Loading";
+import ReturnBack from "../../../components/ui/ReturnBack";
 import useGetTeam from "../../../hooks/useGetTeam";
+import { dateToString } from "../../../utils/helperFunctions";
 
 export const Route = createFileRoute("/dashboard/organizations/team/$team_id")({
   component: RouteComponent,
@@ -12,40 +13,33 @@ export const Route = createFileRoute("/dashboard/organizations/team/$team_id")({
 function RouteComponent() {
   const { team_id } = Route.useParams();
   const { data: team, isPending, error } = useGetTeam(team_id);
-  const navigate = useNavigate();
   console.log(team);
-  const data = Route.useLoaderData();
-  console.log(data);
-
   if (isPending) return <Loading message="Loading team data" />;
 
   if (error) {
-    return (
-      <Error errorMessage={error.message || "An unexpected error occured."} />
-    );
+    return <Error errorMessage={"Team doesn't exist."} />;
   }
 
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      navigate({ to: "/dashboard" });
-    }
-  };
   return (
     <div className="flex flex-col gap-y-4">
-      <div
-        aria-label="go back"
-        className="text-secondary hover:text-secondary/70 flex w-fit cursor-pointer flex-row items-center gap-x-3 transition-all duration-300"
-        onClick={handleBack}
-      >
-        <IoMdArrowBack />
-        <span>Go Back</span>
-      </div>
+      <ReturnBack />
       <p className="text-lg uppercase sm:text-xl">{team.name}</p>
-      <span>Created at : {team.created_at}</span>
-      Hello "/dashboard/organizations/team/$team_id"! {team_id}
-      <button className="btn-error self-end">Delete team</button>
+      <div className="flex flex-col gap-y-2">
+        <span>Description : {team.description}</span>
+        <span>Created at : {dateToString(team.created_at)}</span>
+      </div>
+      <div>Div for team members</div>
+      <div>
+        Div for team tasks, inside here, there should be a link to the
+        team/tasks route, and inside there, there should be 2 routes, finished
+        and unfinished tasks.
+      </div>
+      <button
+        className="bg-error text-text self-end rounded-md p-2 disabled:cursor-not-allowed"
+        disabled
+      >
+        Delete team
+      </button>
     </div>
   );
 }

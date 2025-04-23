@@ -13,8 +13,6 @@ interface NavProps {
   handleNavbarState: (state: boolean) => void;
   user: User | null;
   date: Date;
-  // openLogoutModal: boolean;
-  // handleLogoutModal: (state: boolean) => void;
   loading: boolean;
   handleLogout: () => void;
   navLinks: LinkType[];
@@ -27,8 +25,6 @@ const SmallScreensNav = ({
   handleNavbarState,
   user,
   date,
-  // openLogoutModal,
-  // handleLogoutModal,
   loading,
   handleLogout,
   navLinks,

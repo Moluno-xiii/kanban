@@ -35,6 +35,7 @@ function RouteComponent() {
     );
   return (
     <div className="flex flex-col gap-y-4">
+      <p className="text-lg sm:text-xl">Other Organizations ({data.length})</p>
       <ul className="flex flex-col gap-y-3">
         {data.map((organization) => (
           <li

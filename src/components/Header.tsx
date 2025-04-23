@@ -24,7 +24,7 @@ const Header: React.FC = () => {
       >
         Tasksphere
       </Link>
-      <div className="flex flex-row items-center gap-x-2">
+      <div className="flex flex-row items-center gap-x-2 sm:gap-x-4">
         {profileData?.profile_picture ? (
           <img
             src={profileData?.profile_picture}
@@ -36,7 +36,7 @@ const Header: React.FC = () => {
         {userInitials.length > 0 ? (
           <span
             aria-label="user's display name"
-            className="text-secondary border-secondary hidden cursor-pointer rounded-full border px-3 py-2 text-xl uppercase transition-all duration-300 hover:rotate-180 sm:inline-block md:text-2xl"
+            className="text-secondary border-secondary hidden size-12 cursor-pointer flex-row items-center justify-center rounded-full border text-center text-xl uppercase transition-all duration-300 hover:rotate-180 sm:flex md:text-2xl"
             onClick={() => navigate({ to: "/dashboard/profile" })}
           >
             {userInitials}

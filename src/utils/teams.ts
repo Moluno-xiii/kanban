@@ -86,6 +86,4 @@ async function getAdminTeams(admin_id: string, organization_id: string) {
   return teams;
 }
 
-// probably have to create a team_members table
-
 export { createTeam, deleteTeam, getTeam, getTeams, getAdminTeams };

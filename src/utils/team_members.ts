@@ -73,6 +73,20 @@ async function addMemberToTeam(
 
   return members;
 }
+
+async function getMemberTeams(organization_id: string, member_id: string) {
+  const { data: teams, error } = await supabase
+    .from("team_members")
+    .select("*")
+    .eq("member_id", member_id)
+    .eq("organization_id", organization_id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return teams;
+}
 // member_id, team_id, organization_id, super_admin_id, member_email, team_name, role, admin_id
 // assignTaskToMember
 
@@ -81,6 +95,7 @@ export {
   getTeamMembers,
   getTeamMemberRole,
   addMemberToTeam,
+  getMemberTeams,
 };
 
 // primary_key, member_id, created_at, team_id, organization_id, role, super_admin_id, member_email, team_name

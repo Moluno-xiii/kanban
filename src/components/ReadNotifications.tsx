@@ -4,9 +4,9 @@ import { dateToString, NotificationType } from "../utils/helperFunctions";
 
 const ReadNotifications: React.FC = () => {
   const { data: readNotifications, error } = useGetUserNotifications(true);
+  console.log(readNotifications);
   if (error) toast.error(error.message);
-  if (!readNotifications || readNotifications.length < 0)
-    return <span>No read notifications</span>;
+  if (!readNotifications || readNotifications.length < 1) return;
 
   return (
     <ul className="flex flex-col gap-y-3">

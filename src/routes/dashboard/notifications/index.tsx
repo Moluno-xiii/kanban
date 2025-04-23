@@ -31,10 +31,12 @@ function RouteComponent() {
     <div className="flex flex-col gap-y-6">
       <ul className="flex flex-col gap-y-3">
         <div className="flex flex-row items-center justify-between">
-          <span className="text-xl md:text-2xl">Notifications</span>
+          <span className="text-secondary text-xl md:text-2xl">
+            {notifications.length ? "Unread notifications" : "Notifications"}
+          </span>
           {notifications.length ? (
             <button
-              onClick={() => handleActiveModal("delete notification")}
+              onClick={() => handleActiveModal("delete all notifications")}
               className="btn-error"
             >
               Delete all notifications
@@ -42,7 +44,7 @@ function RouteComponent() {
           ) : (
             <span>No unread notifications</span>
           )}
-          {activeModal === "delete notification" ? (
+          {activeModal === "delete all notifications" ? (
             <DeleteUserNotificationsModal
               closeModal={() => handleActiveModal(null)}
             />

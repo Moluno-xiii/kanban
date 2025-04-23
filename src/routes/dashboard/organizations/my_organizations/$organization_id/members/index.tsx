@@ -45,7 +45,6 @@ function RouteComponent() {
       <GoBack
         route={"/dashboard/organizations/my_organizations/$organization_id"}
       />
-      <span>Organization : {organization_id}</span>
       <ul className="flex flex-col gap-y-2">
         {members.map((member: Member) => (
           <li
@@ -63,9 +62,6 @@ function RouteComponent() {
                 View member
                 <FaArrowRight size={15} />
               </Link>
-              {/* // if the person clicking this is a superadmin, then the link should start with my_organizations, otherwise, other_organizations.
-                // users should also be able to view their own profile and completed tasks. maybe i'll add that to the overview route.
-                // or i could just get the current route, and add the remaining url path */}
             </div>
           </li>
         ))}

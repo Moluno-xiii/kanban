@@ -29,7 +29,9 @@ const OrganizationTeams: React.FC<PropTypes> = ({
 
   return (
     <div className="flex flex-col gap-y-4">
-      <p className="text-xl sm:text-2xl">Teams ({teams?.length})</p>
+      <p className="text-secondary text-xl sm:text-2xl">
+        Teams ({teams?.length})
+      </p>
       {teams.length > 0 ? (
         <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {teams.map((team: TeamType) => (
@@ -55,8 +57,8 @@ const OrganizationTeams: React.FC<PropTypes> = ({
           ))}
         </ul>
       ) : (
-        <span className="text-secondary text-center text-xl sm:text-2xl">
-          No teams yet
+        <span className="text-center text-xl sm:text-2xl">
+          No teams yet, existing teams will appear here.
         </span>
       )}
     </div>
