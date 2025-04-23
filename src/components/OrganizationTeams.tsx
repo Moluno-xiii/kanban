@@ -55,7 +55,9 @@ const OrganizationTeams: React.FC<PropTypes> = ({
           ))}
         </ul>
       ) : (
-        <span className="text-center">No teams yet</span>
+        <span className="text-secondary text-center text-xl sm:text-2xl">
+          No teams yet
+        </span>
       )}
     </div>
   );

@@ -36,7 +36,7 @@ function RouteComponent() {
     error,
   } = useUserProfile(user?.id as string);
   const profile_picture =
-    user?.user_metadata.avatar_url.length ||
+    // user?.user_metadata.avatar_url.length > 1 ||
     String(profileData?.profile_picture).length > 1;
 
   if (isLoading) return <Loading message="Loading user details" />;
@@ -51,7 +51,7 @@ function RouteComponent() {
               src={
                 profileData?.profile_picture || user?.user_metadata.avatar_url
               }
-              className="w-full rounded-full bg-cover"
+              className="h-full w-full rounded-full bg-cover"
               alt="user profile picture"
             />
           </div>

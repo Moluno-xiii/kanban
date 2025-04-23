@@ -72,6 +72,20 @@ async function getTeam(team_id: string) {
   return teams;
 }
 
+async function getAdminTeams(admin_id: string, organization_id: string) {
+  const { data: teams, error } = await supabase
+    .from("teams")
+    .select("*")
+    .eq("admin_id", admin_id)
+    .eq("organization_id", organization_id);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
+  return teams;
+}
+
 // probably have to create a team_members table
 
-export { createTeam, deleteTeam, getTeam, getTeams };
+export { createTeam, deleteTeam, getTeam, getTeams, getAdminTeams };

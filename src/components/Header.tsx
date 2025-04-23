@@ -36,7 +36,7 @@ const Header: React.FC = () => {
         {userInitials.length > 0 ? (
           <span
             aria-label="user's display name"
-            className="text-secondary border-secondary hidden cursor-pointer rounded-full border p-2 text-xl uppercase transition-all duration-300 hover:rotate-180 sm:inline-block md:text-2xl"
+            className="text-secondary border-secondary hidden cursor-pointer rounded-full border px-3 py-2 text-xl uppercase transition-all duration-300 hover:rotate-180 sm:inline-block md:text-2xl"
             onClick={() => navigate({ to: "/dashboard/profile" })}
           >
             {userInitials}

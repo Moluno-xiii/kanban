@@ -45,6 +45,12 @@ const useCreateTeam = (
       queryClient.refetchQueries({
         queryKey: ["organization-teams", organization_id],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["admin-teams"],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["admin-teams"],
+      });
       toast.success("Team created successfully!");
       handleCloseModal();
     },
