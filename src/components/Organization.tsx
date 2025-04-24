@@ -8,7 +8,12 @@ interface Proptypes {
 }
 
 const Organization: React.FC<Proptypes> = ({ organization }) => {
-  const { activeModal, handleActiveModal } = useModalContext();
+  const {
+    activeModal,
+    activeProjectModalId,
+    handleActiveModal,
+    handleProjectModal,
+  } = useModalContext();
 
   return (
     <>
@@ -30,17 +35,20 @@ const Organization: React.FC<Proptypes> = ({ organization }) => {
         </span>
         <span>Date Created : {dateToString(organization.created_at)}</span>
         <button
-          onClick={() => handleActiveModal("delete organization")}
+          onClick={() => {
+            handleProjectModal(organization.id);
+            handleActiveModal("delete organization");
+          }}
           className="btn-error w-fit self-end"
         >
           Delete Organization
         </button>
       </li>
-      {activeModal === "delete organization" ? (
+      {activeModal === "delete organization" &&
+      organization.id === activeProjectModalId ? (
         <DeleteOrganizationModal
           organization_id={organization.id}
           closeModal={() => handleActiveModal(null)}
-          // setDeleteOrgModal={setDeleteOrgModal}
           organization_name={organization.name}
         />
       ) : null}

@@ -29,16 +29,23 @@ async function addMemberToOrganization(
   return members;
 }
 
-async function getOrganizationMembers(organization_id: string) {
-  const { data: members, error } = await supabase
+async function getOrganizationMembers(organization_id: string, role?: string) {
+  let query = supabase
     .from("organization_members")
     .select("*")
     .eq("organization_id", organization_id);
+
+  if (role) {
+    query = query.eq("role", role);
+  }
+
+  const { data: members, error } = await query;
 
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
   return members;
 }
 
@@ -143,6 +150,22 @@ async function getMemberRole(member_id: string, organization_id: string) {
   return role;
 }
 
+async function checkIfMemberExistsInOrganization(
+  member_email: string,
+  organization_id: string,
+) {
+  const { data: member, error } = await supabase
+    .from("organization_members")
+    .select("*")
+    .eq("member_email", member_email)
+    .eq("organization_id", organization_id);
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return member.length ? true : false;
+}
+
 export {
   addMemberToOrganization,
   getOrganizationMembers,
@@ -152,4 +175,5 @@ export {
   deleteOrganizationMembers,
   leaveOrganization,
   getMemberRole,
+  checkIfMemberExistsInOrganization,
 };

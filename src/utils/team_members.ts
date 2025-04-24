@@ -14,11 +14,13 @@ async function deleteMemberFromTeam(member_id: string, team_id: string) {
   return data;
 }
 
-async function getTeamMembers(team_id: string) {
+async function getTeamMembers(team_id: string, organization_id: string) {
   const { data, error } = await supabase
     .from("team_members")
     .select("*")
-    .eq("team_id", team_id);
+    .eq("team_id", team_id)
+    .eq("organization_id", organization_id);
+  // .eq("role", "member");
 
   if (error) {
     throw new Error(error.message);
@@ -41,16 +43,25 @@ async function getTeamMemberRole(member_id: string, team_id: string) {
   return role;
 }
 
-async function addMemberToTeam(
-  member_id: string,
-  team_id: string,
-  organization_id: string,
-  super_admin_id: string,
-  member_email: string,
-  team_name: string,
-  role: string,
-  admin_id: string,
-) {
+async function addMemberToTeam({
+  member_id,
+  member_email,
+  team_id,
+  super_admin_id,
+  organization_id,
+  team_name,
+  role,
+  admin_id,
+}: {
+  member_id: string;
+  team_id: string;
+  organization_id: string;
+  super_admin_id: string;
+  member_email: string;
+  team_name: string;
+  role: string;
+  admin_id: string;
+}) {
   const { data: members, error } = await supabase
     .from("team_members")
     .insert([
@@ -87,6 +98,19 @@ async function getMemberTeams(organization_id: string, member_id: string) {
 
   return teams;
 }
+
+async function checkIfMemberExistsInTeam(member_id: string) {
+  const { data: user, error } = await supabase
+    .from("team_members")
+    .select("member_id")
+    .eq("member_id", member_id);
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return user.length ? true : false;
+}
+
 // member_id, team_id, organization_id, super_admin_id, member_email, team_name, role, admin_id
 // assignTaskToMember
 
@@ -96,6 +120,7 @@ export {
   getTeamMemberRole,
   addMemberToTeam,
   getMemberTeams,
+  checkIfMemberExistsInTeam,
 };
 
 // primary_key, member_id, created_at, team_id, organization_id, role, super_admin_id, member_email, team_name

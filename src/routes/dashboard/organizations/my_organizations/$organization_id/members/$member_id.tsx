@@ -34,7 +34,7 @@ function RouteComponent() {
   if (isPending) return <Loading message="Loading member data" />;
 
   if (!member || member.length < 1 || error)
-    return <EmptyState button={true} emptyStateText="Member doesn't exist" />;
+    return <EmptyState button={false} emptyStateText="Member doesn't exist" />;
 
   return (
     <div className="flex flex-col gap-y-4">

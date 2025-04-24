@@ -9,7 +9,6 @@ interface Props {
 }
 
 const MemberTeams: React.FC<Props> = ({ organization_id }) => {
-  console.log(organization_id);
   const { user } = useAuthGuard();
   const {
     data: teams,

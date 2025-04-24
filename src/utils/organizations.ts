@@ -11,7 +11,7 @@ const getAdminUserOrganizations = async (user_id: string) => {
 };
 
 const getOrganizationDetails = async (organization_id: string) => {
-  const { data: organizations, error } = await supabase
+  const { data, error } = await supabase
     .from("organizations")
     .select("*")
     .eq("id", organization_id);
@@ -19,7 +19,7 @@ const getOrganizationDetails = async (organization_id: string) => {
     console.error(error.message);
     throw new Error(error.message);
   }
-  return organizations;
+  return data;
 };
 
 const getAdminUserOrganization = async (

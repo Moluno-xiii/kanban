@@ -8,9 +8,9 @@ const useGetOrganizationTeams = (
   return useQuery({
     queryKey: ["organization-teams", organization_id],
     queryFn: async () => await getTeams(super_admin_id, organization_id),
-    staleTime: Infinity,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 };
 

@@ -14,7 +14,8 @@ type ActiveModal =
   | "logout"
   | "delete notification"
   | "delete all notifications"
-  | "delete organization member";
+  | "delete organization member"
+  | "add team member";
 
 interface ModalTypes {
   activeModal: ActiveModal | null;

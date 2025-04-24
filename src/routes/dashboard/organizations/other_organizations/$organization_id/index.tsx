@@ -1,13 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import LeaveOrganizationModal from "../../../../../components/modals/LeaveOrganizationModal";
 import Error from "../../../../../components/ui/Error";
 import GoBack from "../../../../../components/ui/GoBack";
 import Loading from "../../../../../components/ui/Loading";
 import { useModalContext } from "../../../../../contexts/ModalContext.tsx";
-import useGetOrganizationMembers from "../../../../../hooks/useGetOrganizationMembers";
+import useGetOrganizationDetails from "../../../../../hooks/useGetOrganizationDetails.ts";
 import useGetUserOrganizationRole from "../../../../../hooks/useGetUserOrganizationRole";
+import { RootState } from "../../../../../store/index.ts";
+import { dateToString } from "../../../../../utils/helperFunctions.ts";
 const AdminTeams = lazy(
   () => import("../../../../../components/AdminTeams.tsx"),
 );
@@ -26,17 +29,15 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { organization_id } = Route.useParams();
-  const { data: userRole } = useGetUserOrganizationRole(organization_id);
-  const {
-    data: members,
-    isPending,
-    error,
-  } = useGetOrganizationMembers(organization_id);
-  console.log(userRole);
+  const { data, isPending, error } = useGetOrganizationDetails(organization_id);
   const { activeModal, handleActiveModal } = useModalContext();
+  const { data: userRole } = useGetUserOrganizationRole(organization_id);
   const user_role = userRole ? userRole[0].role.toLowerCase() : null;
+  console.log(user_role);
+  const { user } = useSelector((state: RootState) => state.auth);
 
-  if (isPending) return <Loading message={"Loading organization members"} />;
+  if (isPending) return <Loading message={"Loading organization"} />;
+  console.log(data);
 
   if (error) {
     toast.error(error.message);
@@ -53,13 +54,20 @@ function RouteComponent() {
   return (
     <div className="flex flex-col gap-y-4">
       <GoBack route="/dashboard/organizations/other_organizations" />
+      <div className="flex flex-col gap-y-2">
+        <span className="text-secondary text-xl uppercase sm:text-2xl">
+          {data.name}
+        </span>
+        <span>Description : {data.description}</span>
+        <span>Date created : {dateToString(data.created_at)}</span>
+      </div>
       <Suspense fallback={<span>Loading organization members...</span>}>
         <OrganizationMembers organization_id={organization_id} />
       </Suspense>
       {user_role !== "member" ? (
         <Suspense fallback={<span>Loading your teams...</span>}>
           <AdminTeams
-            super_admin_id={members[0].super_admin_id}
+            super_admin_id={data.super_admin_id}
             organization_id={organization_id}
           />
         </Suspense>
@@ -78,8 +86,8 @@ function RouteComponent() {
       {activeModal === "leave organization" ? (
         <LeaveOrganizationModal
           closeModal={() => handleActiveModal(null)}
-          organization_id={members[0].organization_id}
-          user_id={members[0].member_id}
+          organization_id={organization_id}
+          user_id={user?.id as string}
         />
       ) : null}
     </div>

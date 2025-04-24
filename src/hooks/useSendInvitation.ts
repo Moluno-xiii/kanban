@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createOrganizationInvitation } from "../utils/invitations";
 import toast from "react-hot-toast";
+import { checkIfMemberExistsInOrganization } from "../utils/members";
 
 interface InvitationPayload {
   email: string;
@@ -16,13 +17,20 @@ const useSendInvitation = (
 ) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       email,
       invitation_message,
       role,
       id,
       organization_name,
-    }: InvitationPayload) =>
+    }: InvitationPayload) => {
+      const userStatus = await checkIfMemberExistsInOrganization(
+        email,
+        organization_id,
+      );
+      if (userStatus) {
+        throw new Error("User is already a member in this organization!");
+      }
       createOrganizationInvitation(
         organization_id,
         email,
@@ -30,7 +38,8 @@ const useSendInvitation = (
         role,
         id,
         organization_name,
-      ),
+      );
+    },
     onSuccess: () => {
       handleModal(false);
       toast.success("Invitation sent successfully!");

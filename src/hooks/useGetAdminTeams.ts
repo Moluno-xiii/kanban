@@ -7,9 +7,9 @@ const useGetAdminTeams = (organization_id: string) => {
   return useQuery({
     queryKey: ["admin-teams", user?.id as string, organization_id],
     queryFn: () => getAdminTeams(user?.id as string, organization_id),
-    staleTime: Infinity,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 };
 
