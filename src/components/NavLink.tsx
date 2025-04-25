@@ -27,7 +27,9 @@ const NavLink = ({
       preload="intent"
     >
       {link.name}
-      {invitations.length > 0 && link.name === "organizations" ? (
+      {invitations.length > 0 &&
+      invitations[0].read === false &&
+      link.name === "organizations" ? (
         <span className="bg-text absolute right-4 size-2 rounded-full"></span>
       ) : null}
       {notifications.length > 0 && link.name === "notifications" ? (

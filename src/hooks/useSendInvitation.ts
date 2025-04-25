@@ -1,5 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createOrganizationInvitation } from "../utils/invitations";
+import {
+  checkIfInvitationExists,
+  createOrganizationInvitation,
+} from "../utils/invitations";
 import toast from "react-hot-toast";
 import { checkIfMemberExistsInOrganization } from "../utils/members";
 
@@ -9,6 +12,7 @@ interface InvitationPayload {
   role: string;
   id: string;
   organization_name: string;
+  inviter_email: string;
 }
 
 const useSendInvitation = (
@@ -23,7 +27,17 @@ const useSendInvitation = (
       role,
       id,
       organization_name,
+      inviter_email,
     }: InvitationPayload) => {
+      const invitationStatus = await checkIfInvitationExists(
+        email,
+        organization_id,
+      );
+      if (invitationStatus) {
+        throw new Error(
+          "Invitation has already been sent to this user from this Organization!",
+        );
+      }
       const userStatus = await checkIfMemberExistsInOrganization(
         email,
         organization_id,
@@ -38,6 +52,7 @@ const useSendInvitation = (
         role,
         id,
         organization_name,
+        inviter_email,
       );
     },
     onSuccess: () => {

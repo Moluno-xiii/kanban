@@ -22,6 +22,15 @@ async function upsertUserProject(formData: {
   projectName: string;
   description: string;
 }) {
+  const checkDuplicate = await checkIfProjectNameExistsForUser(
+    formData.projectName,
+    formData.owner_id,
+  );
+
+  if (checkDuplicate)
+    throw new Error(
+      "You already have a project with this name, change the name and try again.",
+    );
   const { data: projects, error } = await supabase
     .from("projects")
     .upsert([
@@ -66,10 +75,27 @@ async function updateUserProject(
   return { projects, error };
 }
 
+const checkIfProjectNameExistsForUser = async (
+  project_name: string,
+  user_id: string,
+) => {
+  const { data: project, error } = await supabase
+    .from("projects")
+    .select("*")
+    .ilike("project_name", project_name)
+    .eq("owner_id", user_id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return project.length ? true : false;
+};
+
 export {
   getUserProjects,
   upsertUserProject,
   deleteUserProject,
   updateUserProject,
   getUserProject,
+  checkIfProjectNameExistsForUser,
 };

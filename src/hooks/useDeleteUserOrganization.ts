@@ -29,6 +29,12 @@ const useDeleteUserOrganization = ({
       queryClient.refetchQueries({
         queryKey: ["organizations", user?.id as string],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["user-notifications", user?.id as string],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["user-notifications", user?.id as string],
+      });
       toast.success("Organization deleted successfully!");
       handleCloseModal();
       navigate({ to: "/dashboard/organizations/my_organizations" });
@@ -38,7 +44,10 @@ const useDeleteUserOrganization = ({
     },
     mutationFn: async () => {
       await deleteAdminUserOrganization(organization_id, user?.id as string);
-      await deleteOrganizationInvitations(organization_id);
+      await deleteOrganizationInvitations({
+        organization_id,
+        super_admin_id: user?.id as string,
+      });
       await deleteOrganizationMembers(
         user?.id as string,
         user?.id as string,

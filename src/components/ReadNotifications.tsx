@@ -1,16 +1,34 @@
 import toast from "react-hot-toast";
 import useGetUserNotifications from "../hooks/useGetUserNotifications";
 import { dateToString, NotificationType } from "../utils/helperFunctions";
+import EmptyState from "./ui/EmptyState";
+import { useModalContext } from "../contexts/ModalContext";
+import DeleteUserNotificationsModal from "./modals/DeleteUserNotificationsModal";
 
 const ReadNotifications: React.FC = () => {
   const { data: readNotifications, error } = useGetUserNotifications(true);
   console.log(readNotifications);
+  const { activeModal, handleActiveModal } = useModalContext();
   if (error) toast.error(error.message);
-  if (!readNotifications || readNotifications.length < 1) return;
+  if (error) return <span>{error.message}</span>;
+  if (!readNotifications || !readNotifications.length)
+    return (
+      <EmptyState
+        button={false}
+        emptyStateText="You have no read notifications."
+      />
+    );
 
   return (
     <ul className="flex flex-col gap-y-3">
-      <span className="text-xl md:text-2xl">Read Notifications</span>
+      {readNotifications?.length ? (
+        <button
+          onClick={() => handleActiveModal("delete all read notifications")}
+          className="btn-error self-end"
+        >
+          Delete all read notifications
+        </button>
+      ) : null}
       {readNotifications.map((notification: NotificationType) => (
         <li
           key={notification.id}
@@ -23,9 +41,13 @@ const ReadNotifications: React.FC = () => {
           </div>
           <span className="first-letter:uppercase">{notification.message}</span>
           <span>Dated {dateToString(notification.created_at)}</span>
-          <span>
-            Notification status : {notification.has_read ? "read" : "not read"}
-          </span>
+          {activeModal === "delete all read notifications" ? (
+            <DeleteUserNotificationsModal
+              closeModal={() => handleActiveModal(null)}
+              status={true}
+              title="Are you sure you want to delete all READ notifications?"
+            />
+          ) : null}
         </li>
       ))}
     </ul>

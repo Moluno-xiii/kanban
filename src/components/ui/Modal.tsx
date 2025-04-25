@@ -14,7 +14,7 @@ const Modal: React.FC<ModalProps> = ({ children, title, handleClose }) => {
           onClick={handleClose}
           size={16}
         />
-        <p aria-label="Modal title" className="text-xl md:text-2xl">
+        <p aria-label="Modal title" className="text-center text-xl md:text-2xl">
           {title}
         </p>
         {children}

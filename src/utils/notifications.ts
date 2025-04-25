@@ -38,11 +38,14 @@ async function getUserNotifications(user_id: string, status: boolean) {
   return notifications;
 }
 
-async function deleteUserNotifications(user_id: string) {
-  const { data: notifications, error } = await supabase
-    .from("notifications")
-    .delete()
-    .eq("user_id", user_id);
+async function deleteUserNotifications(user_id: string, status?: boolean) {
+  let query = supabase.from("notifications").delete().eq("user_id", user_id);
+
+  if (status === true || status === false) {
+    query = query.eq("has_read", status);
+  }
+
+  const { data: notifications, error } = await query;
 
   if (error) {
     console.error(error.message);

@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteUserNotifications } from "../utils/notifications";
-import { RootState } from "../store";
-import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { deleteUserInvitations } from "../utils/invitations";
 
-const useDeleteUserNotifications = ({
+const useDeleteUserInvitations = ({
   closeModal,
   status,
 }: {
@@ -15,15 +15,15 @@ const useDeleteUserNotifications = ({
   const { user } = useSelector((state: RootState) => state.auth);
   return useMutation({
     mutationFn: async () =>
-      await deleteUserNotifications(user?.id as string, status),
+      await deleteUserInvitations(user?.email as string, status),
     onSuccess: () => {
-      toast.success("Notifications deleted successfully!");
+      toast.success("Invitations deleted successfully!");
       closeModal();
       queryClient.invalidateQueries({
-        queryKey: ["user-notifications", user?.id as string],
+        queryKey: ["user-invitations", user?.email],
       });
       queryClient.refetchQueries({
-        queryKey: ["user-notifications", user?.id as string],
+        queryKey: ["user-invitations", user?.email],
       });
     },
     onError: (err: { message: string }) =>
@@ -31,4 +31,4 @@ const useDeleteUserNotifications = ({
   });
 };
 
-export default useDeleteUserNotifications;
+export default useDeleteUserInvitations;

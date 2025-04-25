@@ -82,7 +82,27 @@ const deleteAdminUserOrganization = async (
     .eq("super_admin_id", user_id)
     .eq("id", organization_id);
 
+  if (error) {
+    throw new Error(error.message);
+  }
+
   return { error };
+};
+
+const checkIfOrganizationNameExistsForUser = async (
+  organization_name: string,
+  user_id: string,
+) => {
+  const { data: organization, error } = await supabase
+    .from("organizations")
+    .select("*")
+    .ilike("name", organization_name)
+    .eq("super_admin_id", user_id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return organization.length ? true : false;
 };
 
 export {
@@ -91,4 +111,5 @@ export {
   deleteAdminUserOrganization,
   getAdminUserOrganization,
   getOrganizationDetails,
+  checkIfOrganizationNameExistsForUser,
 };

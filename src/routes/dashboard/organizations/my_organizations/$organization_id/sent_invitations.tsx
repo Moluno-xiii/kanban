@@ -9,6 +9,8 @@ import Loading from "../../../../../components/ui/Loading";
 import useAuthGuard from "../../../../../hooks/useAuthGuard";
 import { InvitationNotification } from "../../../../../utils/helperFunctions";
 import { getOrganizationInvitations } from "../../../../../utils/invitations";
+import { useModalContext } from "../../../../../contexts/ModalContext";
+import DeleteAllOrganizationInvitationsModal from "../../../../../components/modals/DeleteAllOrganizationInvitationsModal";
 
 export const Route = createFileRoute(
   "/dashboard/organizations/my_organizations/$organization_id/sent_invitations",
@@ -20,6 +22,7 @@ function RouteComponent() {
   const { organization_id } = Route.useParams();
   const { user } = useAuthGuard();
   const [activeInvitationTab, setActiveInvitationTab] = useState("");
+  const { activeModal, handleActiveModal } = useModalContext();
 
   const {
     data: invitations,
@@ -48,9 +51,25 @@ function RouteComponent() {
 
   return (
     <div className="flex h-full w-full flex-col gap-y-3">
-      <GoBack
-        route={`/dashboard/organizations/my_organizations/${organization_id}`}
-      />
+      <div className="flex flex-row items-center justify-between">
+        <GoBack
+          route={`/dashboard/organizations/my_organizations/${organization_id}`}
+        />
+        <button
+          onClick={() =>
+            handleActiveModal("delete all organization invitations")
+          }
+          className="btn-error"
+        >
+          Delete all sent invitations
+        </button>
+        {activeModal === "delete all organization invitations" ? (
+          <DeleteAllOrganizationInvitationsModal
+            organization_id={organization_id}
+            super_admin_id={user?.id as string}
+          />
+        ) : null}
+      </div>
       {!invitations || invitations.length < 1 ? (
         <EmptyState
           button={false}

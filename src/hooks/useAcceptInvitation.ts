@@ -4,7 +4,10 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { updateInvitationStatus } from "../utils/invitations";
-import { addMemberToOrganization } from "../utils/members";
+import {
+  addMemberToOrganization,
+  checkIfMemberExistsInOrganization,
+} from "../utils/members";
 import { sendNotification } from "../utils/notifications";
 
 interface Props {
@@ -26,6 +29,13 @@ const useAcceptInvitation = ({
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async () => {
+      const userStatus = await checkIfMemberExistsInOrganization(
+        user?.email as string,
+        organization_id,
+      );
+
+      if (userStatus)
+        throw new Error("You already belong to this organization!");
       await updateInvitationStatus("accepted", invitation_id);
       await addMemberToOrganization(
         organization_id,

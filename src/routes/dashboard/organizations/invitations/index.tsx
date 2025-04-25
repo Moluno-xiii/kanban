@@ -1,51 +1,65 @@
-import { createFileRoute } from "@tanstack/react-router";
-import EmptyState from "../../../../components/ui/EmptyState";
-import Loading from "../../../../components/ui/Loading";
-import UnreadInvitations from "../../../../components/UnreadInvitations";
-import useGetUserInvitations from "../../../../hooks/useGetUserInvitations";
-import { InvitationNotification } from "../../../../utils/helperFunctions";
+import {
+  createFileRoute,
+  useNavigate,
+  useSearch,
+} from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
+
+const UnreadInvitations = lazy(
+  () => import("../../../../components/UnreadInvitations"),
+);
+const ReadInvitations = lazy(
+  () => import("../../../../components/ReadInvitations"),
+);
 
 export const Route = createFileRoute("/dashboard/organizations/invitations/")({
   component: RouteComponent,
+  validateSearch: (search) => {
+    return {
+      type: (search.type as string) || "unread",
+    };
+  },
 });
 
 function RouteComponent() {
-  const { data: notifications, isPending } = useGetUserInvitations();
-
-  if (isPending) return <Loading message={"Loading user notifications"} />;
-
-  if (!notifications || notifications.length < 1)
-    return (
-      <EmptyState
-        emptyStateText="You don't have any invitations from other organizations, invitations you receive
-        will appear here."
-        button={false}
-      />
-    );
+  const { type } = useSearch({ from: Route.id });
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-y-4">
-      <ul className="flex flex-col gap-y-2">
-        {notifications.map((notification: InvitationNotification) => (
-          <UnreadInvitations
-            key={notification.id}
-            notification={notification}
-          />
-        ))}
-      </ul>
-
-      {/* <ul className="mt-6 flex flex-col gap-y-2">
-        <span className="text-xl md:text-2xl">Read notifications</span>
-        {readMessages.map((notification) => (
-          <li
-            key={notification.id}
-            className="border-secondary flex flex-row items-center justify-between rounded-md border p-2"
-          >
-            <span className="first-letter:uppercase">
-              {notification.message}
-            </span>
-          </li>
-        ))}
-      </ul> */}
+      <div className="flex flex-row items-center gap-x-5">
+        <button
+          onClick={() =>
+            navigate({
+              to: "/dashboard/organizations/invitations",
+              search: () => ({ type: "unread" }),
+            })
+          }
+          className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "unread" ? "text-secondary underline" : "text-text"}`}
+        >
+          Unread invitations
+        </button>
+        <button
+          className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "read" ? "text-secondary underline" : "text-text"}`}
+          onClick={() =>
+            navigate({
+              to: "/dashboard/organizations/invitations",
+              search: () => ({ type: "read" }),
+            })
+          }
+        >
+          Read invitations
+        </button>
+      </div>
+      {type === "unread" ? (
+        <Suspense fallback={<span>Loading unread invitations...</span>}>
+          <UnreadInvitations />
+        </Suspense>
+      ) : null}
+      {type === "read" ? (
+        <Suspense fallback={<span>Loading read invitations...</span>}>
+          <ReadInvitations />
+        </Suspense>
+      ) : null}
     </div>
   );
 }

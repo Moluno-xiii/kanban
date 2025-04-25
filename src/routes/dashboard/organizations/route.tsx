@@ -9,7 +9,8 @@ export const Route = createFileRoute("/dashboard/organizations")({
 });
 
 function RouteComponent() {
-  const { data: invitations, isPending, error } = useGetUserInvitations();
+  const status = false;
+  const { data: invitations, isPending, error } = useGetUserInvitations(status);
   console.log(invitations);
 
   if (isPending) return <Loading message="Loading organization members" />;
@@ -54,10 +55,11 @@ const OrganizationNav = ({
       <Link
         className="[&.active]:border-b-secondary [&.active]:text-secondary relative transition-all duration-300 [&.active]:border-b"
         to="/dashboard/organizations/invitations"
+        search={{ type: "unread" }}
         aria-label="Link to other organizations i belong to"
         preload="intent"
       >
-        {invitations.length > 0 ? (
+        {invitations.length > 0 && invitations[0].read === false ? (
           <span className="bg-text absolute right-4 size-2 rounded-full"></span>
         ) : null}
         Invitations

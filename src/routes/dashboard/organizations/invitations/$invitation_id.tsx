@@ -40,7 +40,7 @@ function RouteComponent() {
 
   if (isPending) return <Loading message={"Loading invitation"} />;
   if (isError || !data || data.length < 1)
-    return <Error errorMessage={"Invitation not found"} />;
+    return <Error errorMessage={"Invitation has expired or doesn't exist"} />;
 
   return (
     <div className="flex flex-col gap-y-4">

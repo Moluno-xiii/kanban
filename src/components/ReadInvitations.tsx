@@ -6,17 +6,16 @@ import DeleteUserInvitationsModal from "./modals/DeleteUserInvitationsModal";
 import EmptyState from "./ui/EmptyState";
 import Loading from "./ui/Loading";
 
-const UnreadInvitations: React.FC = () => {
-  const { data: notifications, isPending } = useGetUserInvitations(false);
+const ReadInvitations: React.FC = () => {
+  const { data: notifications, isPending } = useGetUserInvitations(true);
   const { activeModal, handleActiveModal } = useModalContext();
 
-  if (isPending) return <Loading message={"Loading unread invitations"} />;
+  if (isPending) return <Loading message={"Loading read invitations"} />;
 
   if (!notifications || notifications.length < 1)
     return (
       <EmptyState
-        emptyStateText="You don't have any unread invitations from other organizations, invitations you receive
-        will appear here."
+        emptyStateText="You don't have any read invitations."
         button={false}
       />
     );
@@ -24,27 +23,27 @@ const UnreadInvitations: React.FC = () => {
   return (
     <ul className="flex flex-col gap-y-2">
       <button
-        onClick={() => handleActiveModal("delete all unread invitations")}
+        onClick={() => handleActiveModal("delete all read invitations")}
         className="btn-error self-end"
       >
-        Delete unread invitations
+        Delete read invitations
       </button>
       {notifications.map((notification: InvitationNotification) => (
         <Invitation
-          notification={notification}
           key={notification.id}
-          type="unread"
+          notification={notification}
+          type="read"
         />
       ))}
-      {activeModal === "delete all unread invitations" ? (
+      {activeModal === "delete all read invitations" ? (
         <DeleteUserInvitationsModal
           closeModal={() => handleActiveModal(null)}
-          title="Are you sure you want to delete all your UNREAD invitations?"
-          status={false}
+          title="Are you sure you want to delete all your READ invitations?"
+          status={true}
         />
       ) : null}
     </ul>
   );
 };
 
-export default UnreadInvitations;
+export default ReadInvitations;

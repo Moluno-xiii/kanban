@@ -16,9 +16,9 @@
 }
 
 @theme {
-  --font-macondo: Macondo;
-  --font-roboto: Roboto;
-  --font-space-grotesk: "Space Grotesk";
+  --font-macondo: Macondo, "Arial";
+  --font-roboto: Roboto, "Arial";
+  --font-space-grotesk: "Space Grotesk, Arial ";
   --color-primary: var(--color-primary);
   --color-secondary: var(--color-secondary);
   --color-text: var(--color-text);

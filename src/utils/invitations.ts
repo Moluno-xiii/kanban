@@ -7,6 +7,7 @@ async function createOrganizationInvitation(
   role: string,
   inviter_id: string,
   organization_name: string,
+  invited_by: string,
 ) {
   const { data: organization, error } = await supabase
     .from("organization_invitations")
@@ -21,6 +22,7 @@ async function createOrganizationInvitation(
         role,
         inviter_id,
         organization_name,
+        invited_by,
       },
     ])
     .select();
@@ -32,14 +34,20 @@ async function createOrganizationInvitation(
   return { organization, error };
 }
 
-async function getUserInvitations(userEmail: string) {
-  const { data: organization_invitations, error } = await supabase
+async function getUserInvitations(userEmail: string, status?: boolean) {
+  let query = supabase
     .from("organization_invitations")
     .select("*")
     .eq("invitee_email", userEmail)
     .eq("type", "invitation")
-    .eq("invitation_status", "pending")
-    .eq("read", false);
+    .eq("invitation_status", "pending");
+
+  if (status === true || status === false) {
+    query = query.eq("read", status);
+  }
+
+  const { data: organization_invitations, error } = await query;
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
@@ -95,7 +103,8 @@ async function getOrganizationInvitations(
     .from("organization_invitations")
     .select("*")
     .eq("organization_id", organization_id)
-    .eq("inviter_id", admin_id);
+    .eq("inviter_id", admin_id)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error(error.message);
@@ -118,17 +127,64 @@ async function cancelInvitation(id: string) {
   return;
 }
 
-async function deleteOrganizationInvitations(organization_id: string) {
+async function deleteOrganizationInvitations({
+  organization_id,
+  super_admin_id,
+}: {
+  organization_id: string;
+  super_admin_id: string;
+}) {
   const { error } = await supabase
     .from("organization_invitations")
     .delete()
-    .eq("organization_id", organization_id);
+    .eq("organization_id", organization_id)
+    .eq("inviter_id", super_admin_id);
 
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
   return;
+}
+
+async function checkIfInvitationExists(
+  invitee_email: string,
+  organization_id: string,
+) {
+  const { data: invitation, error } = await supabase
+    .from("organization_invitations")
+    .select("*")
+    .eq("organization_id", organization_id)
+    .eq("invitee_email", invitee_email)
+    .eq("invitation_status", "pending");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
+
+  return invitation?.length ? true : false;
+}
+
+async function deleteUserInvitations(invitee_email: string, status?: boolean) {
+  let query = supabase
+    .from("organization_invitations")
+    .delete()
+    .eq("invitee_email", invitee_email);
+
+  if (status === true || status === false) {
+    query = query.eq("read", status);
+  }
+
+  const { data: invitations, error } = await query;
+  console.log("Deleting invitations for:", invitee_email, status);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
+
+  return invitations;
 }
 
 export {
@@ -140,4 +196,6 @@ export {
   markInvitationAsRead,
   updateInvitationStatus,
   deleteOrganizationInvitations,
+  checkIfInvitationExists,
+  deleteUserInvitations,
 };

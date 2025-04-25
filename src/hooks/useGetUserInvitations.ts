@@ -3,10 +3,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { getUserInvitations } from "../utils/invitations";
 
-const useGetUserInvitations = () => {
+const useGetUserInvitations = (status?: boolean) => {
   const { user } = useSelector((state: RootState) => state.auth);
   return useQuery({
-    queryFn: () => getUserInvitations(user?.email as string),
+    queryFn: () => getUserInvitations(user?.email as string, status),
     queryKey: ["user-invitations", user?.email],
     staleTime: 0,
     refetchOnMount: true,

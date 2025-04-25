@@ -36,7 +36,7 @@ const navLinks: LinkType[] = [
   },
   {
     name: "notifications",
-    route: "/dashboard/notifications",
+    route: "/dashboard/notifications?type=unread",
   },
 ];
 
@@ -47,7 +47,7 @@ const SideBar: React.FC = () => {
   const { handleNavbarState, isNavBarOpen } = useNavbarContext();
   const { handleActiveModal } = useModalContext();
 
-  const { data: invitations } = useGetUserInvitations();
+  const { data: invitations } = useGetUserInvitations(false);
   const { data: notifications } = useGetUserNotifications(false);
 
   async function handleLogout() {

@@ -1,12 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useNavigate,
+  useSearch,
+} from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
-import DeleteUserNotificationsModal from "../../../components/modals/DeleteUserNotificationsModal";
-import EmptyState from "../../../components/ui/EmptyState";
 import Loading from "../../../components/ui/Loading";
-import { useModalContext } from "../../../contexts/ModalContext.tsx";
+import UnreadNotifications from "../../../components/UnreadNotifications.tsx";
 import useGetUserNotifications from "../../../hooks/useGetUserNotifications";
-import useMarkNotificationAsRead from "../../../hooks/useMarkNotificationAsRead.ts";
-import { dateToString, NotificationType } from "../../../utils/helperFunctions";
 
 const ReadNotifications = lazy(
   () => import("../../../components/ReadNotifications.tsx"),
@@ -14,80 +14,64 @@ const ReadNotifications = lazy(
 
 export const Route = createFileRoute("/dashboard/notifications/")({
   component: RouteComponent,
+  validateSearch: (search) => {
+    return {
+      type: (search.type as string) || "unread",
+    };
+  },
 });
 
 function RouteComponent() {
+  const { type } = useSearch({ from: Route.id });
   const { data: notifications, isPending } = useGetUserNotifications(false);
-  const { activeModal, handleActiveModal } = useModalContext();
-  const updateNotificationMutation = useMarkNotificationAsRead();
+  const navigate = useNavigate();
+
   if (isPending) return <Loading message={"Loading user notifications"} />;
-  console.log(notifications);
-  if (!notifications)
-    return (
-      <EmptyState button={false} emptyStateText="You have no notifications." />
-    );
 
   return (
     <div className="flex flex-col gap-y-6">
-      <ul className="flex flex-col gap-y-3">
+      <div className="flex flex-col gap-y-3">
         <div className="flex flex-row items-center justify-between">
           <span className="text-secondary text-xl md:text-2xl">
-            {notifications.length ? "Unread notifications" : "Notifications"}
+            Notifications
           </span>
-          {notifications.length ? (
-            <button
-              onClick={() => handleActiveModal("delete all notifications")}
-              className="btn-error"
-            >
-              Delete all notifications
-            </button>
-          ) : (
-            <span>No unread notifications</span>
-          )}
-          {activeModal === "delete all notifications" ? (
-            <DeleteUserNotificationsModal
-              closeModal={() => handleActiveModal(null)}
-            />
-          ) : null}
         </div>
-        {notifications.map((notification: NotificationType) => (
-          <li
-            key={notification.id}
-            className="border-secondary flex flex-col gap-2 rounded-md border p-2"
+
+        <div className="flex flex-row items-center gap-x-5">
+          <button
+            onClick={() =>
+              navigate({
+                to: "/dashboard/notifications",
+                search: () => ({ type: "unread" }),
+              })
+            }
+            className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "unread" ? "text-secondary underline" : "text-text"}`}
           >
-            <div className="flex flex-row items-center justify-between">
-              <span className="text:lg uppercase md:text-xl">
-                {notification.title}
-              </span>
+            Unread notifications
+          </button>
+          <button
+            className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "read" ? "text-secondary underline" : "text-text"}`}
+            onClick={() =>
+              navigate({
+                to: "/dashboard/notifications",
+                search: () => ({ type: "read" }),
+              })
+            }
+          >
+            Read notifications
+          </button>
+        </div>
+        {type === "unread" ? (
+          <UnreadNotifications
+            notifications={notifications ? notifications : []}
+          />
+        ) : null}
 
-              <button
-                className="text-secondary w-fit cursor-pointer text-sm transition-all duration-200 first-letter:capitalize hover:underline"
-                onClick={() =>
-                  updateNotificationMutation.mutate({
-                    user_id: notification.user_id,
-                    notification_id: notification.id,
-                  })
-                }
-              >
-                mark as read
-              </button>
-            </div>
-            <span className="first-letter:uppercase">
-              {notification.message}
-            </span>
-            <span>Dated {dateToString(notification.created_at)}</span>
-            <span>
-              Notification status :{" "}
-              {notification.has_read ? "read" : "not read"}
-            </span>
-          </li>
-        ))}
-      </ul>
-
-      <div>
-        <Suspense fallback={<span>Loading read notifications...</span>}>
-          <ReadNotifications />
-        </Suspense>
+        {type === "read" ? (
+          <Suspense fallback={<span>Loading read notifications...</span>}>
+            <ReadNotifications />
+          </Suspense>
+        ) : null}
       </div>
     </div>
   );

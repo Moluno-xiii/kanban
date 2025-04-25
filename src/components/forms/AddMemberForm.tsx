@@ -15,9 +15,10 @@ const AddMemberForm = ({
     handleModal,
     organization_id,
   );
-  const invitation_message = `You've been invited to join ${organization_name}`;
 
   const { user } = useSelector((state: RootState) => state.auth);
+  const invitation_message = `You've been invited to join ${organization_name}`;
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -29,8 +30,10 @@ const AddMemberForm = ({
       invitation_message,
       role: dataObject.role as string,
       organization_name,
+      inviter_email: user?.email as string,
     });
   };
+
   return (
     <form className="flex flex-col gap-y-4" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-y-2">
