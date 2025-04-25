@@ -60,7 +60,11 @@ const useAcceptInvitation = ({
       queryClient.refetchQueries({
         queryKey: ["organization-members", organization_id],
       });
-      navigate({ to: "/dashboard/organizations/invitations", replace: true });
+      navigate({
+        to: "/dashboard/organizations/invitations",
+        replace: true,
+        search: { type: "unread" },
+      });
     },
     onError: (error: { message: string }) => {
       toast.error(error.message || "An unexpected error occured");

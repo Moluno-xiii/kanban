@@ -30,7 +30,11 @@ function RouteComponent() {
     mutationFn: () => updateInvitationStatus("rejected", invitation_id),
     onSuccess: () => {
       toast.error("Invitation rejected!");
-      navigate({ to: "/dashboard/organizations/invitations", replace: true });
+      navigate({
+        to: "/dashboard/organizations/invitations",
+        replace: true,
+        search: { type: "unread" },
+      });
     },
     onError: (error: { message: string }) => {
       toast.error(error.message || "An unexpected error occured");
