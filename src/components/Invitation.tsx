@@ -59,7 +59,9 @@ const Invitation: React.FC<PropTypes> = ({ notification, type }) => {
         params={{ invitation_id: notification.id }}
         className="text-secondary hover:text-secondary/80 flex flex-row items-center justify-end gap-x-2 transition-all duration-200 hover:underline"
         onClick={() => {
-          markAsRead.mutate({ notification_id: notification.id });
+          if (!notification.read) {
+            markAsRead.mutate({ notification_id: notification.id });
+          }
         }}
       >
         View invitation

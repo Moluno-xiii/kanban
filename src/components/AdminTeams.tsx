@@ -21,7 +21,6 @@ const OrganizationMembers: React.FC<PropTypes> = ({
   const { handleActiveModal, activeModal } = useModalContext();
   const { user } = useSelector((state: RootState) => state.auth);
   const { data: teams, error, isPending } = useGetAdminTeams(organization_id);
-  console.log(teams);
   if (isPending) return <Loading message="Loading organization members" />;
 
   if (error) {
@@ -36,7 +35,7 @@ const OrganizationMembers: React.FC<PropTypes> = ({
         <div className="border-secondary mt-4 flex flex-col gap-y-2 rounded-md border p-2 shadow-sm">
           <div className="flex flex-row items-center justify-between gap-3">
             <span className="text-secondary text-xl md:text-2xl">
-              Teams ({teams.length})
+              My Teams ({teams.length})
             </span>
             <button
               className="btn"

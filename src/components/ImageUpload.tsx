@@ -7,6 +7,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
+import toast from "react-hot-toast";
 import { IoIosCloudUpload } from "react-icons/io";
 
 interface ImageUploadProps {
@@ -39,6 +40,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           body: formData,
         },
       );
+      if (!response.ok) {
+        throw new Error("Network error, try again.");
+      }
 
       const data = await response.json();
       if (data.secure_url) {
@@ -46,7 +50,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         onImageUpload(data.secure_url);
       }
     } catch (error) {
-      console.error("Error uploading image:", error);
+      const message =
+        error instanceof Error ? error.message : "Unexpected error";
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

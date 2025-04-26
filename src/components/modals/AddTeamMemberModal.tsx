@@ -5,6 +5,7 @@ import { Member, TeamType } from "../../utils/helperFunctions";
 import Modal from "../ui/Modal";
 import Error from "../ui/Error";
 import useAddMemberToTeam from "../../hooks/useAddMemberToTeam";
+import useAuthGuard from "../../hooks/useAuthGuard";
 
 interface PropTypes {
   team: TeamType;
@@ -12,11 +13,18 @@ interface PropTypes {
 
 const AddTeamMemberModal: React.FC<PropTypes> = ({ team }) => {
   const { handleActiveModal } = useModalContext();
+  const { user } = useAuthGuard();
   const {
     data: organizationMembers,
     isPending,
     error,
-  } = useGetOrganizationMembers(team.organization_id, "member");
+  } = useGetOrganizationMembers(
+    team.organization_id,
+    undefined,
+    user?.id as string,
+    team.super_admin_id,
+  );
+  console.log(organizationMembers);
   const addTeamMemberMutation = useAddMemberToTeam(
     team.id,
     team.organization_id,
@@ -40,7 +48,6 @@ const AddTeamMemberModal: React.FC<PropTypes> = ({ team }) => {
       admin_id: team.admin_id,
     };
     addTeamMemberMutation.mutate(finalObject);
-    console.log(finalObject);
   };
 
   return (
@@ -48,8 +55,8 @@ const AddTeamMemberModal: React.FC<PropTypes> = ({ team }) => {
       <form action="" onSubmit={handleSubmit} className="flex flex-col gap-y-2">
         {!organizationMembers?.length && !isPending ? (
           <span className="mx-auto max-w-md text-center text-lg sm:text-xl lg:max-w-lg">
-            You have no ordinary members in your organization, add new members
-            to your organization to continue.
+            You have no members in your organization, add new members to your
+            organization to continue.
             <br />
             Admins and Super Admins do not count as members.
           </span>

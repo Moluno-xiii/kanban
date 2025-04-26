@@ -64,18 +64,24 @@ function RouteComponent() {
       <Suspense fallback={<span>Loading organization members...</span>}>
         <OrganizationMembers organization_id={organization_id} />
       </Suspense>
-      {user_role !== "member" ? (
-        <Suspense fallback={<span>Loading your teams...</span>}>
-          <AdminTeams
-            super_admin_id={data.super_admin_id}
-            organization_id={organization_id}
-          />
-        </Suspense>
-      ) : (
-        <Suspense fallback={<span>Loading teams...</span>}>
-          <MemberTeams organization_id={organization_id} />
-        </Suspense>
-      )}
+      {
+        user_role !== "member" ? (
+          <Suspense fallback={<span>Loading your teams...</span>}>
+            <AdminTeams
+              super_admin_id={data.super_admin_id}
+              organization_id={organization_id}
+            />
+          </Suspense>
+        ) : null
+        // (
+        //   <Suspense fallback={<span>Loading teams...</span>}>
+        //     <MemberTeams organization_id={organization_id} />
+        //   </Suspense>
+        // )
+      }
+      <Suspense fallback={<span>Loading teams...</span>}>
+        <MemberTeams organization_id={organization_id} />
+      </Suspense>
 
       <button
         className="btn-error self-end"

@@ -18,17 +18,23 @@ function RouteComponent() {
       </p>
       <div className="flex flex-col gap-y-3">
         <span>Organization solution for teams and personal projects</span>
-        <button className="btn self-center" aria-label="get started button">
-          {profileData?.display_name || user?.id ? (
-            <Link aria-label="link to signup page" to={"/dashboard/overview"}>
-              Continue
-            </Link>
-          ) : (
-            <Link aria-label="link to signup page" to={"/auth/signup"}>
-              Get started
-            </Link>
-          )}
-        </button>
+        {profileData?.display_name || user?.id ? (
+          <Link
+            className="btn w-fit self-center text-center"
+            aria-label="link to signup page"
+            to={"/dashboard/overview"}
+          >
+            Continue
+          </Link>
+        ) : (
+          <Link
+            className="btn w-fit self-center text-center"
+            aria-label="link to signup page"
+            to={"/auth/signup"}
+          >
+            Get started
+          </Link>
+        )}
       </div>
     </div>
   );

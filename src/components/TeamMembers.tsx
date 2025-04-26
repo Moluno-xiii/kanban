@@ -85,8 +85,3 @@ const TeamMembers: React.FC<PropTypes> = ({ team }) => {
 };
 
 export default TeamMembers;
-//   team_id: string,
-//   super_admin_id: string,
-//   team_name: string,
-//   role: string,
-//   admin_id: string,

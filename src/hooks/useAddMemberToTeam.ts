@@ -20,8 +20,12 @@ const useAddMemberToTeam = (team_id: string, organization_id: string) => {
       role: string;
       admin_id: string;
     }) => {
-      const userStatus = await checkIfMemberExistsInTeam(formData.member_id);
+      const userStatus = await checkIfMemberExistsInTeam(
+        formData.member_id,
+        formData.team_id,
+      );
       if (userStatus) {
+        console.log(formData.member_id, formData.member_email);
         throw new Error("User already exists in this team!");
       }
       return addMemberToTeam(formData);

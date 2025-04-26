@@ -20,7 +20,6 @@ async function getTeamMembers(team_id: string, organization_id: string) {
     .select("*")
     .eq("team_id", team_id)
     .eq("organization_id", organization_id);
-  // .eq("role", "member");
 
   if (error) {
     throw new Error(error.message);
@@ -91,6 +90,7 @@ async function getMemberTeams(organization_id: string, member_id: string) {
     .select("*")
     .eq("member_id", member_id)
     .eq("organization_id", organization_id);
+  // .eq("role", "Member");
 
   if (error) {
     throw new Error(error.message);
@@ -99,20 +99,18 @@ async function getMemberTeams(organization_id: string, member_id: string) {
   return teams;
 }
 
-async function checkIfMemberExistsInTeam(member_id: string) {
+async function checkIfMemberExistsInTeam(member_id: string, team_id: string) {
   const { data: user, error } = await supabase
     .from("team_members")
     .select("member_id")
-    .eq("member_id", member_id);
+    .eq("member_id", member_id)
+    .eq("team_id", team_id);
   if (error) {
     throw new Error(error.message);
   }
 
   return user.length ? true : false;
 }
-
-// member_id, team_id, organization_id, super_admin_id, member_email, team_name, role, admin_id
-// assignTaskToMember
 
 export {
   deleteMemberFromTeam,
@@ -122,5 +120,3 @@ export {
   getMemberTeams,
   checkIfMemberExistsInTeam,
 };
-
-// primary_key, member_id, created_at, team_id, organization_id, role, super_admin_id, member_email, team_name

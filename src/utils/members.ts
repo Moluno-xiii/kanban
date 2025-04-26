@@ -29,7 +29,12 @@ async function addMemberToOrganization(
   return members;
 }
 
-async function getOrganizationMembers(organization_id: string, role?: string) {
+async function getOrganizationMembers(
+  organization_id: string,
+  role?: string,
+  admin_id?: string,
+  super_admin_id?: string,
+) {
   let query = supabase
     .from("organization_members")
     .select("*")
@@ -37,6 +42,12 @@ async function getOrganizationMembers(organization_id: string, role?: string) {
 
   if (role) {
     query = query.eq("role", role);
+  }
+  if (admin_id) {
+    query = query.neq("member_id", admin_id);
+  }
+  if (super_admin_id) {
+    query = query.neq("member_id", super_admin_id);
   }
 
   const { data: members, error } = await query;
