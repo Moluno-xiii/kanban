@@ -68,6 +68,20 @@ interface TeamType {
   super_admin_id: string;
 }
 
+interface Task {
+  assigned_by: string;
+  id: string;
+  assigned_to: string;
+  status: "assigned" | "unassigned" | "finished";
+  task_id: string;
+  team_id: string;
+  admin_id: string;
+  super_admin_id: string;
+  created_at: string;
+  title: string;
+  description: string;
+}
+
 export function dateToString(date: string) {
   const dateString = new Date(date).toLocaleString();
   return dateString;
@@ -80,4 +94,5 @@ export type {
   Member,
   NotificationType,
   TeamType,
+  Task,
 };

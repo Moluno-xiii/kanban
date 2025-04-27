@@ -7,6 +7,7 @@ import { dateToString } from "../../../utils/helperFunctions";
 import { lazy, Suspense } from "react";
 import useGetTeamMemberRole from "../../../hooks/useGetTeamMemberRole.ts";
 const TeamMembers = lazy(() => import("../../../components/TeamMembers.tsx"));
+const TeamTasks = lazy(() => import("../../../components/TeamTasks.tsx"));
 
 export const Route = createFileRoute("/dashboard/organizations/team/$team_id")({
   component: RouteComponent,
@@ -38,11 +39,13 @@ function RouteComponent() {
       </div>
       <Suspense fallback={<span>Loading team members...</span>}>
         <TeamMembers team={team} />
-        <div>
-          {/* Div for team tasks, inside here, there should be a link to the
-          team/tasks route, and inside there, there should be 2 routes, finished
-          and unfinished tasks. */}
-        </div>
+      </Suspense>
+      <Suspense fallback={<span>Loading team tasks...</span>}>
+        <TeamTasks
+          admin_id={team.admin_id}
+          super_admin_id={team.super_admin_id}
+          team_id={team.id}
+        />
       </Suspense>
       {user_role !== "member" ? (
         <button

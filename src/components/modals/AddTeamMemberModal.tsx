@@ -24,7 +24,6 @@ const AddTeamMemberModal: React.FC<PropTypes> = ({ team }) => {
     user?.id as string,
     team.super_admin_id,
   );
-  console.log(organizationMembers);
   const addTeamMemberMutation = useAddMemberToTeam(
     team.id,
     team.organization_id,
