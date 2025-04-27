@@ -20,8 +20,10 @@ const ProjectTodo: React.FC<Props> = ({ project_id, todo }) => {
   const updateTodoStatusMutation = useMutation({
     onSuccess: () => {
       toast.success("Todo status updated successfully!");
-      queryClient.invalidateQueries({ queryKey: ["todo", project_id] });
-      queryClient.refetchQueries({ queryKey: ["todo", project_id] });
+      queryClient.invalidateQueries({ queryKey: ["todo", project_id, "yes"] });
+      queryClient.refetchQueries({ queryKey: ["todo", project_id, "yes"] });
+      queryClient.invalidateQueries({ queryKey: ["todo", project_id, "no"] });
+      queryClient.refetchQueries({ queryKey: ["todo", project_id, "no"] });
     },
     onError: (err: { message: string }) => {
       toast.error(err.message || "An unexpected error occured");

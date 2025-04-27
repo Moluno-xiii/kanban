@@ -4,7 +4,7 @@ import { getTeam } from "../utils/teams";
 const useGetTeam = (team_id: string) => {
   return useQuery({
     queryKey: ["team", team_id],
-    queryFn: () => getTeam(team_id),
+    queryFn: async () => await getTeam(team_id),
     staleTime: Infinity,
     refetchOnMount: false,
     refetchOnWindowFocus: false,

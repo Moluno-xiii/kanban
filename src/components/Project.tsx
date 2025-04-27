@@ -36,6 +36,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
           <Link
             to="/dashboard/personal_projects/$project_id"
             params={{ project_id: String(project.project_id) }}
+            search={{ type: "unfinished" }}
             className="text-secondary flex flex-row items-center gap-x-1 hover:underline"
             aria-label="View project details"
             preload="render"

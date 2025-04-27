@@ -1,10 +1,18 @@
 import supabase from "../supabase";
 
-async function getProjectTodos(project_id: string) {
-  const { data: todos, error } = await supabase
-    .from("Todos")
-    .select("*")
-    .eq("project_id", project_id);
+async function getProjectTodos(project_id: string, is_finished?: "yes" | "no") {
+  let query = supabase.from("Todos").select("*").eq("project_id", project_id);
+
+  if (is_finished) {
+    query = query.eq("is_finished", is_finished);
+  }
+
+  const { data: todos, error } = await query;
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
   return { todos, error };
 }
 

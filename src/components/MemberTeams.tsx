@@ -20,12 +20,12 @@ const MemberTeams: React.FC<Props> = ({ organization_id }) => {
     queryKey: ["member-teams", organization_id, user?.id as string],
     queryFn: async () =>
       await getMemberTeams(organization_id, user?.id as string),
-    staleTime: 0,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    // staleTime: Infinity,
-    // refetchOnMount: false,
-    // refetchOnWindowFocus: false,
+    // staleTime: 0,
+    // refetchOnMount: true,
+    // refetchOnWindowFocus: true,
+    staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
   if (isPending) return <Loading message="Loading teams" />;
 

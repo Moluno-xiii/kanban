@@ -14,8 +14,10 @@ const useDeleteTodo = (projectId: string) => {
       handleTodoModal("");
       handleActiveModal(null);
       toast.success("Todo deleted successfully!");
-      queryClient.invalidateQueries({ queryKey: ["todo", projectId] });
-      queryClient.refetchQueries({ queryKey: ["todo", projectId] });
+      queryClient.invalidateQueries({ queryKey: ["todo", projectId, "yes"] });
+      queryClient.refetchQueries({ queryKey: ["todo", projectId, "yes"] });
+      queryClient.invalidateQueries({ queryKey: ["todo", projectId, "no"] });
+      queryClient.refetchQueries({ queryKey: ["todo", projectId, "no"] });
     },
     onError: (err: { message: string }) => {
       toast.error(err.message || "An unexpected error occurred");

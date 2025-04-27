@@ -5,6 +5,7 @@ import ReturnBack from "../../../components/ui/ReturnBack";
 import useGetTeam from "../../../hooks/useGetTeam";
 import { dateToString } from "../../../utils/helperFunctions";
 import { lazy, Suspense } from "react";
+import useGetTeamMemberRole from "../../../hooks/useGetTeamMemberRole.ts";
 const TeamMembers = lazy(() => import("../../../components/TeamMembers.tsx"));
 
 export const Route = createFileRoute("/dashboard/organizations/team/$team_id")({
@@ -16,7 +17,9 @@ export const Route = createFileRoute("/dashboard/organizations/team/$team_id")({
 function RouteComponent() {
   const { team_id } = Route.useParams();
   const { data: team, isPending, error } = useGetTeam(team_id);
-  console.log(team);
+  const { data: userRole } = useGetTeamMemberRole(team?.id);
+  const user_role = userRole ? userRole.role.toLowerCase() : null;
+
   if (isPending) return <Loading message="Loading team data" />;
 
   if (error) {
@@ -26,8 +29,10 @@ function RouteComponent() {
   return (
     <div className="flex flex-col gap-y-4">
       <ReturnBack />
-      <p className="text-secondary text-lg uppercase sm:text-xl">{team.name}</p>
       <div className="flex flex-col gap-y-2">
+        <p className="text-secondary text-lg uppercase sm:text-xl">
+          {team.name}
+        </p>
         <span>Description : {team.description}</span>
         <span>Created at : {dateToString(team.created_at)}</span>
       </div>
@@ -39,12 +44,14 @@ function RouteComponent() {
           and unfinished tasks. */}
         </div>
       </Suspense>
-      <button
-        className="bg-error text-text self-end rounded-md p-2 disabled:cursor-not-allowed"
-        disabled
-      >
-        Delete team
-      </button>
+      {user_role !== "member" ? (
+        <button
+          className="bg-error text-text self-end rounded-md p-2 disabled:cursor-not-allowed"
+          disabled
+        >
+          Delete team
+        </button>
+      ) : null}
     </div>
   );
 }

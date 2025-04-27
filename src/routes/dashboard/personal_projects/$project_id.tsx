@@ -1,8 +1,12 @@
 import { QueryClient } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useNavigate,
+  useSearch,
+} from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 import AddTodoForm from "../../../components/forms/AddTodoForm";
 import DeleteProjectModal from "../../../components/modals/DeleteProjectModal";
-import ProjectTodo from "../../../components/ProjectTodo";
 import Error from "../../../components/ui/Error";
 import GoBack from "../../../components/ui/GoBack";
 import Loading from "../../../components/ui/Loading";
@@ -10,9 +14,16 @@ import Modal from "../../../components/ui/Modal";
 import { useModalContext } from "../../../contexts/ModalContext";
 import useProject from "../../../hooks/useProject";
 import useProjectTodos from "../../../hooks/useProjectTodos";
-import { dateToString, Todo } from "../../../utils/helperFunctions";
+import { dateToString } from "../../../utils/helperFunctions";
 import { getUserProject } from "../../../utils/project";
 import { getProjectTodos } from "../../../utils/todo";
+
+const FinishedPersonalProjectTodos = lazy(
+  () => import("../../../components/FinishedPersonalProjectTodos"),
+);
+const UnfinishedPersonalProjectTodos = lazy(
+  () => import("../../../components/UnfinishedPersonalProjectTodos"),
+);
 
 export const Route = createFileRoute(
   "/dashboard/personal_projects/$project_id",
@@ -37,11 +48,18 @@ export const Route = createFileRoute(
     return { todos, project };
   },
   pendingComponent: () => Loading({ message: "Loading project data" }),
+  validateSearch: (search) => {
+    return {
+      type: (search.type as string) || null,
+    };
+  },
   errorComponent: () => <div>Could not Load page content, try again.</div>,
 });
 
 function RouteComponent() {
   const { project_id } = Route.useParams();
+  const { type } = useSearch({ from: Route.id });
+  const navigate = useNavigate();
   const {
     activeModal,
     activeProjectModalId,
@@ -50,16 +68,12 @@ function RouteComponent() {
   } = useModalContext();
 
   const { data: project, isPending, error } = useProject(project_id);
-  const {
-    data: todos,
-    isPending: loadingTodos,
-    error: todoError,
-  } = useProjectTodos(project_id);
+  const { data: todos, isPending: loadingTodos } = useProjectTodos(project_id);
 
   if (isPending || loadingTodos)
-    return <Loading message="loading project data" />;
+    return <Loading message="Loading project data" />;
+
   if (error) return <Error errorMessage={error.message} />;
-  if (todoError) return <Error errorMessage={todoError.message} />;
 
   return (
     <div className="flex flex-col gap-y-6">
@@ -86,12 +100,44 @@ function RouteComponent() {
         <span>Number of Todos : {todos?.length || 0}</span>
         <span>Date created : {dateToString(project.created_at as string)}</span>
 
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-          {todos?.map((todo: Todo) => (
-            <ProjectTodo key={todo.id} project_id={project_id} todo={todo} />
-          ))}
-        </ul>
+        <div className="flex flex-row items-center gap-x-5">
+          <button
+            className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "unfinished" ? "text-secondary underline" : "text-text"}`}
+            onClick={() =>
+              navigate({
+                to: "/dashboard/personal_projects/$project_id",
+                params: { project_id },
+                search: () => ({ type: "unfinished" }),
+              })
+            }
+          >
+            Unfinished Todos
+          </button>
+          <button
+            onClick={() =>
+              navigate({
+                to: "/dashboard/personal_projects/$project_id",
+                params: { project_id },
+                search: () => ({ type: "finished" }),
+              })
+            }
+            className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "finished" ? "text-secondary underline" : "text-text"}`}
+          >
+            Finished Todos
+          </button>
+        </div>
+        {type === "finished" ? (
+          <Suspense fallback={<span>Loading finished todos...</span>}>
+            <FinishedPersonalProjectTodos project_id={project_id} />
+          </Suspense>
+        ) : null}
+        {type === "unfinished" ? (
+          <Suspense fallback={<span>Loading unfinished todos...</span>}>
+            <UnfinishedPersonalProjectTodos project_id={project_id} />
+          </Suspense>
+        ) : null}
       </div>
+
       <button
         aria-label="delete project button"
         className="btn-error self-end"

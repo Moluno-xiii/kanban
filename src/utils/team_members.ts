@@ -4,8 +4,8 @@ async function deleteMemberFromTeam(member_id: string, team_id: string) {
   const { data, error } = await supabase
     .from("team_members")
     .delete()
-    .eq("member_id", member_id)
-    .eq("team_id", team_id);
+    .eq("team_id", team_id)
+    .eq("member_id", member_id);
 
   if (error) {
     throw new Error(error.message);

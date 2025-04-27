@@ -20,22 +20,27 @@ type ActiveModal =
   | "delete all unread invitations"
   | "delete organization member"
   | "add team member"
-  | "delete all organization invitations";
+  | "delete all organization invitations"
+  | "delete team member";
 
 interface ModalTypes {
   activeModal: ActiveModal | null;
+  activeTeamMember: string | null;
   activeTodoModalId: string | null;
   activeProjectModalId: string | null;
   handleActiveModal: (modalName: ActiveModal | null) => void;
+  handleActiveTeamMember: (member_id: string | null) => void;
   handleProjectModal: (projectId: string) => void;
   handleTodoModal: (todoId: string) => void;
 }
 
 const ModalContext = createContext<ModalTypes>({
   activeModal: null,
+  activeTeamMember: "",
   activeTodoModalId: "",
   activeProjectModalId: "",
   handleActiveModal: () => {},
+  handleActiveTeamMember: () => {},
   handleProjectModal: () => {},
   handleTodoModal: () => {},
 });
@@ -46,6 +51,7 @@ const ModalContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     string | null
   >("");
   const [activeTodoModalId, setActiveTodoModalId] = useState<string | null>("");
+  const [activeTeamMember, setActiveTeamMember] = useState<string | null>("");
 
   const handleActiveModal = (state: ActiveModal | null) => {
     setActiveModal(state);
@@ -59,13 +65,19 @@ const ModalContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setActiveProjectModalId(projectId);
   };
 
+  const handleActiveTeamMember = (member_id: string | null) => {
+    setActiveTeamMember(member_id);
+  };
+
   return (
     <ModalContext.Provider
       value={{
         activeModal,
         activeTodoModalId,
+        activeTeamMember,
         activeProjectModalId,
         handleActiveModal,
+        handleActiveTeamMember,
         handleProjectModal,
         handleTodoModal,
       }}
