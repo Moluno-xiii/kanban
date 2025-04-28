@@ -1,14 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { lazy, Suspense, useEffect } from "react";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import Error from "../../../../../components/ui/Error";
 import Loading from "../../../../../components/ui/Loading";
 import ReturnBack from "../../../../../components/ui/ReturnBack";
 import useGetTeam from "../../../../../hooks/useGetTeam";
-import { dateToString } from "../../../../../utils/helperFunctions";
-import { lazy, Suspense, useEffect } from "react";
 import useGetTeamMemberRole from "../../../../../hooks/useGetTeamMemberRole.ts";
-import { useSelector } from "react-redux";
 import { RootState } from "../../../../../store/index.ts";
-import toast from "react-hot-toast";
+import { dateToString } from "../../../../../utils/helperFunctions";
 const TeamMembers = lazy(
   () => import("../../../../../components/TeamMembers.tsx"),
 );
@@ -30,15 +30,14 @@ function RouteComponent() {
   );
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
-  console.log("user role i need", userRole);
 
   useEffect(() => {
     if (!team || !user || isPending || isLoadingUserRole) return;
 
     if (
       user.id !== team.super_admin_id &&
-      userRole.toLowerCase() !== "member" &&
-      userRole.toLowerCase() !== "admin"
+      userRole?.role.toLowerCase() !== "member" &&
+      userRole?.role.toLowerCase() !== "admin"
     ) {
       toast.error("You're not a member of this team.");
       navigate({ to: "/dashboard/organizations", replace: true });
@@ -55,11 +54,18 @@ function RouteComponent() {
     <div className="flex flex-col gap-y-4 md:gap-y-6">
       <ReturnBack />
       <div className="flex flex-col gap-y-2">
-        <p className="text-secondary text-lg uppercase sm:text-xl">
+        <p
+          aria-label="team name"
+          className="text-secondary text-lg uppercase sm:text-xl"
+        >
           {team.name}
         </p>
-        <span>Description : {team.description}</span>
-        <span>Created at : {dateToString(team.created_at)}</span>
+        <span aria-label="team description">
+          Description : {team.description}
+        </span>
+        <span aria-label="date created">
+          Created at : {dateToString(team.created_at)}
+        </span>
       </div>
       <Suspense fallback={<span>Loading team members...</span>}>
         <TeamMembers team={team} />
@@ -69,12 +75,15 @@ function RouteComponent() {
           admin_id={team.admin_id}
           super_admin_id={team.super_admin_id}
           team_id={team.id}
+          organization_id={team.organization_id}
+          team_name={team.name}
         />
       </Suspense>
-      {userRole !== "member" ? (
+      {userRole?.role.toLowerCase() !== "member" ? (
         <button
           className="bg-error text-text self-end rounded-md p-2 disabled:cursor-not-allowed"
           disabled
+          aria-label="delete team button"
         >
           Delete team
         </button>

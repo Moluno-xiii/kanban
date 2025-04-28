@@ -45,7 +45,7 @@ async function getTeamMember(member_id: string, team_id: string) {
 async function getTeamMemberRole(member_id: string, team_id: string) {
   const { data: role, error } = await supabase
     .from("team_members")
-    .select("role")
+    .select("role,organization_id,team_name")
     .eq("team_id", team_id)
     .eq("member_id", member_id);
 

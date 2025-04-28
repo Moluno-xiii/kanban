@@ -36,7 +36,7 @@ const navLinks: LinkType[] = [
   },
   {
     name: "notifications",
-    route: "/dashboard/notifications?type=unread",
+    route: "/dashboard/notifications",
   },
 ];
 

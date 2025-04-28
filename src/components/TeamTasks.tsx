@@ -11,9 +11,17 @@ interface Props {
   team_id: string;
   admin_id: string;
   super_admin_id: string;
+  organization_id: string;
+  team_name: string;
 }
 
-const TeamTasks: React.FC<Props> = ({ admin_id, team_id, super_admin_id }) => {
+const TeamTasks: React.FC<Props> = ({
+  admin_id,
+  team_id,
+  super_admin_id,
+  organization_id,
+  team_name,
+}) => {
   const { activeModal, handleActiveModal } = useModalContext();
   const { data: userRole, isPending: loadingUserRole } =
     useGetTeamMemberRole(team_id);
@@ -32,8 +40,9 @@ const TeamTasks: React.FC<Props> = ({ admin_id, team_id, super_admin_id }) => {
               Tasks
               {/* ({tasks.length}) */}
             </span>
-            {userRole !== "member" ? (
+            {userRole?.role.toLowerCase() !== "member" ? (
               <button
+                aria-label="add task button"
                 onClick={() => handleActiveModal("add team task")}
                 className="btn"
               >
@@ -47,6 +56,8 @@ const TeamTasks: React.FC<Props> = ({ admin_id, team_id, super_admin_id }) => {
               to="/dashboard/organizations/teams/$team_id/tasks"
               params={{ team_id }}
               className="btn self-end"
+              search={() => ({ type: "all" })}
+              aria-label="link to view all tasks"
             >
               View all tasks
             </Link>
@@ -54,13 +65,17 @@ const TeamTasks: React.FC<Props> = ({ admin_id, team_id, super_admin_id }) => {
         </div>
       ) : (
         <div className="flex flex-col items-center gap-y-2 text-center">
-          <span className="text-secondary text-xl sm:text-2xl">
+          <span
+            aria-label="tasks empty state text"
+            className="text-secondary text-xl sm:text-2xl"
+          >
             No team tasks yet, team tasks added will appear here.
           </span>
-          {userRole !== "member" ? (
+          {userRole?.role.toLowerCase() !== "member" ? (
             <button
               onClick={() => handleActiveModal("add team task")}
               className="btn"
+              aria-label="add task button"
             >
               Add Task
             </button>
@@ -73,6 +88,8 @@ const TeamTasks: React.FC<Props> = ({ admin_id, team_id, super_admin_id }) => {
           team_id={team_id}
           super_admin_id={super_admin_id}
           handleActiveModal={handleActiveModal}
+          organization_id={organization_id}
+          team_name={team_name}
         />
       ) : null}
     </div>

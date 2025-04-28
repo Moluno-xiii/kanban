@@ -1,30 +1,58 @@
 import useCreateTeamTask from "../../hooks/useCreateTeamTask";
+import useGetOrganizationMembers from "../../hooks/useGetOrganizationMembers";
+import Loading from "../ui/Loading";
+import Error from "../ui/Error";
 import Modal from "../ui/Modal";
+import { Member } from "../../utils/helperFunctions";
 
 interface Props {
   admin_id: string;
   team_id: string;
+  organization_id: string;
   super_admin_id: string;
+  team_name: string;
   handleActiveModal: (state: null) => void;
 }
 
 const AddTeamTaskModal: React.FC<Props> = ({
   admin_id,
   team_id,
+  organization_id,
   super_admin_id,
+  team_name,
   handleActiveModal,
 }) => {
+  const {
+    data: organizationMembers,
+    isPending,
+    error,
+  } = useGetOrganizationMembers(
+    organization_id,
+    undefined,
+    admin_id,
+    super_admin_id,
+  );
   const createTaskMutation = useCreateTeamTask(team_id, () =>
     handleActiveModal(null),
   );
+
+  if (isPending) return <Loading message="Loading organization members" />;
+  if (error) return <Error errorMessage={error.message} />;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const dataObject = Object.fromEntries(formData);
-    console.log(dataObject);
+    const selectedMember = JSON.parse(dataObject.assigned_to as string);
+    const finalObject = {
+      ...dataObject,
+      assigned_to: selectedMember.email,
+      assignee_id: selectedMember.id,
+      team_name,
+    };
+
     createTaskMutation.mutate(
-      dataObject as {
+      finalObject as {
         admin_id: string;
         description: string;
         status: "assigned" | "unassigned" | "finished";
@@ -32,32 +60,74 @@ const AddTeamTaskModal: React.FC<Props> = ({
         team_id: string;
         title: string;
         assigned_to: string;
+        assignee_id: string;
+        team_name: string;
       },
     );
   };
+
   return (
     <Modal title="Add Team Task" handleClose={() => handleActiveModal(null)}>
       <form action="" onSubmit={handleSubmit} className="flex flex-col gap-y-3">
         <div className="flex flex-col gap-y-2">
           <label htmlFor="title">Task title</label>
-          <input type="text" name="title" id="title" />
+          <input
+            aria-label="task title input"
+            type="text"
+            name="title"
+            id="title"
+          />
         </div>
         <div className="flex flex-col gap-y-2">
           <label htmlFor="description">Task description</label>
-          <input type="text" name="description" id="description" />
+          <input
+            aria-label="task description input"
+            type="text"
+            name="description"
+            id="description"
+          />
         </div>
+        {!organizationMembers || organizationMembers.length < 1 ? (
+          <span aria-label="organization members empty state text">
+            You don't have any members in your organization!
+          </span>
+        ) : (
+          <div className="flex flex-col gap-y-2">
+            <label htmlFor="assigned_to">Assignee email</label>
+            <select
+              className="border-secondary min-w-sm cursor-pointer rounded-md border p-2"
+              required
+              name="assigned_to"
+              id="assigned_to"
+              defaultValue={""}
+              aria-label="task assignee  email selection"
+            >
+              {organizationMembers?.map((member: Member) => (
+                <option
+                  aria-label={`email for ${member.member_email}`}
+                  value={JSON.stringify({
+                    email: member.member_email,
+                    id: member.member_id,
+                  })}
+                  key={member.member_id}
+                >
+                  {member.member_email}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <input type="hidden" value={team_id} name="team_id" id="team_id" />
         <input type="hidden" value={"unassigned"} name="status" id="status" />
         <input type="hidden" value={admin_id} name="admin_id" id="admin_id" />
-        <input type="hidden" value={""} name="assigned_to" id="assigned_to" />
         <input
           type="hidden"
           value={super_admin_id}
           name="super_admin_id"
           id="super_admin_id"
         />
-        <button className="btn" type="submit">
+        <button aria-label="submit button" className="btn" type="submit">
           {createTaskMutation.isPending ? "Creating team task..." : "Submit"}
         </button>
       </form>

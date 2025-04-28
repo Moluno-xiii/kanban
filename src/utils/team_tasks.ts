@@ -9,19 +9,21 @@ async function createTeamTask(
   title: string,
   description: string,
   assigned_to?: string,
+  assignee_id?: string,
 ) {
   const { data: tasks, error } = await supabase
     .from("team_tasks")
     .insert([
       {
-        assigned_by: assigned_by,
-        assigned_to: assigned_to,
-        status: status,
-        team_id: team_id,
-        super_admin_id: super_admin_id,
-        admin_id: admin_id,
-        title: title,
-        description: description,
+        assigned_by,
+        assigned_to,
+        status,
+        team_id,
+        super_admin_id,
+        admin_id,
+        title,
+        description,
+        assignee_id,
       },
     ])
 
@@ -39,7 +41,8 @@ async function getTeamTasks(team_id: string) {
   const { data: tasks, error } = await supabase
     .from("team_tasks")
     .select("*")
-    .eq("team_id", team_id);
+    .eq("team_id", team_id)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error(error.message);
@@ -64,11 +67,15 @@ async function getTeamTask(task_id: string, team_id: string) {
   return task;
 }
 
-async function checkIfTaskTitleExistsInTeam(task_title: string) {
+async function checkIfTaskTitleExistsInTeam(
+  task_title: string,
+  team_id: string,
+) {
   const { data: task, error } = await supabase
     .from("team_tasks")
-    .select()
-    .eq("title", task_title);
+    .select("*")
+    .eq("team_id", team_id)
+    .ilike("title", task_title);
 
   if (error) {
     console.error(error.message);
@@ -78,6 +85,19 @@ async function checkIfTaskTitleExistsInTeam(task_title: string) {
   return task.length ? true : false;
 }
 
+async function deleteTeamTask(task_id: string, team_id: string) {
+  const { data: tasks, error } = await supabase
+    .from("team_tasks")
+    .delete()
+    .eq("id", task_id)
+    .eq("team_id", team_id)
+    .select();
+
+  if (error) throw new Error(error.message);
+
+  return tasks;
+}
+
 // const getUserFinishedTasks()
 
 export {
@@ -85,4 +105,5 @@ export {
   getTeamTasks,
   getTeamTask,
   checkIfTaskTitleExistsInTeam,
+  deleteTeamTask,
 };

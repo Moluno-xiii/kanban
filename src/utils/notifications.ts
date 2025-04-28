@@ -28,7 +28,8 @@ async function getUserNotifications(user_id: string, status: boolean) {
     .from("notifications")
     .select("*")
     .eq("user_id", user_id)
-    .eq("has_read", status);
+    .eq("has_read", status)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error(error.message);

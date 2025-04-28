@@ -27,11 +27,13 @@ type ActiveModal =
 
 interface ModalTypes {
   activeModal: ActiveModal | null;
-  activeTeamMember: string | null;
-  activeTodoModalId: string | null;
   activeProjectModalId: string | null;
+  activeTeamMember: string | null;
+  activeTeamTask: string | null;
+  activeTodoModalId: string | null;
   handleActiveModal: (modalName: ActiveModal | null) => void;
   handleActiveTeamMember: (member_id: string | null) => void;
+  handleActiveTeamTask: (task_id: string | null) => void;
   handleProjectModal: (projectId: string) => void;
   handleTodoModal: (todoId: string) => void;
 }
@@ -39,10 +41,12 @@ interface ModalTypes {
 const ModalContext = createContext<ModalTypes>({
   activeModal: null,
   activeTeamMember: "",
+  activeTeamTask: "",
   activeTodoModalId: "",
   activeProjectModalId: "",
   handleActiveModal: () => {},
   handleActiveTeamMember: () => {},
+  handleActiveTeamTask: () => {},
   handleProjectModal: () => {},
   handleTodoModal: () => {},
 });
@@ -54,6 +58,7 @@ const ModalContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   >("");
   const [activeTodoModalId, setActiveTodoModalId] = useState<string | null>("");
   const [activeTeamMember, setActiveTeamMember] = useState<string | null>("");
+  const [activeTeamTask, setActiveTeamTask] = useState<string | null>("");
 
   const handleActiveModal = (state: ActiveModal | null) => {
     setActiveModal(state);
@@ -71,15 +76,21 @@ const ModalContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setActiveTeamMember(member_id);
   };
 
+  const handleActiveTeamTask = (task_id: string | null) => {
+    setActiveTeamTask(task_id);
+  };
+
   return (
     <ModalContext.Provider
       value={{
         activeModal,
         activeTodoModalId,
         activeTeamMember,
+        activeTeamTask,
         activeProjectModalId,
         handleActiveModal,
         handleActiveTeamMember,
+        handleActiveTeamTask,
         handleProjectModal,
         handleTodoModal,
       }}

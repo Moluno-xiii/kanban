@@ -17,26 +17,41 @@ function RouteComponent() {
 
   if (isPending) return <Loading message={"Loading task"} />;
   if (error) return <Error errorMessage={"Task doesn't exist."} />;
-  console.log("task", task);
   return (
     <div className="flex flex-col gap-y-4">
       <ReturnBack />
-      <p className="text-secondary text-xl capitalize md:text-2xl">
+      <p
+        aria-label="Task title"
+        className="text-secondary text-xl capitalize md:text-2xl"
+      >
         {" "}
         {task.title}
       </p>
       <div className="flex flex-col gap-y-2">
-        <span>Task description : {task.descriiption}</span>
-        <span>Date created : {dateToString(task.created_at)}</span>
+        <span aria-label="task description">
+          Task description : {task.description}
+        </span>
+        <span aria-label="task's creation date ">
+          Date created : {dateToString(task.created_at)}
+        </span>
         {task.assigned_to ? (
-          <span>Assigned to : {task.assigned_to}</span>
+          <span aria-label="email of user task was assigned to">
+            Assigned to : {task.assigned_to}
+          </span>
         ) : (
-          <span>Status : {task.status}</span>
+          <span aria-label="task status">Status : {task.status}</span>
         )}
-        <span>Assigned by : {task.assigned_by}</span>
+        <span aria-label="email of user task was assigned by">
+          Assigned by : {task.assigned_by}
+        </span>
       </div>
       {!task.assigned_to ? (
-        <button className="btn self-end">Assign task</button>
+        <button
+          aria-label="assign task to member button"
+          className="btn self-end"
+        >
+          Assign task
+        </button>
       ) : null}
     </div>
   );
