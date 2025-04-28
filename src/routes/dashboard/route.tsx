@@ -20,9 +20,9 @@ function RouteComponent() {
 
   return (
     <div
-      className={`mx-3 grid min-h-[calc(100dvh-110px)] max-w-dvw gap-5 overflow-hidden md:mx-6 ${
+      className={`mx-3 grid min-h-[calc(100dvh-110px)] max-w-dvw gap-5 overflow-x-auto md:mx-6 lg:overflow-hidden ${
         isNavBarOpen
-          ? "grid-cols-[300px_1fr]"
+          ? "grid-cols-[200px_1fr] sm:grid-cols-[300px_1fr]"
           : "grid-cols-1 lg:grid-cols-[300px_1fr]"
       }`}
     >
@@ -32,7 +32,7 @@ function RouteComponent() {
       >
         <SideBar />
       </aside>
-      <main className="mx-auto w-full max-w-[2000px] overflow-y-scroll rounded-lg px-1">
+      <main className="mx-auto max-w-[2000px] min-w-full overflow-y-scroll rounded-lg px-1">
         <Outlet />
       </main>
     </div>

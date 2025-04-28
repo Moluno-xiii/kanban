@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useModalContext } from "../contexts/ModalContext";
 import useGetTeamMemberRole from "../hooks/useGetTeamMemberRole";
 import useGetTeamMembers from "../hooks/useGetTeamMembers";
@@ -7,6 +8,7 @@ import DeleteTeamMemberModal from "./modals/DeleteTeamMemberModal";
 import EmptyState from "./ui/EmptyState";
 import Error from "./ui/Error";
 import Loading from "./ui/Loading";
+import { FaArrowRight } from "react-icons/fa6";
 
 interface PropTypes {
   team: TeamType;
@@ -26,7 +28,6 @@ const TeamMembers: React.FC<PropTypes> = ({ team }) => {
   } = useModalContext();
   // const { data: userRole } = useGetUserOrganizationRole(team.organization_id);
   const { data: userRole } = useGetTeamMemberRole(team.id);
-  const user_role = userRole ? userRole.role.toLowerCase() : null;
 
   if (isPending) return <Loading message="Loading organization members" />;
 
@@ -39,7 +40,7 @@ const TeamMembers: React.FC<PropTypes> = ({ team }) => {
   if (!members || members.length < 1)
     return (
       <>
-        {user_role === "member" ? (
+        {userRole === "member" ? (
           <span className="text-secondary text-center text-xl sm:text-2xl">
             No team members yet. Team members will appear here.
           </span>
@@ -66,7 +67,7 @@ const TeamMembers: React.FC<PropTypes> = ({ team }) => {
         <span className="text-secondary text-lg sm:text-xl">
           Team members ({members.length})
         </span>
-        {user_role !== "member" ? (
+        {userRole !== "member" ? (
           <button
             onClick={() => handleActiveModal("add team member")}
             className="btn"
@@ -81,22 +82,32 @@ const TeamMembers: React.FC<PropTypes> = ({ team }) => {
             key={member.member_id}
             className="border-b-secondary flex flex-col justify-between gap-2 border-b py-2 sm:flex-row sm:items-center"
           >
-            <div className="flex flex-1 flex-row justify-between">
+            <div className="flex flex-1 flex-col gap-y-1">
               <span>{member.member_email}</span>
               <span className="capitalize">{member.role}</span>
             </div>
-            {member.role.toLowerCase() === "member" &&
-            user_role !== "member" ? (
-              <button
-                onClick={() => {
-                  handleActiveTeamMember(member.member_id);
-                  handleActiveModal("delete team member");
-                }}
-                className="btn-error self-end"
+            <div className="mt-2 flex flex-row items-center justify-between gap-4">
+              {member.role.toLowerCase() === "member" &&
+              userRole !== "member" ? (
+                <button
+                  onClick={() => {
+                    handleActiveTeamMember(member.member_id);
+                    handleActiveModal("delete team member");
+                  }}
+                  className="btn-error self-end"
+                >
+                  Delete member
+                </button>
+              ) : null}
+              <Link
+                to="/dashboard/organizations/teams/$team_id/$member_id"
+                className="text-secondary flex flex-row items-center gap-x-2 self-start hover:underline"
+                params={{ team_id: team.id, member_id: member.member_id }}
               >
-                Delete member
-              </button>
-            ) : null}
+                View member
+                <FaArrowRight size={15} />
+              </Link>
+            </div>
             {activeModal === "delete team member" &&
             activeTeamMember === member.member_id ? (
               <DeleteTeamMemberModal

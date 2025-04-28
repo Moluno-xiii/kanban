@@ -36,7 +36,7 @@ const SmallScreensNav = ({
 
   return (
     <nav
-      className={`bg-secondary relative flex ${isNavBarOpen ? "h-full" : "h-0"} flex-col gap-y-4 overflow-y-hidden rounded-lg p-3 transition-all duration-500 ease-in-out lg:hidden`}
+      className={`bg-secondary relative flex ${isNavBarOpen ? "min-h-[calc(100dvh-150px)]" : "h-0"} flex-col gap-y-4 overflow-y-hidden rounded-lg p-3 transition-all duration-500 ease-in-out lg:hidden`}
       aria-label="navigation links menu"
     >
       <IoClose

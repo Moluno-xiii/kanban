@@ -11,6 +11,7 @@ const useGetUserOrganizationRole = (organization_id: string) => {
     staleTime: Infinity,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    select: (res) => res[0].role,
   });
 };
 

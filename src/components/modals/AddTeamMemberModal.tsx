@@ -51,7 +51,11 @@ const AddTeamMemberModal: React.FC<PropTypes> = ({ team }) => {
 
   return (
     <Modal handleClose={() => handleActiveModal(null)} title="Add Team member">
-      <form action="" onSubmit={handleSubmit} className="flex flex-col gap-y-2">
+      <form
+        action=""
+        onSubmit={handleSubmit}
+        className="flex w-full flex-col gap-y-2"
+      >
         {!organizationMembers?.length && !isPending ? (
           <span className="mx-auto max-w-md text-center text-lg sm:text-xl lg:max-w-lg">
             You have no members in your organization, add new members to your

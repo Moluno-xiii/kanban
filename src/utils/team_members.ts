@@ -28,6 +28,20 @@ async function getTeamMembers(team_id: string, organization_id: string) {
   return data;
 }
 
+async function getTeamMember(member_id: string, team_id: string) {
+  const { data, error } = await supabase
+    .from("team_members")
+    .select("*")
+    .eq("team_id", team_id)
+    .eq("member_id", member_id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+
 async function getTeamMemberRole(member_id: string, team_id: string) {
   const { data: role, error } = await supabase
     .from("team_members")
@@ -89,8 +103,8 @@ async function getMemberTeams(organization_id: string, member_id: string) {
     .from("team_members")
     .select("*")
     .eq("member_id", member_id)
-    .eq("organization_id", organization_id);
-  // .eq("role", "Member");
+    .eq("organization_id", organization_id)
+    .eq("role", "Member");
 
   if (error) {
     throw new Error(error.message);
@@ -119,4 +133,5 @@ export {
   addMemberToTeam,
   getMemberTeams,
   checkIfMemberExistsInTeam,
+  getTeamMember,
 };

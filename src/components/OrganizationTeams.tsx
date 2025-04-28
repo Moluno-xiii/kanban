@@ -44,7 +44,7 @@ const OrganizationTeams: React.FC<PropTypes> = ({
                   {team.name}
                 </span>
                 <Link
-                  to="/dashboard/organizations/team/$team_id"
+                  to="/dashboard/organizations/teams/$team_id"
                   params={{ team_id: team.id }}
                   className="text-secondary flex flex-row items-center gap-x-2 transition-all duration-200 hover:underline"
                 >

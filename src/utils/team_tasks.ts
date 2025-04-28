@@ -49,12 +49,12 @@ async function getTeamTasks(team_id: string) {
   return tasks;
 }
 
-async function getTeamTask(team_id: string, task_id: string) {
+async function getTeamTask(task_id: string, team_id: string) {
   const { data: task, error } = await supabase
     .from("team_tasks")
     .select("*")
-    .eq("team_id", team_id)
-    .eq("id", task_id);
+    .eq("id", task_id)
+    .eq("team_id", team_id);
 
   if (error) {
     console.error(error.message);
@@ -77,6 +77,8 @@ async function checkIfTaskTitleExistsInTeam(task_title: string) {
 
   return task.length ? true : false;
 }
+
+// const getUserFinishedTasks()
 
 export {
   createTeamTask,

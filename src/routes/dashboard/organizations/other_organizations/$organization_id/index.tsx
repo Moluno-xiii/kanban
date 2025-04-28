@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { lazy, Suspense, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import LeaveOrganizationModal from "../../../../../components/modals/LeaveOrganizationModal";
@@ -31,13 +31,32 @@ function RouteComponent() {
   const { organization_id } = Route.useParams();
   const { data, isPending, error } = useGetOrganizationDetails(organization_id);
   const { activeModal, handleActiveModal } = useModalContext();
-  const { data: userRole } = useGetUserOrganizationRole(organization_id);
-  const user_role = userRole ? userRole[0].role.toLowerCase() : null;
-  console.log(user_role);
+  const { data: userRole, isPending: isFetchingUserRole } =
+    useGetUserOrganizationRole(organization_id);
+  const navigate = useNavigate();
+  console.log(userRole);
   const { user } = useSelector((state: RootState) => state.auth);
 
-  if (isPending) return <Loading message={"Loading organization"} />;
-  console.log(data);
+  useEffect(() => {
+    if (!user || isPending || isFetchingUserRole) return;
+
+    console.log("user role", userRole);
+    if (
+      // user.id !== team.super_admin_id &&
+      (userRole.toLowerCase() !== "member" &&
+        userRole.toLowerCase() !== "admin") ||
+      userRole === null
+    ) {
+      toast.error("You're not a member of this organization.");
+      navigate({
+        to: "/dashboard/organizations/other_organizations",
+        replace: true,
+      });
+    }
+  }, [user, userRole, isPending, isFetchingUserRole]);
+
+  if (isPending || isFetchingUserRole)
+    return <Loading message={"Loading organization"} />;
 
   if (error) {
     toast.error(error.message);
@@ -64,21 +83,14 @@ function RouteComponent() {
       <Suspense fallback={<span>Loading organization members...</span>}>
         <OrganizationMembers organization_id={organization_id} />
       </Suspense>
-      {
-        user_role !== "member" ? (
-          <Suspense fallback={<span>Loading your teams...</span>}>
-            <AdminTeams
-              super_admin_id={data.super_admin_id}
-              organization_id={organization_id}
-            />
-          </Suspense>
-        ) : null
-        // (
-        //   <Suspense fallback={<span>Loading teams...</span>}>
-        //     <MemberTeams organization_id={organization_id} />
-        //   </Suspense>
-        // )
-      }
+      {userRole !== "member" ? (
+        <Suspense fallback={<span>Loading your teams...</span>}>
+          <AdminTeams
+            super_admin_id={data.super_admin_id}
+            organization_id={organization_id}
+          />
+        </Suspense>
+      ) : null}
       <Suspense fallback={<span>Loading teams...</span>}>
         <MemberTeams organization_id={organization_id} />
       </Suspense>

@@ -7,7 +7,7 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ children, title, handleClose }) => {
   return (
     <div className="fixed inset-0 z-2 flex items-center justify-center bg-white/10 backdrop-blur-sm">
-      <div className="text-text bg-background flex flex-col items-center gap-y-4 rounded-md p-4 drop-shadow-2xl">
+      <div className="text-text bg-background mx-5 flex flex-col items-center gap-y-4 rounded-md p-4 drop-shadow-2xl max-sm:w-full">
         <IoCloseSharp
           aria-label="Close modal button"
           className="cursor-pointer self-end"

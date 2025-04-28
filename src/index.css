@@ -37,7 +37,8 @@
 
 .theme-red {
   --color-primary: #e63946;
-  --color-secondary: #c62828;
+  /* --color-secondary: #c62828; */
+  --color-secondary: #942323;
   --color-text: #faf3f3;
   --color-background: #3c0000;
 }
@@ -51,8 +52,12 @@
 
 .theme-light {
   --color-primary: #007a67;
-  --color-secondary: #1c4a52;
-  --color-text: #848181;
+  /* --color-secondary: #1c4a52; */
+  /* --color-secondary: #154a41; */
+  --color-secondary: #1a6352;
+  --color-text: #333333;
+  /* --color-text: #274c3c; */
+  /* --color-text: #848181; */
   --color-background: #f8f9fa;
 }
 
@@ -63,9 +68,14 @@
   --color-background: #1c1c1c;
 }
 
-.theme-mixed {
-  --color-primary: #e63956;
-  --color-secondary: #c72c41;
+.theme-purple {
+  /* --color-primary: #e63956; */
+  /* --color-secondary: #5d2d91; */
+  /* --color-primary: #6a1b9a; */
+  /* --color-primary: #4b0082; */
+  /* --color-secondary: #c72c41; */
+  --color-primary: #7b1fa2;
+  --color-secondary: #5d2d91;
   --color-text: #eaecef;
   --color-background: #111921;
 }
@@ -86,7 +96,7 @@
   }
 
   input {
-    @apply border-secondary w-full min-w-xs rounded-md border-2 p-2 disabled:cursor-not-allowed md:min-w-sm;
+    @apply border-secondary w-full rounded-md border-2 p-2 disabled:cursor-not-allowed md:min-w-sm;
   }
 
   textarea {

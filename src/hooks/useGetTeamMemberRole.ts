@@ -11,7 +11,7 @@ const useGetTeamMemberRole = (team_id: string) => {
     staleTime: Infinity,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-    select: (res) => res[0],
+    select: (res) => res[0].role.toLowerCase(),
   });
 };
 

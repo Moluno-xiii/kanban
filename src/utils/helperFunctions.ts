@@ -69,17 +69,16 @@ interface TeamType {
 }
 
 interface Task {
-  assigned_by: string;
-  id: string;
-  assigned_to: string;
-  status: "assigned" | "unassigned" | "finished";
-  task_id: string;
-  team_id: string;
   admin_id: string;
-  super_admin_id: string;
+  assigned_by: string;
+  assigned_to: string;
   created_at: string;
-  title: string;
   description: string;
+  id: string;
+  status: "assigned" | "unassigned" | "finished";
+  super_admin_id: string;
+  team_id: string;
+  title: string;
 }
 
 export function dateToString(date: string) {

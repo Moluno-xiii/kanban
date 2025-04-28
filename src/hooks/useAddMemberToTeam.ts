@@ -26,7 +26,7 @@ const useAddMemberToTeam = (team_id: string, organization_id: string) => {
       );
       if (userStatus) {
         console.log(formData.member_id, formData.member_email);
-        throw new Error("User already exists in this team!");
+        throw new Error("User is already a member of this team!");
       }
       return addMemberToTeam(formData);
     },

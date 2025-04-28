@@ -33,7 +33,7 @@ const BigScreensNav = ({
 
   return (
     <nav
-      className="bg-secondary relative hidden h-full flex-col gap-y-4 overflow-y-hidden rounded-lg p-3 transition-all duration-500 ease-in-out lg:flex"
+      className="bg-secondary relative hidden min-h-[calc(100dvh-150px)] flex-col gap-y-4 overflow-y-hidden rounded-lg p-3 transition-all duration-500 ease-in-out lg:flex"
       aria-label="navigation links menu"
     >
       <IoClose

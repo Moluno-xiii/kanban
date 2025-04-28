@@ -68,7 +68,7 @@ const SideBar: React.FC = () => {
   const navigate = useNavigate();
   const date = new Date();
   return (
-    <div className="h-full">
+    <div className="fixed top-28 bottom-3 z-20 min-h-[calc(100dvh-150px)] w-[200px] sm:w-[300px]">
       <BigScreensNav
         navLinks={navLinks}
         handleNavbarState={handleNavbarState}

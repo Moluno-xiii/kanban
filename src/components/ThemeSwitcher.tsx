@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { BsSun } from "react-icons/bs";
 
-type Theme = "mixed" | "light" | "dark" | "red" | "blue" | "";
+type Theme = "purple" | "light" | "dark" | "red" | "blue" | "";
 
 const ThemeSwitcher = () => {
   const [theme, setTheme] = useState<Theme>("");
@@ -75,11 +75,11 @@ const ThemeSwitcher = () => {
             Blue Theme
           </button>
           <button
-            aria-label="mixed theme button"
+            aria-label="purple theme button"
             className="btn"
-            onClick={() => handleTheme("mixed")}
+            onClick={() => handleTheme("purple")}
           >
-            Mixed Theme
+            purple Theme
           </button>
         </div>
       ) : null}

@@ -24,8 +24,6 @@ const OrganizationMembers: React.FC<PropTypes> = ({ organization_id }) => {
     error,
   } = useGetOrganizationMembers(organization_id);
   const { data: userRole } = useGetUserOrganizationRole(organization_id);
-  const user_role = userRole ? userRole[0].role.toLowerCase() : null;
-  console.log(user_role);
   if (isFetchingMembers)
     return <Loading message="Loading organization members" />;
 
@@ -44,7 +42,7 @@ const OrganizationMembers: React.FC<PropTypes> = ({ organization_id }) => {
               Members ({members.length})
             </span>
             {members.length > 5 &&
-            (user_role === "super admin" || user_role === "admin") ? (
+            (userRole === "super admin" || userRole === "admin") ? (
               <Link
                 className="text-secondary hover:text-secondary/70 transition-all duration-300 hover:underline"
                 params={{ organization_id }}

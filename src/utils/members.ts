@@ -157,7 +157,7 @@ async function getMemberRole(member_id: string, organization_id: string) {
     throw new Error(error.message);
   }
 
-  console.log(role[0].role);
+  console.log("member fn user role : ", role[0].role);
   return role;
 }
 

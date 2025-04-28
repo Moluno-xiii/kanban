@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import useAuthGuard from "../hooks/useAuthGuard";
-import { getMemberTeams } from "../utils/team_members";
-import Loading from "./ui/Loading";
-import Error from "./ui/Error";
 import { Link } from "@tanstack/react-router";
 import { FaArrowRight } from "react-icons/fa6";
+import useAuthGuard from "../hooks/useAuthGuard";
+import useGetUserOrganizationRole from "../hooks/useGetUserOrganizationRole";
+import { getMemberTeams } from "../utils/team_members";
+import Error from "./ui/Error";
+import Loading from "./ui/Loading";
 
 interface Props {
   organization_id: string;
@@ -20,14 +21,13 @@ const MemberTeams: React.FC<Props> = ({ organization_id }) => {
     queryKey: ["member-teams", organization_id, user?.id as string],
     queryFn: async () =>
       await getMemberTeams(organization_id, user?.id as string),
-    // staleTime: 0,
-    // refetchOnMount: true,
-    // refetchOnWindowFocus: true,
     staleTime: Infinity,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
-  if (isPending) return <Loading message="Loading teams" />;
+  const { data: userRole, isPending: loadingUserRole } =
+    useGetUserOrganizationRole(organization_id);
+  if (isPending || loadingUserRole) return <Loading message="Loading teams" />;
 
   if (error) {
     return (
@@ -39,7 +39,7 @@ const MemberTeams: React.FC<Props> = ({ organization_id }) => {
   return (
     <div className="flex flex-col gap-y-2 rounded-md p-3">
       <p className="text-secondary text-lg sm:text-xl">
-        Teams ({teams.length})
+        {userRole === "member" ? "Teams" : "Other teams"} ({teams.length})
       </p>
       {teams.length < 1 ? (
         <span className="text-center text-xl sm:text-2xl">
@@ -58,7 +58,7 @@ const MemberTeams: React.FC<Props> = ({ organization_id }) => {
                   {team.team_name}
                 </span>
                 <Link
-                  to="/dashboard/organizations/team/$team_id"
+                  to="/dashboard/organizations/teams/$team_id"
                   params={{ team_id: team.team_id }}
                   className="text-secondary flex flex-row items-center gap-x-2 transition-all duration-200 hover:underline"
                 >
