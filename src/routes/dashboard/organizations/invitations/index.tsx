@@ -3,14 +3,8 @@ import {
   useNavigate,
   useSearch,
 } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
-
-const UnreadInvitations = lazy(
-  () => import("../../../../components/UnreadInvitations"),
-);
-const ReadInvitations = lazy(
-  () => import("../../../../components/ReadInvitations"),
-);
+import { Suspense, useState } from "react";
+import Invitations from "../../../../components/Invitations";
 
 export const Route = createFileRoute("/dashboard/organizations/invitations/")({
   component: RouteComponent,
@@ -23,43 +17,39 @@ export const Route = createFileRoute("/dashboard/organizations/invitations/")({
 
 function RouteComponent() {
   const { type } = useSearch({ from: Route.id });
+  const [invitationStatus, setInvitationStatus] = useState(false);
   const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex flex-row items-center gap-x-5">
         <button
-          onClick={() =>
+          onClick={() => {
             navigate({
               to: "/dashboard/organizations/invitations",
               search: () => ({ type: "unread" }),
-            })
-          }
+            });
+            setInvitationStatus(false);
+          }}
           className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "unread" ? "text-secondary underline" : "text-text"}`}
         >
           Unread invitations
         </button>
         <button
           className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "read" ? "text-secondary underline" : "text-text"}`}
-          onClick={() =>
+          onClick={() => {
             navigate({
               to: "/dashboard/organizations/invitations",
               search: () => ({ type: "read" }),
-            })
-          }
+            });
+            setInvitationStatus(true);
+          }}
         >
           Read invitations
         </button>
       </div>
-      {type === "unread" ? (
-        <Suspense fallback={<span>Loading unread invitations...</span>}>
-          <UnreadInvitations />
-        </Suspense>
-      ) : null}
-      {type === "read" ? (
-        <Suspense fallback={<span>Loading read invitations...</span>}>
-          <ReadInvitations />
-        </Suspense>
-      ) : null}
+      <Suspense fallback={<span>Loading {type} invitations...</span>}>
+        <Invitations invitationStatus={invitationStatus} type={type} />
+      </Suspense>
     </div>
   );
 }

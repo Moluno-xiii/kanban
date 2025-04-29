@@ -37,7 +37,7 @@ const OrganizationNav = ({
   return (
     <nav className="relative flex flex-row items-center gap-x-3">
       <Link
-        className="[&.active]:border-b-secondary [&.active]:text-secondary transition-all duration-300 [&.active]:border-b"
+        className="[&.active]:border-b-secondary [&.active]:text-secondary hover:text-secondary transition-all duration-300 hover:underline [&.active]:border-b [&.actve]:underline"
         to="/dashboard/organizations/my_organizations"
         aria-label="Link to my organizations"
         preload="render"
@@ -45,7 +45,7 @@ const OrganizationNav = ({
         My organizations
       </Link>
       <Link
-        className="[&.active]:border-b-secondary [&.active]:text-secondary transition-all duration-300 [&.active]:border-b"
+        className="[&.active]:border-b-secondary [&.active]:text-secondary hover:text-secondary transition-all duration-300 hover:underline [&.active]:border-b [&.actve]:underline"
         to="/dashboard/organizations/other_organizations"
         aria-label="Link to other organizations i belong to"
         preload="intent"
@@ -53,7 +53,7 @@ const OrganizationNav = ({
         Other organizations
       </Link>
       <Link
-        className="[&.active]:border-b-secondary [&.active]:text-secondary relative transition-all duration-300 [&.active]:border-b"
+        className="[&.active]:border-b-secondary [&.active]:text-secondary hover:text-secondary relative transition-all duration-300 hover:underline [&.active]:border-b [&.actve]:underline"
         to="/dashboard/organizations/invitations"
         search={{ type: "unread" }}
         aria-label="Link to other organizations i belong to"

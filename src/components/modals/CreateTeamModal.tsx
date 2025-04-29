@@ -2,7 +2,6 @@ import useCreateTeam from "../../hooks/useCreateTeam";
 import Modal from "../ui/Modal";
 
 interface PropTypes {
-  //   isModalOpen: boolean;
   handleCloseModal: () => void;
   organization_id: string;
   super_admin_id: string;

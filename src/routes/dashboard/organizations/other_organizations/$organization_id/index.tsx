@@ -42,7 +42,6 @@ function RouteComponent() {
 
     console.log("user role", userRole);
     if (
-      // user.id !== team.super_admin_id &&
       (userRole.toLowerCase() !== "member" &&
         userRole.toLowerCase() !== "admin") ||
       userRole === null

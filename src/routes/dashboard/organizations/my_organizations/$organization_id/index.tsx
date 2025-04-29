@@ -12,6 +12,7 @@ import { useModalContext } from "../../../../../contexts/ModalContext.tsx";
 import useGetAdminOrganization from "../../../../../hooks/useGetAdminOrganization";
 import { RootState } from "../../../../../store";
 import { dateToString } from "../../../../../utils/helperFunctions";
+import UpdateOrganizationDetailsModal from "../../../../../components/modals/UpdateOrganizationDetailsModal.tsx";
 const OrganizationTeams = lazy(
   () => import("../../../../../components/OrganizationTeams.tsx"),
 );
@@ -110,6 +111,18 @@ function RouteComponent() {
       <div className="flex flex-col gap-y-2">
         <span>Date Created : {dateToString(organization.created_at)}</span>
         <span>Description : {organization.description}</span>
+        <button
+          onClick={() => handleActiveModal("update organization details")}
+          className="btn self-start"
+        >
+          Edit Organization details
+        </button>
+        {activeModal === "update organization details" ? (
+          <UpdateOrganizationDetailsModal
+            organization={organization}
+            handleClose={() => handleActiveModal(null)}
+          />
+        ) : null}
       </div>
 
       <Suspense

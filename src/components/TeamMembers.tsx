@@ -26,7 +26,6 @@ const TeamMembers: React.FC<PropTypes> = ({ team }) => {
     handleActiveModal,
     handleActiveTeamMember,
   } = useModalContext();
-  // const { data: userRole } = useGetUserOrganizationRole(team.organization_id);
   const { data: userRole } = useGetTeamMemberRole(team.id);
 
   if (isPending) return <Loading message="Loading organization members" />;

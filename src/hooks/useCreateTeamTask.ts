@@ -57,6 +57,12 @@ const useCreateTeamTask = (team_id: string, closeModal: () => void) => {
       queryClient.refetchQueries({
         queryKey: ["team_tasks", team_id],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["user_tasks", undefined, team_id],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["user_tasks", undefined, team_id],
+      });
       closeModal();
     },
     onError: (err: { message: string }) => {

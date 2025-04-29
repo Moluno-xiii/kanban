@@ -58,7 +58,7 @@ const MemberTeams: React.FC<Props> = ({ organization_id }) => {
               key={team.primary_key}
               className="border-secondary rounded-md border p-2"
             >
-              <div className="flex flex-row items-center justify-between">
+              <div className="flex flex-row items-center justify-between gap-4">
                 <span
                   aria-label="team name"
                   className="text-lg first-letter:capitalize sm:text-xl"

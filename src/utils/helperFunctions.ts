@@ -75,10 +75,23 @@ interface Task {
   created_at: string;
   description: string;
   id: string;
-  status: "assigned" | "unassigned" | "finished";
+  status: "assigned" | "unfinished" | "finished";
   super_admin_id: string;
   team_id: string;
   title: string;
+  date_finished: string;
+}
+
+interface TeamTaskSubmission {
+  id: string;
+  created_at: string;
+  team_id: string;
+  status: string;
+  submitted_by: string;
+  additional_note: string;
+  task_id: string;
+  super_admin_id: string;
+  admin_id: string;
 }
 
 export function dateToString(date: string) {
@@ -94,4 +107,5 @@ export type {
   NotificationType,
   TeamType,
   Task,
+  TeamTaskSubmission,
 };

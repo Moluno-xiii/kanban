@@ -49,6 +49,7 @@ const AddTeamTaskModal: React.FC<Props> = ({
       assigned_to: selectedMember.email,
       assignee_id: selectedMember.id,
       team_name,
+      status: dataObject.assigned_to ? "unfinished" : "unassigned",
     };
 
     createTaskMutation.mutate(
@@ -119,7 +120,7 @@ const AddTeamTaskModal: React.FC<Props> = ({
         )}
 
         <input type="hidden" value={team_id} name="team_id" id="team_id" />
-        <input type="hidden" value={"unassigned"} name="status" id="status" />
+        {/* <input type="hidden" value={"unassigned"} name="status" id="status" /> */}
         <input type="hidden" value={admin_id} name="admin_id" id="admin_id" />
         <input
           type="hidden"

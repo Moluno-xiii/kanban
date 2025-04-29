@@ -46,8 +46,8 @@ export const Tasks: React.FC<PropTypes> = ({ team_id, tasks }) => {
           )}
           <span aria-label="date created">
             Created at : {dateToString(task.created_at)}
-          </span>
-
+          </span>{" "}
+          <span aria-label="task status">Status : {task.status}</span>
           <div className="flex flex-row items-center justify-between">
             <Link
               to="/dashboard/organizations/teams/$team_id/tasks/$task_id"

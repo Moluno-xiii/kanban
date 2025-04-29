@@ -105,6 +105,27 @@ const checkIfOrganizationNameExistsForUser = async (
   return organization.length ? true : false;
 };
 
+const updateOrganizationDetails = async (
+  organization_id: string,
+  super_admin_id: string,
+  name: string,
+  description: string,
+) => {
+  const { data: organization, error } = await supabase
+    .from("organizations")
+    .update({
+      name,
+      description,
+    })
+    .eq("id", organization_id)
+    .eq("super_admin_id", super_admin_id)
+    .select("*");
+
+  if (error) throw new Error(error.message);
+
+  return organization;
+};
+
 export {
   getAdminUserOrganizations,
   upsertAdminUserOrganization,
@@ -112,4 +133,5 @@ export {
   getAdminUserOrganization,
   getOrganizationDetails,
   checkIfOrganizationNameExistsForUser,
+  updateOrganizationDetails,
 };

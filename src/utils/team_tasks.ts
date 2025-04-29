@@ -37,12 +37,21 @@ async function createTeamTask(
   return tasks;
 }
 
-async function getTeamTasks(team_id: string) {
-  const { data: tasks, error } = await supabase
+async function getTeamTasks(
+  team_id: string,
+  status?: "unfinished" | "unassigned" | "finished",
+) {
+  let query = supabase
     .from("team_tasks")
     .select("*")
     .eq("team_id", team_id)
     .order("created_at", { ascending: false });
+
+  if (status) {
+    query = query.ilike("status", status);
+  }
+
+  const { data: tasks, error } = await query;
 
   if (error) {
     console.error(error.message);
@@ -98,12 +107,36 @@ async function deleteTeamTask(task_id: string, team_id: string) {
   return tasks;
 }
 
-// const getUserFinishedTasks()
+async function getUserTasks(
+  assignee_email: string,
+  team_id: string,
+  status?: string,
+) {
+  let query = supabase
+    .from("team_tasks")
+    .select("*")
+    .eq("team_id", team_id)
+    .eq("assigned_to", assignee_email);
+
+  if (status && status !== "all") {
+    query = query.eq("status", status);
+  }
+
+  const { data: tasks, error } = await query;
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
+
+  return tasks;
+}
 
 export {
-  createTeamTask,
-  getTeamTasks,
-  getTeamTask,
   checkIfTaskTitleExistsInTeam,
+  createTeamTask,
   deleteTeamTask,
+  getTeamTask,
+  getTeamTasks,
+  getUserTasks,
 };

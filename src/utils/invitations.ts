@@ -39,8 +39,8 @@ async function getUserInvitations(userEmail: string, status?: boolean) {
     .from("organization_invitations")
     .select("*")
     .eq("invitee_email", userEmail)
-    .eq("type", "invitation")
-    .eq("invitation_status", "pending");
+    .eq("type", "invitation");
+  // .eq("invitation_status", "pending");
 
   if (status === true || status === false) {
     query = query.eq("read", status);

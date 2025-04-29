@@ -55,14 +55,16 @@ function RouteComponent() {
         <GoBack
           route={`/dashboard/organizations/my_organizations/${organization_id}`}
         />
-        <button
-          onClick={() =>
-            handleActiveModal("delete all organization invitations")
-          }
-          className="btn-error"
-        >
-          Delete all sent invitations
-        </button>
+        {invitations.length ? (
+          <button
+            onClick={() =>
+              handleActiveModal("delete all organization invitations")
+            }
+            className="btn-error"
+          >
+            Delete all sent invitations
+          </button>
+        ) : null}
         {activeModal === "delete all organization invitations" ? (
           <DeleteAllOrganizationInvitationsModal
             organization_id={organization_id}

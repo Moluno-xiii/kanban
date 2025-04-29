@@ -35,9 +35,7 @@ function RouteComponent() {
     isLoading,
     error,
   } = useUserProfile(user?.id as string);
-  const profile_picture =
-    // user?.user_metadata.avatar_url.length > 1 ||
-    String(profileData?.profile_picture).length > 1;
+  const profile_picture = String(profileData?.profile_picture).length > 1;
 
   if (isLoading) return <Loading message="Loading user details" />;
   if (error) return <Error errorMessage={error.message} />;

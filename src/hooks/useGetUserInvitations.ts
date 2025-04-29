@@ -7,7 +7,7 @@ const useGetUserInvitations = (status?: boolean) => {
   const { user } = useSelector((state: RootState) => state.auth);
   return useQuery({
     queryFn: () => getUserInvitations(user?.email as string, status),
-    queryKey: ["user-invitations", user?.email],
+    queryKey: ["user-invitations", user?.email, status],
     staleTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true,

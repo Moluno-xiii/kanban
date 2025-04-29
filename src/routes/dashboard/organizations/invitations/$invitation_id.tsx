@@ -53,18 +53,23 @@ function RouteComponent() {
       <span>Invitation status : {data.invitation_status}</span>
       <span>Role : {data.role}</span>
 
-      <div className="flex flex-row items-center justify-between">
-        <button className="btn-error" onClick={() => rejectInvitation.mutate()}>
-          {rejectInvitation.isPending
-            ? "Rejecting invitation..."
-            : "Reject invite"}
-        </button>
-        <button className="btn" onClick={() => acceptInvitation.mutate()}>
-          {acceptInvitation.isPending
-            ? "Accepting invitation..."
-            : "accept invite"}
-        </button>
-      </div>
+      {data.invitation_status !== "accepted" ? (
+        <div className="flex flex-row items-center justify-between">
+          <button
+            className="btn-error"
+            onClick={() => rejectInvitation.mutate()}
+          >
+            {rejectInvitation.isPending
+              ? "Rejecting invitation..."
+              : "Reject invite"}
+          </button>
+          <button className="btn" onClick={() => acceptInvitation.mutate()}>
+            {acceptInvitation.isPending
+              ? "Accepting invitation..."
+              : "accept invite"}
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

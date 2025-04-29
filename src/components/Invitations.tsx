@@ -4,18 +4,23 @@ import { InvitationNotification } from "../utils/helperFunctions";
 import Invitation from "./Invitation";
 import DeleteUserInvitationsModal from "./modals/DeleteUserInvitationsModal";
 import EmptyState from "./ui/EmptyState";
-import Loading from "./ui/Loading";
 
-const ReadInvitations: React.FC = () => {
-  const { data: notifications, isPending } = useGetUserInvitations(true);
+interface PropTypes {
+  type: string;
+  invitationStatus: boolean;
+}
+
+const Invitations: React.FC<PropTypes> = ({ type, invitationStatus }) => {
+  const { data: notifications, isPending } =
+    useGetUserInvitations(invitationStatus);
   const { activeModal, handleActiveModal } = useModalContext();
 
-  if (isPending) return <Loading message={"Loading read invitations"} />;
+  if (isPending) return <span>Loading {type} invitations...</span>;
 
   if (!notifications || notifications.length < 1)
     return (
       <EmptyState
-        emptyStateText="You don't have any read invitations."
+        emptyStateText={`You don't have any ${type} invitations.`}
         button={false}
       />
     );
@@ -23,16 +28,20 @@ const ReadInvitations: React.FC = () => {
   return (
     <ul className="flex flex-col gap-y-2">
       <button
-        onClick={() => handleActiveModal("delete all read invitations")}
+        onClick={() =>
+          handleActiveModal(
+            `delete all ${type as "read" | "unread"} invitations`,
+          )
+        }
         className="btn-error self-end"
       >
-        Delete read invitations
+        Delete {type} invitations
       </button>
       {notifications.map((notification: InvitationNotification) => (
         <Invitation
           key={notification.id}
           notification={notification}
-          type="read"
+          type={type as "read" | "unread"}
         />
       ))}
       {activeModal === "delete all read invitations" ? (
@@ -41,9 +50,15 @@ const ReadInvitations: React.FC = () => {
           title="Are you sure you want to delete all your READ invitations?"
           status={true}
         />
+      ) : activeModal === "delete all unread notifications" ? (
+        <DeleteUserInvitationsModal
+          closeModal={() => handleActiveModal(null)}
+          title="Are you sure you want to delete all your UNREAD invitations?"
+          status={false}
+        />
       ) : null}
     </ul>
   );
 };
 
-export default ReadInvitations;
+export default Invitations;

@@ -3,14 +3,8 @@ import {
   useNavigate,
   useSearch,
 } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
-import Loading from "../../../components/ui/Loading";
-import UnreadNotifications from "../../../components/UnreadNotifications.tsx";
-import useGetUserNotifications from "../../../hooks/useGetUserNotifications";
-
-const ReadNotifications = lazy(
-  () => import("../../../components/ReadNotifications.tsx"),
-);
+import { Suspense, useState } from "react";
+import Notifications from "../../../components/Notifications.tsx";
 
 export const Route = createFileRoute("/dashboard/notifications/")({
   component: RouteComponent,
@@ -23,10 +17,8 @@ export const Route = createFileRoute("/dashboard/notifications/")({
 
 function RouteComponent() {
   const { type } = useSearch({ from: Route.id });
-  const { data: notifications, isPending } = useGetUserNotifications(false);
+  const [readStatus, setReadStatus] = useState(false);
   const navigate = useNavigate();
-
-  if (isPending) return <Loading message={"Loading user notifications"} />;
 
   return (
     <div className="flex flex-col gap-y-6">
@@ -39,39 +31,33 @@ function RouteComponent() {
 
         <div className="flex flex-row items-center gap-x-5">
           <button
-            onClick={() =>
+            onClick={() => {
               navigate({
                 to: "/dashboard/notifications",
                 search: () => ({ type: "unread" }),
-              })
-            }
+              });
+              setReadStatus(false);
+            }}
             className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "unread" ? "text-secondary underline" : "text-text"}`}
           >
             Unread notifications
           </button>
           <button
             className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "read" ? "text-secondary underline" : "text-text"}`}
-            onClick={() =>
+            onClick={() => {
               navigate({
                 to: "/dashboard/notifications",
                 search: () => ({ type: "read" }),
-              })
-            }
+              });
+              setReadStatus(true);
+            }}
           >
             Read notifications
           </button>
         </div>
-        {type === "unread" ? (
-          <UnreadNotifications
-            notifications={notifications ? notifications : []}
-          />
-        ) : null}
-
-        {type === "read" ? (
-          <Suspense fallback={<span>Loading read notifications...</span>}>
-            <ReadNotifications />
-          </Suspense>
-        ) : null}
+        <Suspense fallback={<span>Loading {type} notifications...</span>}>
+          <Notifications type={type} readStatus={readStatus} />
+        </Suspense>
       </div>
     </div>
   );

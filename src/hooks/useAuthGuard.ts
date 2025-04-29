@@ -40,10 +40,6 @@ export default function useAuthGuard() {
             toast.error("You must be logged in to access this page");
             navigate({ to: "/auth/login", replace: true });
           }
-          // if (!pathname.startsWith("/auth") && !pathname.startsWith("/auth")) {
-          //   toast.error("You must be logged in to access this page");
-          //   navigate({ to: "/auth/login", replace: true });
-          // }
         }
       } catch (err: unknown) {
         const message =

@@ -18,7 +18,6 @@ const useSendNotification = () => {
     mutationFn: ({ user_id, title, message, email }: NotificationPayload) =>
       sendNotification(user_id, title, message, email),
     onSuccess: () => {
-      //   handleModal(false);
       toast.success("Notification sent successfully!");
       queryClient.invalidateQueries({
         queryKey: ["user-notifications", user?.id as string],
