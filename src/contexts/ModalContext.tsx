@@ -24,7 +24,8 @@ type ActiveModal =
   | "delete team member"
   | "add team task"
   | "delete team task"
-  | "update organization details";
+  | "update organization details"
+  | "delete all read organization invitations";
 
 interface ModalTypes {
   activeModal: ActiveModal | null;

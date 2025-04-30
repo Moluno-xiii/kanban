@@ -80,9 +80,10 @@ async function getOrganizationMember(
 async function getOrganizations(user_id: string) {
   const { data, error } = await supabase
     .from("organization_members")
-    .select("organization_name, primary_key, organization_id")
+    .select("organization_name, primary_key, organization_id, created_at")
     .eq("member_id", user_id)
-    .neq("super_admin_id", user_id);
+    .neq("super_admin_id", user_id)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error(error.message);
@@ -157,7 +158,6 @@ async function getMemberRole(member_id: string, organization_id: string) {
     throw new Error(error.message);
   }
 
-  console.log("member fn user role : ", role[0].role);
   return role;
 }
 

@@ -28,7 +28,7 @@ const useMarkNotificationAsRead = () => {
       queryClient.refetchQueries({
         queryKey: ["user-notifications", user?.id as string, true],
       });
-      toast.success("notification marked as read");
+      toast.success("Notification marked as read!");
     },
     onError: (err: { message: string }) =>
       toast.error(err.message || "An unexpected error occured"),

@@ -30,7 +30,7 @@ function RouteComponent() {
 
   if (isPending) return <Loading message={"Loading team member"} />;
   if (error) return <Error errorMessage={"Member not found"} />;
-  console.log(member);
+
   return (
     <div className="flex flex-col gap-y-4">
       <ReturnBack />

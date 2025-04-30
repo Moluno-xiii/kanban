@@ -54,6 +54,7 @@ const Invitation: React.FC<PropTypes> = ({ notification, type }) => {
       <span>Invited by : {notification.invited_by}</span>
       <span>Invitation role : {notification.role}</span>
       <span>Dated : {dateToString(notification.created_at)}</span>
+      <span>Status : {notification.invitation_status}</span>
       <Link
         to="/dashboard/organizations/invitations/$invitation_id"
         params={{ invitation_id: notification.id }}

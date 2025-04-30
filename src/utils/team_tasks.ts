@@ -1,4 +1,5 @@
 import supabase from "../supabase";
+import { TaskTypes } from "./helperFunctions";
 
 async function createTeamTask(
   assigned_by: string,
@@ -37,10 +38,7 @@ async function createTeamTask(
   return tasks;
 }
 
-async function getTeamTasks(
-  team_id: string,
-  status?: "unfinished" | "unassigned" | "finished",
-) {
+async function getTeamTasks(team_id: string, status?: TaskTypes) {
   let query = supabase
     .from("team_tasks")
     .select("*")

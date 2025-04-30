@@ -12,7 +12,7 @@ import { dateToString } from "../../../../../utils/helperFunctions";
 const TeamMembers = lazy(
   () => import("../../../../../components/TeamMembers.tsx"),
 );
-const TeamTasks = lazy(() => import("../../../../../components/TeamTasks.tsx"));
+const TeamTasks = lazy(() => import("../../../../../components/TeamTasks"));
 
 export const Route = createFileRoute(
   "/dashboard/organizations/teams/$team_id/",

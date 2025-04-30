@@ -4,7 +4,7 @@ import {
   useNavigate,
   useSearch,
 } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import AddTodoForm from "../../../components/forms/AddTodoForm";
 import DeleteProjectModal from "../../../components/modals/DeleteProjectModal";
 import Error from "../../../components/ui/Error";
@@ -18,11 +18,8 @@ import { dateToString } from "../../../utils/helperFunctions";
 import { getUserProject } from "../../../utils/project";
 import { getProjectTodos } from "../../../utils/todo";
 
-const FinishedPersonalProjectTodos = lazy(
-  () => import("../../../components/FinishedPersonalProjectTodos"),
-);
-const UnfinishedPersonalProjectTodos = lazy(
-  () => import("../../../components/UnfinishedPersonalProjectTodos"),
+const SortedPersonalProjectTodos = lazy(
+  () => import("../../../components/SortedPersonalTodos"),
 );
 
 export const Route = createFileRoute(
@@ -66,6 +63,7 @@ function RouteComponent() {
     handleActiveModal,
     handleProjectModal,
   } = useModalContext();
+  const [todoType, setTodoType] = useState<"yes" | "no">("no");
 
   const { data: project, isPending, error } = useProject(project_id);
   const { data: todos, isPending: loadingTodos } = useProjectTodos(project_id);
@@ -103,39 +101,38 @@ function RouteComponent() {
         <div className="flex flex-row items-center gap-x-5">
           <button
             className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "unfinished" ? "text-secondary underline" : "text-text"}`}
-            onClick={() =>
+            onClick={() => {
               navigate({
                 to: "/dashboard/personal_projects/$project_id",
                 params: { project_id },
                 search: () => ({ type: "unfinished" }),
-              })
-            }
+              });
+              setTodoType("no");
+            }}
           >
             Unfinished Todos
           </button>
           <button
-            onClick={() =>
+            onClick={() => {
               navigate({
                 to: "/dashboard/personal_projects/$project_id",
                 params: { project_id },
                 search: () => ({ type: "finished" }),
-              })
-            }
+              });
+              setTodoType("yes");
+            }}
             className={`hover:text-secondary cursor-pointer text-lg transition-all duration-200 hover:underline md:text-xl ${type === "finished" ? "text-secondary underline" : "text-text"}`}
           >
             Finished Todos
           </button>
         </div>
-        {type === "finished" ? (
-          <Suspense fallback={<span>Loading finished todos...</span>}>
-            <FinishedPersonalProjectTodos project_id={project_id} />
-          </Suspense>
-        ) : null}
-        {type === "unfinished" ? (
-          <Suspense fallback={<span>Loading unfinished todos...</span>}>
-            <UnfinishedPersonalProjectTodos project_id={project_id} />
-          </Suspense>
-        ) : null}
+        <Suspense fallback={<span>Loading {type} todos...</span>}>
+          <SortedPersonalProjectTodos
+            todoType={todoType}
+            type={type}
+            project_id={project_id}
+          />
+        </Suspense>
       </div>
 
       <button

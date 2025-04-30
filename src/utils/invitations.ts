@@ -39,8 +39,8 @@ async function getUserInvitations(userEmail: string, status?: boolean) {
     .from("organization_invitations")
     .select("*")
     .eq("invitee_email", userEmail)
-    .eq("type", "invitation");
-  // .eq("invitation_status", "pending");
+    .eq("type", "invitation")
+    .order("created_at", { ascending: false });
 
   if (status === true || status === false) {
     query = query.eq("read", status);
@@ -130,16 +130,23 @@ async function cancelInvitation(id: string) {
 async function deleteOrganizationInvitations({
   organization_id,
   super_admin_id,
+  status,
 }: {
   organization_id: string;
   super_admin_id: string;
+  status?: boolean;
 }) {
-  const { error } = await supabase
+  let query = supabase
     .from("organization_invitations")
     .delete()
     .eq("organization_id", organization_id)
     .eq("inviter_id", super_admin_id);
 
+  if (status === true || status === false) {
+    query = query.eq("read", status);
+  }
+
+  const { error } = await query;
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
@@ -177,7 +184,6 @@ async function deleteUserInvitations(invitee_email: string, status?: boolean) {
   }
 
   const { data: invitations, error } = await query;
-  console.log("Deleting invitations for:", invitee_email, status);
 
   if (error) {
     console.error(error.message);

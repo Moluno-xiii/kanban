@@ -5,7 +5,7 @@ import useGetTeamTasks from "../hooks/useGetTeamTasks";
 import AddTeamTaskModal from "./modals/AddTeamTaskModal";
 import Error from "./ui/Error";
 import Loading from "./ui/Loading";
-import { Tasks } from "./Tasks";
+import Tasks from "./Tasks";
 
 interface Props {
   team_id: string;
@@ -50,7 +50,7 @@ const TeamTasks: React.FC<Props> = ({
               </button>
             ) : null}
           </div>
-          <Tasks team_id={team_id} tasks={tasks.slice(0, 4)} />
+          <Tasks team_id={team_id} secondaryTasks={tasks.slice(0, 4)} />
           {tasks.length > 5 ? (
             <Link
               to="/dashboard/organizations/teams/$team_id/tasks"

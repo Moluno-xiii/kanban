@@ -8,7 +8,10 @@ interface PropTypes {
 }
 
 const DeleteMemberModal: React.FC<PropTypes> = ({ member, closeModal }) => {
-  const deleteMemberMutation = useDeleteMemberFromOrganization(member);
+  const deleteMemberMutation = useDeleteMemberFromOrganization(
+    member,
+    closeModal,
+  );
   return (
     <Modal
       title="Are you sure you want to Delete this member??"
@@ -20,7 +23,9 @@ const DeleteMemberModal: React.FC<PropTypes> = ({ member, closeModal }) => {
           className="btn-error"
           onClick={() => deleteMemberMutation.mutate()}
         >
-          {deleteMemberMutation.isPending ? "Deleting Organization..." : "Yes"}
+          {deleteMemberMutation.isPending
+            ? "Deleting Organization member..."
+            : "Yes"}
         </button>
         <button
           aria-label="No, i don't want to delete member button"

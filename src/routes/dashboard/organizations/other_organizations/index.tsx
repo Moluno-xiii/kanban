@@ -6,6 +6,7 @@ import { RootState } from "../../../../store";
 import { getOrganizations } from "../../../../utils/members";
 import Loading from "../../../../components/ui/Loading";
 import { FaArrowRight } from "react-icons/fa";
+import { dateToString } from "../../../../utils/helperFunctions";
 
 export const Route = createFileRoute(
   "/dashboard/organizations/other_organizations/",
@@ -45,10 +46,13 @@ function RouteComponent() {
             <Link
               to="/dashboard/organizations/other_organizations/$organization_id"
               params={{ organization_id: organization.organization_id }}
-              className="flex flex-row items-center justify-between capitalize"
+              className="flex flex-col gap-y-2"
             >
-              {organization.organization_name}
-              <FaArrowRight color="var(--color-secondary)" size={15} />
+              <div className="flex flex-row items-center justify-between capitalize">
+                {organization.organization_name}
+                <FaArrowRight color="var(--color-secondary)" size={15} />
+              </div>
+              <span>Date Joined : {dateToString(organization.created_at)}</span>
             </Link>
           </li>
         ))}

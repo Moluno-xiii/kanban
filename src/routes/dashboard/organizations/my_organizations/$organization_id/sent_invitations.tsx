@@ -51,24 +51,43 @@ function RouteComponent() {
 
   return (
     <div className="flex h-full w-full flex-col gap-y-3">
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-col justify-between gap-y-3 md:flex-row md:items-center">
         <GoBack
           route={`/dashboard/organizations/my_organizations/${organization_id}`}
         />
         {invitations.length ? (
-          <button
-            onClick={() =>
-              handleActiveModal("delete all organization invitations")
-            }
-            className="btn-error"
-          >
-            Delete all sent invitations
-          </button>
+          <div className="flex flex-col gap-x-4 gap-y-2 md:flex-row md:items-center">
+            <button
+              onClick={() =>
+                handleActiveModal("delete all organization invitations")
+              }
+              className="btn-error"
+            >
+              Delete all sent invitations
+            </button>
+            <button
+              onClick={() =>
+                handleActiveModal("delete all read organization invitations")
+              }
+              className="btn-error"
+            >
+              Delete all read invitations
+            </button>
+          </div>
         ) : null}
         {activeModal === "delete all organization invitations" ? (
           <DeleteAllOrganizationInvitationsModal
             organization_id={organization_id}
             super_admin_id={user?.id as string}
+            title="All invitations"
+          />
+        ) : null}
+        {activeModal === "delete all read organization invitations" ? (
+          <DeleteAllOrganizationInvitationsModal
+            organization_id={organization_id}
+            super_admin_id={user?.id as string}
+            title="All Read invitations"
+            status={true}
           />
         ) : null}
       </div>

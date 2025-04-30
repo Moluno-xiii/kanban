@@ -1,8 +1,15 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useNavigate,
+  useRouterState,
+} from "@tanstack/react-router";
 import Loading from "../../../components/ui/Loading";
 import Error from "../../../components/ui/Error";
 import useGetUserInvitations from "../../../hooks/useGetUserInvitations";
 import { InvitationNotification } from "../../../utils/helperFunctions";
+import { useEffect } from "react";
 export const Route = createFileRoute("/dashboard/organizations")({
   component: RouteComponent,
   pendingComponent: () => Loading({ message: "Loading organizations data" }),
@@ -11,7 +18,18 @@ export const Route = createFileRoute("/dashboard/organizations")({
 function RouteComponent() {
   const status = false;
   const { data: invitations, isPending, error } = useGetUserInvitations(status);
-  console.log(invitations);
+  const route = useRouterState();
+  const pathname = route.location.pathname;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (pathname === "/dashboard/organizations") {
+      navigate({
+        to: "/dashboard/organizations/my_organizations",
+        replace: true,
+      });
+    }
+  }, [pathname]);
 
   if (isPending) return <Loading message="Loading organization members" />;
 

@@ -1,8 +1,8 @@
 import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { Suspense } from "react";
-import { SortingButton } from ".";
 import UserTasks from "../../../../../../components/UserTasks";
 import ReturnBack from "../../../../../../components/ui/ReturnBack";
+import SortingButton from "../../../../../../components/ui/SortingButton";
 
 export const Route = createFileRoute(
   "/dashboard/organizations/teams/$team_id/tasks/assigned_tasks",
@@ -21,8 +21,6 @@ function RouteComponent() {
   return (
     <div className="flex flex-col gap-y-4">
       <ReturnBack />
-      Hello "/dashboard/organizations/teams/$team_id/tasks/assigned_tasks"!
-      <span>{team_id}</span>
       <ul className="flex flex-row gap-x-4">
         {subRouteParams.map((route) => (
           <li key={route}>

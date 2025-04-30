@@ -1,28 +1,16 @@
-import {
-  createFileRoute,
-  Link,
-  useNavigate,
-  useSearch,
-} from "@tanstack/react-router";
-import Loading from "../../../../../../components/ui/Loading";
-import Error from "../../../../../../components/ui/Error";
-import useGetTeamTasks from "../../../../../../hooks/useGetTeamTasks";
-import ReturnBack from "../../../../../../components/ui/ReturnBack";
-import { Tasks } from "../../../../../../components/Tasks";
-import useGetTeamMemberRole from "../../../../../../hooks/useGetTeamMemberRole";
-import { useModalContext } from "../../../../../../contexts/ModalContext";
-import AddTeamTaskModal from "../../../../../../components/modals/AddTeamTaskModal";
-import { lazy, Suspense } from "react";
+import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
+import { lazy, Suspense, useState } from "react";
 import { FaArrowRight } from "react-icons/fa6";
-const FinishedTeamTasks = lazy(
-  () => import("../../../../../../components/FinishedTeamTasks"),
-);
-const UnfinishedTeamTasks = lazy(
-  () => import("../../../../../../components/UnfinishedTeamTasks"),
-);
-const UnassignedTeamTasks = lazy(
-  () => import("../../../../../../components/UnassignedTeamTasks"),
-);
+import AddTeamTaskModal from "../../../../../../components/modals/AddTeamTaskModal";
+import Error from "../../../../../../components/ui/Error";
+import Loading from "../../../../../../components/ui/Loading";
+import ReturnBack from "../../../../../../components/ui/ReturnBack";
+import SortingButton from "../../../../../../components/ui/SortingButton";
+import { useModalContext } from "../../../../../../contexts/ModalContext";
+import useGetTeamMemberRole from "../../../../../../hooks/useGetTeamMemberRole";
+import useGetTeamTasks from "../../../../../../hooks/useGetTeamTasks";
+import { TaskTypes } from "../../../../../../utils/helperFunctions";
+const Tasks = lazy(() => import("../../../../../../components/Tasks"));
 
 export const Route = createFileRoute(
   "/dashboard/organizations/teams/$team_id/tasks/",
@@ -47,6 +35,7 @@ function RouteComponent() {
     error: userRoleError,
   } = useGetTeamMemberRole(team_id);
   const { activeModal, handleActiveModal } = useModalContext();
+  const [taskType, setTaskType] = useState<TaskTypes | undefined>(undefined);
 
   if (isPending || isLoadingUserRole)
     return <Loading message="Loading team tasks" />;
@@ -92,20 +81,14 @@ function RouteComponent() {
               team_id={team_id}
               type={button}
               urlQuery={type}
+              setTaskType={setTaskType}
               route="/dashboard/organizations/teams/$team_id/tasks"
             />
           </li>
         ))}
       </ul>
-      {type === "all" ? <Tasks tasks={tasks} team_id={team_id} /> : null}
       <Suspense fallback={<span>Loading {type} tasks...</span>}>
-        {type === "finished" ? <FinishedTeamTasks team_id={team_id} /> : null}
-        {type === "unfinished" ? (
-          <UnfinishedTeamTasks team_id={team_id} />
-        ) : null}
-        {type === "unassigned" ? (
-          <UnassignedTeamTasks team_id={team_id} />
-        ) : null}
+        <Tasks type={type} taskType={taskType} team_id={team_id} />
       </Suspense>
       {activeModal === "add team task" ? (
         <AddTeamTaskModal
@@ -120,33 +103,3 @@ function RouteComponent() {
     </div>
   );
 }
-
-interface PropTypes {
-  team_id: string;
-  type: string;
-  urlQuery: string;
-  route: string;
-}
-export const SortingButton: React.FC<PropTypes> = ({
-  team_id,
-  type,
-  urlQuery,
-  route,
-}) => {
-  const navigate = useNavigate();
-  return (
-    <button
-      aria-label={`show ${type} tasks button.`}
-      onClick={() =>
-        navigate({
-          to: route,
-          search: () => ({ type }),
-          params: { team_id },
-        })
-      }
-      className={`${type === urlQuery ? "text-secondary underline" : "text-text hover:text-secondary transition-all duration-200 hover:underline"} cursor-pointer capitalize sm:text-lg md:text-xl`}
-    >
-      {type} Tasks
-    </button>
-  );
-};

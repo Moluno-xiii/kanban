@@ -94,6 +94,8 @@ interface TeamTaskSubmission {
   admin_id: string;
 }
 
+type TaskTypes = "finished" | "unfinished" | "unassigned";
+
 export function dateToString(date: string) {
   const dateString = new Date(date).toLocaleString();
   return dateString;
@@ -108,4 +110,5 @@ export type {
   TeamType,
   Task,
   TeamTaskSubmission,
+  TaskTypes,
 };

@@ -34,13 +34,11 @@ function RouteComponent() {
   const { data: userRole, isPending: isFetchingUserRole } =
     useGetUserOrganizationRole(organization_id);
   const navigate = useNavigate();
-  console.log(userRole);
   const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     if (!user || isPending || isFetchingUserRole) return;
 
-    console.log("user role", userRole);
     if (
       (userRole.toLowerCase() !== "member" &&
         userRole.toLowerCase() !== "admin") ||

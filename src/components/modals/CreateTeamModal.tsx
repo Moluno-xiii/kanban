@@ -28,7 +28,6 @@ const CreateTeamModal: React.FC<PropTypes> = ({
       description: string;
     };
     const finalObject = { ...formObject, admin_id: creator_id, super_admin_id };
-    console.log(finalObject);
     createTeamMutation.mutate(finalObject);
   };
 

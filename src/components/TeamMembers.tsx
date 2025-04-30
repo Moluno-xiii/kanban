@@ -47,7 +47,6 @@ const TeamMembers: React.FC<PropTypes> = ({ team }) => {
           <EmptyState
             button={true}
             handleClick={() => {
-              console.log("i was clicked");
               handleActiveModal("add team member");
             }}
             emptyStateText=" No team members yet. Team members will appear here."

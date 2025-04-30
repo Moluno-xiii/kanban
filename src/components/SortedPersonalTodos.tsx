@@ -7,20 +7,30 @@ import EmptyState from "./ui/EmptyState";
 
 interface Props {
   project_id: string;
+  type: string | null;
+  todoType: "yes" | "no";
 }
 
-const UnfinishedPersonalProjectTodos: React.FC<Props> = ({ project_id }) => {
-  const { data: todos, isPending, error } = useProjectTodos(project_id, "no");
+const SortedPersonalProjectTodos: React.FC<Props> = ({
+  project_id,
+  type,
+  todoType,
+}) => {
+  const {
+    data: todos,
+    isPending,
+    error,
+  } = useProjectTodos(project_id, todoType);
 
-  if (!todos.length)
+  if (!todos.length && !isPending && !error)
     return (
       <EmptyState
         button={false}
-        emptyStateText="You have no unfinished todos, Todos you mark as unfinished will appear here."
+        emptyStateText={`You have no ${type} todos, Todos you mark as finished will appear here.`}
       />
     );
 
-  if (isPending) return <Loading message="loading unfinished projects" />;
+  if (isPending) return <Loading message={`loading ${type} projects`} />;
   if (error) return <Error errorMessage={error.message} />;
 
   return (
@@ -32,4 +42,4 @@ const UnfinishedPersonalProjectTodos: React.FC<Props> = ({ project_id }) => {
   );
 };
 
-export default UnfinishedPersonalProjectTodos;
+export default SortedPersonalProjectTodos;

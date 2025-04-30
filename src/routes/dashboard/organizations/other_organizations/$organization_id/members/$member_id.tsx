@@ -26,7 +26,7 @@ function RouteComponent() {
       <Error errorMessage={error.message || "An unexpected error occured."} />
     );
   }
-  console.log(member);
+
   return (
     <div className="flex flex-col gap-y-4">
       <ReturnBack />

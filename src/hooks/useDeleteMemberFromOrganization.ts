@@ -6,7 +6,10 @@ import { Member } from "../utils/helperFunctions";
 import useAuthGuard from "./useAuthGuard";
 import { useNavigate } from "@tanstack/react-router";
 
-const useDeleteMemberFromOrganization = (member: Member) => {
+const useDeleteMemberFromOrganization = (
+  member: Member,
+  closeModal: () => void,
+) => {
   const { user } = useAuthGuard();
   const navigate = useNavigate();
   return useMutation({
@@ -30,6 +33,7 @@ const useDeleteMemberFromOrganization = (member: Member) => {
       navigate({
         to: `/dashboard/organizations/my_organizations/${member.organization_id}`,
       });
+      closeModal();
     },
     onError: (err: { message: string }) => {
       toast.error(err.message || "An unexpected error occured.");
