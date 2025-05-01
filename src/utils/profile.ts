@@ -5,7 +5,13 @@ async function getUserProfile(userId: string) {
     .from("user_details")
     .select("*")
     .eq("id", userId);
-  return { user_details, error };
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
+
+  return user_details;
 }
 
 async function upsertUserProfile(formData: {
@@ -23,6 +29,10 @@ async function upsertUserProfile(formData: {
       },
     ])
     .select();
+
+  if (error) {
+    throw new Error(error.message);
+  }
 
   return { data, error };
 }

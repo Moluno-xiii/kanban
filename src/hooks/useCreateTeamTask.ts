@@ -68,7 +68,6 @@ const useCreateTeamTask = (team_id: string, closeModal: () => void) => {
     onError: (err: { message: string }) => {
       const message =
         err instanceof Error ? err.message : "An unexpected error occured.";
-      console.error(message);
       toast.error(message);
     },
   });

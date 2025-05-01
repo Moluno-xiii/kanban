@@ -67,7 +67,6 @@ const useSendInvitation = (
     },
     onError: (error: { message: string }) => {
       toast.error(error.message || "An unexpected error occured");
-      console.error(error.message);
     },
   });
 };

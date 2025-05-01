@@ -34,6 +34,7 @@ const DeleteTeamTaskModal: React.FC<Props> = ({
       toast.error(message);
     },
   });
+
   return (
     <Modal
       handleClose={handleClose}

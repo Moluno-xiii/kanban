@@ -28,7 +28,6 @@ async function createOrganizationInvitation(
     .select();
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
   return { organization, error };
@@ -49,7 +48,6 @@ async function getUserInvitations(userEmail: string, status?: boolean) {
   const { data: organization_invitations, error } = await query;
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
   return organization_invitations;
@@ -61,7 +59,6 @@ async function getUserInvitation(id: string) {
     .select("*")
     .eq("id", id);
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
   return organization_invitations;
@@ -74,7 +71,6 @@ async function updateInvitationStatus(value: string, id: string) {
     .eq("id", id);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -89,7 +85,6 @@ async function markInvitationAsRead(id: string) {
     .select();
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
   return organization_invitations;
@@ -107,7 +102,6 @@ async function getOrganizationInvitations(
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -121,7 +115,6 @@ async function cancelInvitation(id: string) {
     .eq("id", id);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
   return;
@@ -148,7 +141,6 @@ async function deleteOrganizationInvitations({
 
   const { error } = await query;
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
   return;
@@ -166,7 +158,6 @@ async function checkIfInvitationExists(
     .eq("invitation_status", "pending");
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -186,7 +177,6 @@ async function deleteUserInvitations(invitee_email: string, status?: boolean) {
   const { data: invitations, error } = await query;
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 

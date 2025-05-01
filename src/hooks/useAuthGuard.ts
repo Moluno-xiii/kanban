@@ -21,6 +21,10 @@ export default function useAuthGuard() {
       try {
         dispatch(setLoading({ loadingState: true }));
         const userSession = await getSession();
+        // console.log("user session is equal to", userSession);
+        if (!userSession) {
+          navigate({ to: "/auth/login", replace: true });
+        }
         const isEmailVerified =
           userSession.data.session?.user?.user_metadata?.email_verified;
         const isAuthenticated =

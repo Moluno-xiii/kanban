@@ -57,7 +57,6 @@ function RouteComponent() {
 
   if (error) {
     toast.error(error.message);
-    console.error(error.message);
     return (
       <Error
         errorMessage={

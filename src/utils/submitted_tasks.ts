@@ -25,7 +25,6 @@ async function submitTask(
     .select("*");
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
   // ONLY WHEN SUBMISSION IS ACCEPTED  BY ADMIN, WILL TASK BE MARKED AS FINISHED

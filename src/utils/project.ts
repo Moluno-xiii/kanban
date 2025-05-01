@@ -6,7 +6,13 @@ async function getUserProjects(userId: string) {
     .from("projects")
     .select("*")
     .eq("owner_id", userId);
-  return { projects, error };
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  // return { projects, error };
+  return projects;
 }
 
 async function getUserProject(projectId: string) {
@@ -14,7 +20,13 @@ async function getUserProject(projectId: string) {
     .from("projects")
     .select("*")
     .eq("project_id", projectId);
-  return { project, error };
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  // return { project, error };
+  return project;
 }
 
 async function upsertUserProject(formData: {
@@ -41,19 +53,27 @@ async function upsertUserProject(formData: {
       },
     ])
     .select();
-  return { projects, error };
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  // return { projects, error };
+  return projects;
 }
 
 async function deleteUserProject(projectId: string) {
-  const { error: todosError } = await deleteAllProjectTodos(projectId);
-  if (todosError) throw new Error(todosError?.message);
+  await deleteAllProjectTodos(projectId);
 
   const { data, error } = await supabase
     .from("projects")
     .delete()
     .eq("project_id", projectId);
+
   if (error) throw new Error(error.message);
-  return { data, error };
+
+  return data;
+  // return { data, error };
 }
 
 async function updateUserProject(
@@ -72,7 +92,12 @@ async function updateUserProject(
     .eq("project_id", projectId)
     .select();
 
-  return { projects, error };
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  // return { projects, error };
+  return projects;
 }
 
 const checkIfProjectNameExistsForUser = async (

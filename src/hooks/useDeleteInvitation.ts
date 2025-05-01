@@ -17,7 +17,6 @@ const useDeleteInvitation = (organization_id: string) => {
     mutationFn: (id: string) => cancelInvitation(id),
     onError: (error: { message: string }) => {
       toast.error(error.message || "An unexpected error occured, try again.");
-      console.error(error.message);
     },
   });
 };

@@ -13,7 +13,6 @@ async function createTeam(
     .select();
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -35,8 +34,8 @@ async function deleteTeam(
     .delete()
     .eq("id", team_id)
     .select();
+
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -51,7 +50,6 @@ async function getTeams(super_admin_id: string, organization_id: string) {
     .eq("super_admin_id", super_admin_id);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -65,7 +63,6 @@ async function getTeam(team_id: string) {
     .eq("id", team_id);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -80,7 +77,6 @@ async function getAdminTeams(admin_id: string, organization_id: string) {
     .eq("organization_id", organization_id);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
   return teams;

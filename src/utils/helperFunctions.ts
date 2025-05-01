@@ -86,12 +86,14 @@ interface TeamTaskSubmission {
   id: string;
   created_at: string;
   team_id: string;
-  status: string;
-  submitted_by: string;
-  additional_note: string;
+  status: "under review" | "rejected" | "accepted";
+  sumitted_by: string;
+  additional_submission_note: string;
   task_id: string;
   super_admin_id: string;
   admin_id: string;
+  additional_review_note: string;
+  reviewed_at: string;
 }
 
 type TaskTypes = "finished" | "unfinished" | "unassigned";

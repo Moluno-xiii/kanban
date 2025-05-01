@@ -17,12 +17,7 @@ function RouteComponent() {
       const dataObject = Object.fromEntries(formData);
       const userEmail = dataObject.email as string;
 
-      const { error } = await resetPassword(userEmail);
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
+      await resetPassword(userEmail);
       toast.success("password reset email sent, check your inbox");
     } catch (error: unknown) {
       if (error instanceof Error) {

@@ -5,7 +5,7 @@ const useProject = (project_id: string) => {
   return useSuspenseQuery({
     queryKey: ["project", project_id],
     queryFn: () => getUserProject(project_id),
-    select: (res) => res.project?.[0],
+    select: (res) => res[0],
     staleTime: Infinity,
     refetchOnMount: false,
   });

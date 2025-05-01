@@ -23,7 +23,6 @@ async function addMemberToOrganization(
     .select();
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
   return members;
@@ -53,7 +52,6 @@ async function getOrganizationMembers(
   const { data: members, error } = await query;
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -71,7 +69,6 @@ async function getOrganizationMember(
     .eq("member_id", member_id);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
   return member;
@@ -86,7 +83,6 @@ async function getOrganizations(user_id: string) {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
   return data;

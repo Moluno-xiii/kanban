@@ -15,10 +15,11 @@ const getOrganizationDetails = async (organization_id: string) => {
     .from("organizations")
     .select("*")
     .eq("id", organization_id);
+
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
+
   return data;
 };
 
@@ -31,7 +32,9 @@ const getAdminUserOrganization = async (
     .select("*")
     .eq("super_admin_id", user_id)
     .eq("id", organization_id);
+
   if (error) throw new Error(error.message);
+
   return { organizations };
 };
 
@@ -65,10 +68,11 @@ const upsertAdminUserOrganization = async (
       formData.name,
     );
   }
+
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
+
   return organization;
 };
 
@@ -102,6 +106,7 @@ const checkIfOrganizationNameExistsForUser = async (
   if (error) {
     throw new Error(error.message);
   }
+
   return organization.length ? true : false;
 };
 

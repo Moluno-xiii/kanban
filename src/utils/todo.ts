@@ -10,9 +10,9 @@ async function getProjectTodos(project_id: string, is_finished?: "yes" | "no") {
   const { data: todos, error } = await query;
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
+
   return { todos, error };
 }
 
@@ -34,6 +34,10 @@ async function upsertProjectTodo(formData: {
     ])
     .select();
 
+  if (error) {
+    throw new Error(error.message);
+  }
+
   return { todos, error };
 }
 
@@ -44,13 +48,22 @@ async function deleteProjectTodo(id: string, project_id: string) {
     .eq("id", id)
     .eq("project_id", project_id);
 
+  if (error) {
+    throw new Error(error.message);
+  }
+
   return { error };
 }
+
 async function deleteAllProjectTodos(project_id: string) {
   const { error } = await supabase
     .from("Todos")
     .delete()
     .eq("project_id", project_id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
 
   return { error };
 }
@@ -75,6 +88,10 @@ async function updateProjectTodo(
     .eq("id", id)
     .select();
 
+  if (error) {
+    throw new Error(error.message);
+  }
+
   return { projects, error };
 }
 
@@ -86,6 +103,10 @@ async function updateTodoStatus(id: string, is_finished: "yes" | "no") {
     })
     .eq("id", id)
     .select();
+
+  if (error) {
+    throw new Error(error.message);
+  }
 
   return { projects, error };
 }

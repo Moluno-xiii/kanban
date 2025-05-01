@@ -18,10 +18,7 @@ function RouteComponent() {
   async function handleGoogleLogin() {
     try {
       setIsLoading(true);
-      const { error } = await signInWithGoogle();
-      if (error) {
-        throw new Error(error.message);
-      }
+      await signInWithGoogle();
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast(error.message);
@@ -47,12 +44,7 @@ function RouteComponent() {
       const userEmail = dataObject.email as string;
       const password = dataObject.password as string;
 
-      const { error } = await signUpNewUser(userEmail, password);
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
+      await signUpNewUser(userEmail, password);
       toast.success("email verification sent, check your inbox");
     } catch (error: unknown) {
       if (error instanceof Error) {

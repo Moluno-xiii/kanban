@@ -31,7 +31,6 @@ async function createTeamTask(
     .select("*");
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -52,7 +51,6 @@ async function getTeamTasks(team_id: string, status?: TaskTypes) {
   const { data: tasks, error } = await query;
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -67,7 +65,6 @@ async function getTeamTask(task_id: string, team_id: string) {
     .eq("team_id", team_id);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -85,7 +82,6 @@ async function checkIfTaskTitleExistsInTeam(
     .ilike("title", task_title);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -123,7 +119,6 @@ async function getUserTasks(
   const { data: tasks, error } = await query;
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 

@@ -20,15 +20,9 @@ function RouteComponent() {
   async function handleGoogleLogin() {
     try {
       setIsLoading(true);
-      const { error } = await signInWithGoogle();
-      if (error) {
-        toast(error.message);
-        console.error("error signing in with google : ", error?.message);
-        throw new Error(error.message);
-      }
+      await signInWithGoogle();
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error("error logging in with google : ", error.message);
         toast(error.message);
         throw new Error(error.message);
       }
@@ -47,12 +41,7 @@ function RouteComponent() {
       const userEmail = dataObject.email as string;
       const password = dataObject.password as string;
 
-      const { data, error } = await loginUser(userEmail, password);
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
+      const data = await loginUser(userEmail, password);
       if (!data.user || !data.session) {
         throw new Error("Login failed: no user or session returned");
       }

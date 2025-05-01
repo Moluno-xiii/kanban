@@ -40,9 +40,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           body: formData,
         },
       );
-      if (!response.ok) {
-        throw new Error("Network error, try again.");
-      }
 
       const data = await response.json();
       if (data.secure_url) {

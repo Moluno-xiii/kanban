@@ -28,7 +28,6 @@ const Invitation: React.FC<PropTypes> = ({ notification, type }) => {
     },
     onError: (error: { message: string }) => {
       toast.error(error.message || "An unexpected error occured, try again.");
-      console.error(error.message);
     },
   });
   return (

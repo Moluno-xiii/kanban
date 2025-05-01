@@ -16,7 +16,6 @@ async function sendNotification(
       has_read: false,
     });
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -32,7 +31,6 @@ async function getUserNotifications(user_id: string, status: boolean) {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -49,7 +47,6 @@ async function deleteUserNotifications(user_id: string, status?: boolean) {
   const { data: notifications, error } = await query;
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -68,7 +65,6 @@ async function markNotificationAsRead(
     .select();
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
 

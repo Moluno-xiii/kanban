@@ -1,33 +1,17 @@
-import { User } from "@supabase/supabase-js";
-import { QueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import AddProjectForm from "../../../components/forms/AddProjectForm";
 import Project from "../../../components/Project";
 import EmptyState from "../../../components/ui/EmptyState";
 import Loading from "../../../components/ui/Loading";
+import Error from "../../../components/ui/Error";
 import Modal from "../../../components/ui/Modal";
 import { useModalContext } from "../../../contexts/ModalContext";
 import useAuthGuard from "../../../hooks/useAuthGuard";
 import useUserProjects from "../../../hooks/useUserProjects";
 import { Project as ProjectTypes } from "../../../utils/helperFunctions";
-import { getUserProjects } from "../../../utils/project";
 
 export const Route = createFileRoute("/dashboard/personal_projects/")({
   component: RouteComponent,
-  loader: async ({ context }) => {
-    const { queryClient, store } = context as {
-      queryClient: QueryClient;
-      store: {
-        getState: () => { auth: { user: User } };
-      };
-    };
-    const user = store.getState().auth.user;
-    return await queryClient.ensureQueryData({
-      queryKey: ["user-projects", user?.id],
-      queryFn: () => getUserProjects(user?.id),
-    });
-  },
-  pendingComponent: () => Loading({ message: "Loading user Projects" }),
 });
 
 function RouteComponent() {
@@ -39,8 +23,8 @@ function RouteComponent() {
     data: projects,
   } = useUserProjects(user?.id as string);
 
-  if (isPending) return <span>Loading projects...</span>;
-  if (error) return <span>An error occured</span>;
+  if (isPending) return <Loading message={"Loading projects"} />;
+  if (error) return <Error errorMessage={error.message} />;
   if (!projects || projects?.length < 1)
     return (
       <EmptyState

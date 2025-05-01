@@ -9,7 +9,10 @@ async function signUpNewUser(userEmail: string, userPassword: string) {
     },
   });
 
-  return { data, error };
+  if (error) throw new Error(error.message);
+
+  // return { data, error };
+  return data;
 }
 
 async function loginUser(userEmail: string, userPassword: string) {
@@ -18,15 +21,17 @@ async function loginUser(userEmail: string, userPassword: string) {
     password: userPassword,
   });
 
-  return { data, error };
+  if (error) throw new Error(error.message);
+
+  // return { data, error };
+  return data;
 }
 
 async function logoutUser() {
   const { error } = await supabase.auth.signOut();
-  if (error) {
-    console.error("error logging out : ", error.message);
-    return error;
-  }
+  if (error) throw new Error(error.message);
+
+  return error;
 }
 
 async function getUser() {
@@ -34,7 +39,11 @@ async function getUser() {
     data: { user },
     error,
   } = await supabase.auth.getUser();
-  return { user, error };
+
+  if (error) throw new Error(error.message);
+
+  // return { user, error };
+  return user;
 }
 
 async function resetPassword(email: string) {
@@ -42,7 +51,12 @@ async function resetPassword(email: string) {
     redirectTo:
       "http://https://tasksphere-amber.vercel.app/auth/reset-password",
   });
-  return { data, error };
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  // return { data, error };
+  return data;
 }
 async function updateUser(userEmail: string, userPassword: string) {
   const { data, error } = await supabase.auth.updateUser({
@@ -50,7 +64,11 @@ async function updateUser(userEmail: string, userPassword: string) {
     password: userPassword,
     data: { hello: "world" },
   });
-  return { data, error };
+
+  if (error) throw new Error(error.message);
+
+  // return { data, error };
+  return data;
 }
 
 async function signInWithGoogle() {
@@ -61,7 +79,10 @@ async function signInWithGoogle() {
         "http://https://tasksphere-amber.vercel.app/dashboard/profile",
     },
   });
-  return { data, error };
+  if (error) throw new Error(error.message);
+
+  // return { data, error };
+  return data;
 }
 async function getSession() {
   const { data, error } = await supabase.auth.getSession();

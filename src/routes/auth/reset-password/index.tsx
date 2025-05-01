@@ -28,11 +28,7 @@ function RouteComponent() {
       const userEmail = dataObject.email as string;
       const userPassword = dataObject.password as string;
 
-      const { error } = await updateUser(userEmail, userPassword);
-
-      if (error) {
-        throw new Error(error.message);
-      }
+      await updateUser(userEmail, userPassword);
 
       toast.success("password updated successfully");
       navigate({ to: "/auth/login", replace: true });
