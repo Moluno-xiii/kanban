@@ -25,30 +25,37 @@ type ActiveModal =
   | "add team task"
   | "delete team task"
   | "update organization details"
-  | "delete all read organization invitations";
+  | "delete all read organization invitations"
+  | "submit team task"
+  | "delete user submission"
+  | "review user submission";
 
 interface ModalTypes {
   activeModal: ActiveModal | null;
   activeProjectModalId: string | null;
   activeTeamMember: string | null;
-  activeTeamTask: string | null;
   activeTodoModalId: string | null;
+  activeTeamTask: string | null;
+  activeUserSubmission: string | null;
   handleActiveModal: (modalName: ActiveModal | null) => void;
   handleActiveTeamMember: (member_id: string | null) => void;
   handleActiveTeamTask: (task_id: string | null) => void;
+  handleActiveUserSubmission: (submission_id: string | null) => void;
   handleProjectModal: (projectId: string) => void;
   handleTodoModal: (todoId: string) => void;
 }
 
 const ModalContext = createContext<ModalTypes>({
   activeModal: null,
-  activeTeamMember: "",
-  activeTeamTask: "",
-  activeTodoModalId: "",
   activeProjectModalId: "",
+  activeTeamMember: "",
+  activeTodoModalId: "",
+  activeTeamTask: "",
+  activeUserSubmission: "",
   handleActiveModal: () => {},
   handleActiveTeamMember: () => {},
   handleActiveTeamTask: () => {},
+  handleActiveUserSubmission: () => {},
   handleProjectModal: () => {},
   handleTodoModal: () => {},
 });
@@ -61,6 +68,9 @@ const ModalContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [activeTodoModalId, setActiveTodoModalId] = useState<string | null>("");
   const [activeTeamMember, setActiveTeamMember] = useState<string | null>("");
   const [activeTeamTask, setActiveTeamTask] = useState<string | null>("");
+  const [activeUserSubmission, setActiveUserSubmission] = useState<
+    string | null
+  >("");
 
   const handleActiveModal = (state: ActiveModal | null) => {
     setActiveModal(state);
@@ -82,6 +92,10 @@ const ModalContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setActiveTeamTask(task_id);
   };
 
+  const handleActiveUserSubmission = (submission_id: string | null) => {
+    setActiveUserSubmission(submission_id);
+  };
+
   return (
     <ModalContext.Provider
       value={{
@@ -90,9 +104,11 @@ const ModalContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
         activeTeamMember,
         activeTeamTask,
         activeProjectModalId,
+        activeUserSubmission,
         handleActiveModal,
         handleActiveTeamMember,
         handleActiveTeamTask,
+        handleActiveUserSubmission,
         handleProjectModal,
         handleTodoModal,
       }}

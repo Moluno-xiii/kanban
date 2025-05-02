@@ -1,58 +1,95 @@
-import { createFileRoute } from "@tanstack/react-router";
-import Error from "../../../../../../components/ui/Error";
-import Loading from "../../../../../../components/ui/Loading";
-import useGetTeamTask from "../../../../../../hooks/useGetTeamTask";
-import ReturnBack from "../../../../../../components/ui/ReturnBack";
-import { dateToString } from "../../../../../../utils/helperFunctions";
+import {
+  createFileRoute,
+  useNavigate,
+  useSearch,
+} from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
+import GoBack from "../../../../../../components/ui/GoBack";
+
+const TaskDescription = lazy(
+  () => import("../../../../../../components/TaskDescription"),
+);
+const TaskSubmissions = lazy(
+  () => import("../../../../../../components/TaskSubmissions"),
+);
 
 export const Route = createFileRoute(
   "/dashboard/organizations/teams/$team_id/tasks/$task_id",
 )({
   component: RouteComponent,
+  validateSearch: (search) => {
+    return {
+      type: (search.type as string) || "description",
+    };
+  },
 });
 
 function RouteComponent() {
   const { team_id, task_id } = Route.useParams();
-  const { data: task, isPending, error } = useGetTeamTask(task_id, team_id);
+  const { type } = useSearch({ from: Route.id });
 
-  if (isPending) return <Loading message={"Loading task"} />;
-  if (error) return <Error errorMessage={"Task doesn't exist."} />;
+  const subRouteButtons = ["description", "submissions"];
   return (
     <div className="flex flex-col gap-y-4">
-      <ReturnBack />
-      <p
-        aria-label="Task title"
-        className="text-secondary text-xl capitalize md:text-2xl"
-      >
-        {" "}
-        {task.title}
-      </p>
-      <div className="flex flex-col gap-y-2">
-        <span aria-label="task description">
-          Task description : {task.description}
-        </span>
-        <span aria-label="task's creation date ">
-          Date created : {dateToString(task.created_at)}
-        </span>
-        {task.assigned_to ? (
-          <span aria-label="email of user task was assigned to">
-            Assigned to : {task.assigned_to}
-          </span>
-        ) : (
-          <span aria-label="task status">Status : {task.status}</span>
-        )}
-        <span aria-label="email of user task was assigned by">
-          Assigned by : {task.assigned_by}
-        </span>
+      <GoBack
+        route={`/dashboard/organizations/teams/${team_id}/tasks?type=all`}
+      />
+      <div className="flex flex-row items-center gap-x-4">
+        {subRouteButtons.map((button) => (
+          <SortingButton
+            route="/dashboard/organizations/teams/$team_id/tasks/$task_id"
+            type={button}
+            task_id={task_id}
+            team_id={team_id}
+            key={button}
+            urlQuery={type}
+          />
+        ))}
       </div>
-      {!task.assigned_to ? (
-        <button
-          aria-label="assign task to member button"
-          className="btn self-end"
-        >
-          Assign task
-        </button>
+      {type === "description" ? (
+        <Suspense fallback={<span>Loading task description...</span>}>
+          <TaskDescription task_id={task_id} team_id={team_id} />
+        </Suspense>
+      ) : null}
+      {type === "submissions" ? (
+        <Suspense fallback={<span>Loading task submissions...</span>}>
+          <TaskSubmissions task_id={task_id} team_id={team_id} />
+        </Suspense>
       ) : null}
     </div>
   );
 }
+
+interface PropTypes {
+  team_id: string;
+  task_id: string;
+  type: string;
+  urlQuery: string;
+  route: string;
+}
+const SortingButton: React.FC<PropTypes> = ({
+  team_id,
+  task_id,
+  type,
+  urlQuery,
+  route,
+}) => {
+  const navigate = useNavigate();
+  return (
+    <button
+      aria-label={`show task ${type} button.`}
+      onClick={() => {
+        navigate({
+          to: route,
+          search: () => ({ type }),
+          params: { team_id, task_id },
+        });
+      }}
+      className={`${type === urlQuery ? "text-secondary underline" : "text-text hover:text-secondary transition-all duration-200 hover:underline"} cursor-pointer capitalize sm:text-lg md:text-xl`}
+    >
+      Task {type}
+    </button>
+  );
+};
+
+export default SortingButton;

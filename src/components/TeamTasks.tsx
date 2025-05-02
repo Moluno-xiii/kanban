@@ -35,33 +35,53 @@ const TeamTasks: React.FC<Props> = ({
     <div className="flex flex-col gap-y-3">
       {tasks.length ? (
         <div className="flex flex-col gap-y-3">
-          <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-col justify-between gap-y-2 sm:flex-row sm:items-center">
             <span className="text-secondary text-lg sm:text-xl">
-              Tasks
-              {/* ({tasks.length}) */}
+              Tasks ({tasks.length})
             </span>
             {userRole?.role.toLowerCase() !== "member" ? (
-              <button
-                aria-label="add task button"
-                onClick={() => handleActiveModal("add team task")}
-                className="btn"
-              >
-                Add Task
-              </button>
+              <div className="flex flex-row gap-x-4 sm:items-center">
+                <button
+                  aria-label="add task button"
+                  onClick={() => handleActiveModal("add team task")}
+                  className="btn"
+                >
+                  Add Task
+                </button>
+                <Link
+                  className="btn"
+                  to="/dashboard/organizations/teams/$team_id/submissions"
+                  params={{ team_id }}
+                  search={{ type: "all" }}
+                >
+                  View all task submissions
+                </Link>
+              </div>
             ) : null}
           </div>
           <Tasks team_id={team_id} secondaryTasks={tasks.slice(0, 4)} />
-          {tasks.length > 5 ? (
+          <div className="flex flex-row items-center justify-between">
             <Link
-              to="/dashboard/organizations/teams/$team_id/tasks"
+              to="/dashboard/organizations/teams/$team_id/tasks/assigned_tasks"
               params={{ team_id }}
-              className="btn self-end"
+              className="btn"
               search={() => ({ type: "all" })}
-              aria-label="link to view all tasks"
+              aria-label="link to view all my assigned tasks"
             >
-              View all tasks
+              View my assigned tasks
             </Link>
-          ) : null}
+            {tasks.length > 5 ? (
+              <Link
+                to="/dashboard/organizations/teams/$team_id/tasks"
+                params={{ team_id }}
+                className="btn"
+                search={() => ({ type: "all" })}
+                aria-label="link to view all tasks"
+              >
+                View all tasks
+              </Link>
+            ) : null}
+          </div>
         </div>
       ) : (
         <div className="flex flex-col items-center gap-y-2 text-center">

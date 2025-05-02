@@ -3,7 +3,7 @@ import { TeamTaskSubmission } from "../utils/helperFunctions";
 import { getAllUserTeamTaskSubmissions } from "../utils/team_tasks_submissions";
 
 const useGetUserTeamTaskSubmissions = (
-  user_email: TeamTaskSubmission["sumitted_by"],
+  user_email: TeamTaskSubmission["submitted_by"],
   team_id: TeamTaskSubmission["team_id"],
 ) => {
   return useQuery({

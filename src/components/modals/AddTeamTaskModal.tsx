@@ -3,7 +3,7 @@ import useGetOrganizationMembers from "../../hooks/useGetOrganizationMembers";
 import Loading from "../ui/Loading";
 import Error from "../ui/Error";
 import Modal from "../ui/Modal";
-import { Member } from "../../utils/helperFunctions";
+import { Member, TaskTypes } from "../../utils/helperFunctions";
 
 interface Props {
   admin_id: string;
@@ -56,7 +56,7 @@ const AddTeamTaskModal: React.FC<Props> = ({
       finalObject as {
         admin_id: string;
         description: string;
-        status: "assigned" | "unassigned" | "finished";
+        status: TaskTypes;
         super_admin_id: string;
         team_id: string;
         title: string;

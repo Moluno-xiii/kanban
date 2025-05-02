@@ -3,7 +3,7 @@ import { TaskTypes } from "./helperFunctions";
 
 async function createTeamTask(
   assigned_by: string,
-  status: "assigned" | "unassigned" | "finished",
+  status: TaskTypes,
   team_id: string,
   admin_id: string,
   super_admin_id: string,
@@ -125,6 +125,23 @@ async function getUserTasks(
   return tasks;
 }
 
+async function editTeamTaskStatus(status: string, task_id: string) {
+  const { data: task, error } = await supabase
+    .from("team_tasks")
+    .update([
+      {
+        status,
+      },
+    ])
+    .eq("id", task_id);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
+  console.log("team status updated successfully : ", status);
+  return task;
+}
 export {
   checkIfTaskTitleExistsInTeam,
   createTeamTask,
@@ -132,4 +149,5 @@ export {
   getTeamTask,
   getTeamTasks,
   getUserTasks,
+  editTeamTaskStatus,
 };

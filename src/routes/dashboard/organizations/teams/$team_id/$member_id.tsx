@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import ReturnBack from "../../../../../components/ui/ReturnBack";
 import { useQuery } from "@tanstack/react-query";
-import { getTeamMember } from "../../../../../utils/team_members";
-import Loading from "../../../../../components/ui/Loading";
+import { createFileRoute } from "@tanstack/react-router";
 import Error from "../../../../../components/ui/Error";
+import Loading from "../../../../../components/ui/Loading";
+import ReturnBack from "../../../../../components/ui/ReturnBack";
 import { dateToString } from "../../../../../utils/helperFunctions";
+import { getTeamMember } from "../../../../../utils/team_members";
 
 export const Route = createFileRoute(
   "/dashboard/organizations/teams/$team_id/$member_id",

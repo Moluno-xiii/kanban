@@ -87,7 +87,7 @@ interface TeamTaskSubmission {
   created_at: string;
   team_id: string;
   status: "under review" | "rejected" | "accepted";
-  sumitted_by: string;
+  submitted_by: string;
   additional_submission_note: string;
   task_id: string;
   super_admin_id: string;

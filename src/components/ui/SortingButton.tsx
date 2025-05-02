@@ -9,6 +9,7 @@ interface PropTypes {
   route: string;
   setTaskType?: Dispatch<SetStateAction<TaskTypes | undefined>>;
 }
+
 const SortingButton: React.FC<PropTypes> = ({
   team_id,
   type,

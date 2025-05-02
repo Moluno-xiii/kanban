@@ -1,8 +1,9 @@
 import { createFileRoute, useSearch } from "@tanstack/react-router";
-import { Suspense } from "react";
-import UserTasks from "../../../../../../components/UserTasks";
-import ReturnBack from "../../../../../../components/ui/ReturnBack";
+import { lazy, Suspense } from "react";
 import SortingButton from "../../../../../../components/ui/SortingButton";
+import GoBack from "../../../../../../components/ui/GoBack";
+
+const UserTasks = lazy(() => import("../../../../../../components/UserTasks"));
 
 export const Route = createFileRoute(
   "/dashboard/organizations/teams/$team_id/tasks/assigned_tasks",
@@ -20,7 +21,7 @@ function RouteComponent() {
   const { type } = useSearch({ from: Route.id });
   return (
     <div className="flex flex-col gap-y-4">
-      <ReturnBack />
+      <GoBack route={`/dashboard/organizations/teams/${team_id}`} />
       <ul className="flex flex-row gap-x-4">
         {subRouteParams.map((route) => (
           <li key={route}>

@@ -7,7 +7,7 @@ const useGetTaskSubmissions = (
   team_id: TeamTaskSubmission["team_id"],
 ) => {
   return useQuery({
-    queryKey: ["task_submissions"],
+    queryKey: ["task_submissions", task_id],
     queryFn: () => getTaskSubmissions(team_id, task_id),
     staleTime: Infinity,
     refetchOnMount: false,

@@ -109,10 +109,14 @@ const TaskComponent = ({
         Created at : {dateToString(task.created_at)}
       </span>{" "}
       <span aria-label="task status">Status : {task.status}</span>
+      {task.date_finished ? (
+        <span>Finished on : {task.date_finished.split("T").join(" ")}</span>
+      ) : null}
       <div className="flex flex-row items-center justify-between">
         <Link
           to="/dashboard/organizations/teams/$team_id/tasks/$task_id"
           params={{ team_id, task_id: task.id }}
+          search={{ type: "description" }}
           className="btn"
           aria-label="view task details"
         >

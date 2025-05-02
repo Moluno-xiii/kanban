@@ -4,12 +4,12 @@ import { FaArrowRight } from "react-icons/fa6";
 import AddTeamTaskModal from "../../../../../../components/modals/AddTeamTaskModal";
 import Error from "../../../../../../components/ui/Error";
 import Loading from "../../../../../../components/ui/Loading";
-import ReturnBack from "../../../../../../components/ui/ReturnBack";
 import SortingButton from "../../../../../../components/ui/SortingButton";
 import { useModalContext } from "../../../../../../contexts/ModalContext";
 import useGetTeamMemberRole from "../../../../../../hooks/useGetTeamMemberRole";
 import useGetTeamTasks from "../../../../../../hooks/useGetTeamTasks";
 import { TaskTypes } from "../../../../../../utils/helperFunctions";
+import GoBack from "../../../../../../components/ui/GoBack";
 const Tasks = lazy(() => import("../../../../../../components/Tasks"));
 
 export const Route = createFileRoute(
@@ -45,7 +45,7 @@ function RouteComponent() {
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex flex-row items-center justify-between">
-        <ReturnBack />
+        <GoBack route={`/dashboard/organizations/teams/${team_id}`} />
         {userRole.role.toLowerCase() === "member" ? (
           <Link
             to="/dashboard/organizations/teams/$team_id/tasks/assigned_tasks"

@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { sendNotification } from "../utils/notifications";
+import { TaskTypes } from "../utils/helperFunctions";
 
 const useCreateTeamTask = (team_id: string, closeModal: () => void) => {
   const queryClient = useQueryClient();
@@ -18,7 +19,7 @@ const useCreateTeamTask = (team_id: string, closeModal: () => void) => {
       super_admin_id: string;
       title: string;
       description: string;
-      status: "assigned" | "unassigned" | "finished";
+      status: TaskTypes;
       assignee_id: string;
       assigned_to: string;
       team_name: string;

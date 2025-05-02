@@ -34,10 +34,12 @@ import { Route as DashboardOrganizationsMyorganizationsOrganizationidIndexImport
 import { Route as DashboardOrganizationsTeamsTeamidMemberidImport } from './routes/dashboard/organizations/teams/$team_id/$member_id'
 import { Route as DashboardOrganizationsMyorganizationsOrganizationidSentinvitationsImport } from './routes/dashboard/organizations/my_organizations/$organization_id/sent_invitations'
 import { Route as DashboardOrganizationsTeamsTeamidTasksIndexImport } from './routes/dashboard/organizations/teams/$team_id/tasks/index'
+import { Route as DashboardOrganizationsTeamsTeamidSubmissionsIndexImport } from './routes/dashboard/organizations/teams/$team_id/submissions/index'
 import { Route as DashboardOrganizationsOtherorganizationsOrganizationidMembersIndexImport } from './routes/dashboard/organizations/other_organizations/$organization_id/members/index'
 import { Route as DashboardOrganizationsMyorganizationsOrganizationidMembersIndexImport } from './routes/dashboard/organizations/my_organizations/$organization_id/members/index'
 import { Route as DashboardOrganizationsTeamsTeamidTasksAssignedtasksImport } from './routes/dashboard/organizations/teams/$team_id/tasks/assigned_tasks'
 import { Route as DashboardOrganizationsTeamsTeamidTasksTaskidImport } from './routes/dashboard/organizations/teams/$team_id/tasks/$task_id'
+import { Route as DashboardOrganizationsTeamsTeamidSubmissionsSubmissionidImport } from './routes/dashboard/organizations/teams/$team_id/submissions/$submission_id'
 import { Route as DashboardOrganizationsOtherorganizationsOrganizationidMembersMemberidImport } from './routes/dashboard/organizations/other_organizations/$organization_id/members/$member_id'
 import { Route as DashboardOrganizationsMyorganizationsOrganizationidMembersMemberidImport } from './routes/dashboard/organizations/my_organizations/$organization_id/members/$member_id'
 
@@ -197,6 +199,13 @@ const DashboardOrganizationsTeamsTeamidTasksIndexRoute =
     getParentRoute: () => DashboardOrganizationsRouteRoute,
   } as any)
 
+const DashboardOrganizationsTeamsTeamidSubmissionsIndexRoute =
+  DashboardOrganizationsTeamsTeamidSubmissionsIndexImport.update({
+    id: '/teams/$team_id/submissions/',
+    path: '/teams/$team_id/submissions/',
+    getParentRoute: () => DashboardOrganizationsRouteRoute,
+  } as any)
+
 const DashboardOrganizationsOtherorganizationsOrganizationidMembersIndexRoute =
   DashboardOrganizationsOtherorganizationsOrganizationidMembersIndexImport.update(
     {
@@ -224,6 +233,13 @@ const DashboardOrganizationsTeamsTeamidTasksTaskidRoute =
   DashboardOrganizationsTeamsTeamidTasksTaskidImport.update({
     id: '/teams/$team_id/tasks/$task_id',
     path: '/teams/$team_id/tasks/$task_id',
+    getParentRoute: () => DashboardOrganizationsRouteRoute,
+  } as any)
+
+const DashboardOrganizationsTeamsTeamidSubmissionsSubmissionidRoute =
+  DashboardOrganizationsTeamsTeamidSubmissionsSubmissionidImport.update({
+    id: '/teams/$team_id/submissions/$submission_id',
+    path: '/teams/$team_id/submissions/$submission_id',
     getParentRoute: () => DashboardOrganizationsRouteRoute,
   } as any)
 
@@ -417,6 +433,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardOrganizationsOtherorganizationsOrganizationidMembersMemberidImport
       parentRoute: typeof DashboardOrganizationsRouteImport
     }
+    '/dashboard/organizations/teams/$team_id/submissions/$submission_id': {
+      id: '/dashboard/organizations/teams/$team_id/submissions/$submission_id'
+      path: '/teams/$team_id/submissions/$submission_id'
+      fullPath: '/dashboard/organizations/teams/$team_id/submissions/$submission_id'
+      preLoaderRoute: typeof DashboardOrganizationsTeamsTeamidSubmissionsSubmissionidImport
+      parentRoute: typeof DashboardOrganizationsRouteImport
+    }
     '/dashboard/organizations/teams/$team_id/tasks/$task_id': {
       id: '/dashboard/organizations/teams/$team_id/tasks/$task_id'
       path: '/teams/$team_id/tasks/$task_id'
@@ -443,6 +466,13 @@ declare module '@tanstack/react-router' {
       path: '/other_organizations/$organization_id/members'
       fullPath: '/dashboard/organizations/other_organizations/$organization_id/members'
       preLoaderRoute: typeof DashboardOrganizationsOtherorganizationsOrganizationidMembersIndexImport
+      parentRoute: typeof DashboardOrganizationsRouteImport
+    }
+    '/dashboard/organizations/teams/$team_id/submissions/': {
+      id: '/dashboard/organizations/teams/$team_id/submissions/'
+      path: '/teams/$team_id/submissions'
+      fullPath: '/dashboard/organizations/teams/$team_id/submissions'
+      preLoaderRoute: typeof DashboardOrganizationsTeamsTeamidSubmissionsIndexImport
       parentRoute: typeof DashboardOrganizationsRouteImport
     }
     '/dashboard/organizations/teams/$team_id/tasks/': {
@@ -487,10 +517,12 @@ interface DashboardOrganizationsRouteRouteChildren {
   DashboardOrganizationsTeamsTeamidIndexRoute: typeof DashboardOrganizationsTeamsTeamidIndexRoute
   DashboardOrganizationsMyorganizationsOrganizationidMembersMemberidRoute: typeof DashboardOrganizationsMyorganizationsOrganizationidMembersMemberidRoute
   DashboardOrganizationsOtherorganizationsOrganizationidMembersMemberidRoute: typeof DashboardOrganizationsOtherorganizationsOrganizationidMembersMemberidRoute
+  DashboardOrganizationsTeamsTeamidSubmissionsSubmissionidRoute: typeof DashboardOrganizationsTeamsTeamidSubmissionsSubmissionidRoute
   DashboardOrganizationsTeamsTeamidTasksTaskidRoute: typeof DashboardOrganizationsTeamsTeamidTasksTaskidRoute
   DashboardOrganizationsTeamsTeamidTasksAssignedtasksRoute: typeof DashboardOrganizationsTeamsTeamidTasksAssignedtasksRoute
   DashboardOrganizationsMyorganizationsOrganizationidMembersIndexRoute: typeof DashboardOrganizationsMyorganizationsOrganizationidMembersIndexRoute
   DashboardOrganizationsOtherorganizationsOrganizationidMembersIndexRoute: typeof DashboardOrganizationsOtherorganizationsOrganizationidMembersIndexRoute
+  DashboardOrganizationsTeamsTeamidSubmissionsIndexRoute: typeof DashboardOrganizationsTeamsTeamidSubmissionsIndexRoute
   DashboardOrganizationsTeamsTeamidTasksIndexRoute: typeof DashboardOrganizationsTeamsTeamidTasksIndexRoute
 }
 
@@ -518,6 +550,8 @@ const DashboardOrganizationsRouteRouteChildren: DashboardOrganizationsRouteRoute
       DashboardOrganizationsMyorganizationsOrganizationidMembersMemberidRoute,
     DashboardOrganizationsOtherorganizationsOrganizationidMembersMemberidRoute:
       DashboardOrganizationsOtherorganizationsOrganizationidMembersMemberidRoute,
+    DashboardOrganizationsTeamsTeamidSubmissionsSubmissionidRoute:
+      DashboardOrganizationsTeamsTeamidSubmissionsSubmissionidRoute,
     DashboardOrganizationsTeamsTeamidTasksTaskidRoute:
       DashboardOrganizationsTeamsTeamidTasksTaskidRoute,
     DashboardOrganizationsTeamsTeamidTasksAssignedtasksRoute:
@@ -526,6 +560,8 @@ const DashboardOrganizationsRouteRouteChildren: DashboardOrganizationsRouteRoute
       DashboardOrganizationsMyorganizationsOrganizationidMembersIndexRoute,
     DashboardOrganizationsOtherorganizationsOrganizationidMembersIndexRoute:
       DashboardOrganizationsOtherorganizationsOrganizationidMembersIndexRoute,
+    DashboardOrganizationsTeamsTeamidSubmissionsIndexRoute:
+      DashboardOrganizationsTeamsTeamidSubmissionsIndexRoute,
     DashboardOrganizationsTeamsTeamidTasksIndexRoute:
       DashboardOrganizationsTeamsTeamidTasksIndexRoute,
   }
@@ -584,10 +620,12 @@ export interface FileRoutesByFullPath {
   '/dashboard/organizations/teams/$team_id': typeof DashboardOrganizationsTeamsTeamidIndexRoute
   '/dashboard/organizations/my_organizations/$organization_id/members/$member_id': typeof DashboardOrganizationsMyorganizationsOrganizationidMembersMemberidRoute
   '/dashboard/organizations/other_organizations/$organization_id/members/$member_id': typeof DashboardOrganizationsOtherorganizationsOrganizationidMembersMemberidRoute
+  '/dashboard/organizations/teams/$team_id/submissions/$submission_id': typeof DashboardOrganizationsTeamsTeamidSubmissionsSubmissionidRoute
   '/dashboard/organizations/teams/$team_id/tasks/$task_id': typeof DashboardOrganizationsTeamsTeamidTasksTaskidRoute
   '/dashboard/organizations/teams/$team_id/tasks/assigned_tasks': typeof DashboardOrganizationsTeamsTeamidTasksAssignedtasksRoute
   '/dashboard/organizations/my_organizations/$organization_id/members': typeof DashboardOrganizationsMyorganizationsOrganizationidMembersIndexRoute
   '/dashboard/organizations/other_organizations/$organization_id/members': typeof DashboardOrganizationsOtherorganizationsOrganizationidMembersIndexRoute
+  '/dashboard/organizations/teams/$team_id/submissions': typeof DashboardOrganizationsTeamsTeamidSubmissionsIndexRoute
   '/dashboard/organizations/teams/$team_id/tasks': typeof DashboardOrganizationsTeamsTeamidTasksIndexRoute
 }
 
@@ -616,10 +654,12 @@ export interface FileRoutesByTo {
   '/dashboard/organizations/teams/$team_id': typeof DashboardOrganizationsTeamsTeamidIndexRoute
   '/dashboard/organizations/my_organizations/$organization_id/members/$member_id': typeof DashboardOrganizationsMyorganizationsOrganizationidMembersMemberidRoute
   '/dashboard/organizations/other_organizations/$organization_id/members/$member_id': typeof DashboardOrganizationsOtherorganizationsOrganizationidMembersMemberidRoute
+  '/dashboard/organizations/teams/$team_id/submissions/$submission_id': typeof DashboardOrganizationsTeamsTeamidSubmissionsSubmissionidRoute
   '/dashboard/organizations/teams/$team_id/tasks/$task_id': typeof DashboardOrganizationsTeamsTeamidTasksTaskidRoute
   '/dashboard/organizations/teams/$team_id/tasks/assigned_tasks': typeof DashboardOrganizationsTeamsTeamidTasksAssignedtasksRoute
   '/dashboard/organizations/my_organizations/$organization_id/members': typeof DashboardOrganizationsMyorganizationsOrganizationidMembersIndexRoute
   '/dashboard/organizations/other_organizations/$organization_id/members': typeof DashboardOrganizationsOtherorganizationsOrganizationidMembersIndexRoute
+  '/dashboard/organizations/teams/$team_id/submissions': typeof DashboardOrganizationsTeamsTeamidSubmissionsIndexRoute
   '/dashboard/organizations/teams/$team_id/tasks': typeof DashboardOrganizationsTeamsTeamidTasksIndexRoute
 }
 
@@ -649,10 +689,12 @@ export interface FileRoutesById {
   '/dashboard/organizations/teams/$team_id/': typeof DashboardOrganizationsTeamsTeamidIndexRoute
   '/dashboard/organizations/my_organizations/$organization_id/members/$member_id': typeof DashboardOrganizationsMyorganizationsOrganizationidMembersMemberidRoute
   '/dashboard/organizations/other_organizations/$organization_id/members/$member_id': typeof DashboardOrganizationsOtherorganizationsOrganizationidMembersMemberidRoute
+  '/dashboard/organizations/teams/$team_id/submissions/$submission_id': typeof DashboardOrganizationsTeamsTeamidSubmissionsSubmissionidRoute
   '/dashboard/organizations/teams/$team_id/tasks/$task_id': typeof DashboardOrganizationsTeamsTeamidTasksTaskidRoute
   '/dashboard/organizations/teams/$team_id/tasks/assigned_tasks': typeof DashboardOrganizationsTeamsTeamidTasksAssignedtasksRoute
   '/dashboard/organizations/my_organizations/$organization_id/members/': typeof DashboardOrganizationsMyorganizationsOrganizationidMembersIndexRoute
   '/dashboard/organizations/other_organizations/$organization_id/members/': typeof DashboardOrganizationsOtherorganizationsOrganizationidMembersIndexRoute
+  '/dashboard/organizations/teams/$team_id/submissions/': typeof DashboardOrganizationsTeamsTeamidSubmissionsIndexRoute
   '/dashboard/organizations/teams/$team_id/tasks/': typeof DashboardOrganizationsTeamsTeamidTasksIndexRoute
 }
 
@@ -683,10 +725,12 @@ export interface FileRouteTypes {
     | '/dashboard/organizations/teams/$team_id'
     | '/dashboard/organizations/my_organizations/$organization_id/members/$member_id'
     | '/dashboard/organizations/other_organizations/$organization_id/members/$member_id'
+    | '/dashboard/organizations/teams/$team_id/submissions/$submission_id'
     | '/dashboard/organizations/teams/$team_id/tasks/$task_id'
     | '/dashboard/organizations/teams/$team_id/tasks/assigned_tasks'
     | '/dashboard/organizations/my_organizations/$organization_id/members'
     | '/dashboard/organizations/other_organizations/$organization_id/members'
+    | '/dashboard/organizations/teams/$team_id/submissions'
     | '/dashboard/organizations/teams/$team_id/tasks'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -714,10 +758,12 @@ export interface FileRouteTypes {
     | '/dashboard/organizations/teams/$team_id'
     | '/dashboard/organizations/my_organizations/$organization_id/members/$member_id'
     | '/dashboard/organizations/other_organizations/$organization_id/members/$member_id'
+    | '/dashboard/organizations/teams/$team_id/submissions/$submission_id'
     | '/dashboard/organizations/teams/$team_id/tasks/$task_id'
     | '/dashboard/organizations/teams/$team_id/tasks/assigned_tasks'
     | '/dashboard/organizations/my_organizations/$organization_id/members'
     | '/dashboard/organizations/other_organizations/$organization_id/members'
+    | '/dashboard/organizations/teams/$team_id/submissions'
     | '/dashboard/organizations/teams/$team_id/tasks'
   id:
     | '__root__'
@@ -745,10 +791,12 @@ export interface FileRouteTypes {
     | '/dashboard/organizations/teams/$team_id/'
     | '/dashboard/organizations/my_organizations/$organization_id/members/$member_id'
     | '/dashboard/organizations/other_organizations/$organization_id/members/$member_id'
+    | '/dashboard/organizations/teams/$team_id/submissions/$submission_id'
     | '/dashboard/organizations/teams/$team_id/tasks/$task_id'
     | '/dashboard/organizations/teams/$team_id/tasks/assigned_tasks'
     | '/dashboard/organizations/my_organizations/$organization_id/members/'
     | '/dashboard/organizations/other_organizations/$organization_id/members/'
+    | '/dashboard/organizations/teams/$team_id/submissions/'
     | '/dashboard/organizations/teams/$team_id/tasks/'
   fileRoutesById: FileRoutesById
 }
@@ -818,10 +866,12 @@ export const routeTree = rootRoute
         "/dashboard/organizations/teams/$team_id/",
         "/dashboard/organizations/my_organizations/$organization_id/members/$member_id",
         "/dashboard/organizations/other_organizations/$organization_id/members/$member_id",
+        "/dashboard/organizations/teams/$team_id/submissions/$submission_id",
         "/dashboard/organizations/teams/$team_id/tasks/$task_id",
         "/dashboard/organizations/teams/$team_id/tasks/assigned_tasks",
         "/dashboard/organizations/my_organizations/$organization_id/members/",
         "/dashboard/organizations/other_organizations/$organization_id/members/",
+        "/dashboard/organizations/teams/$team_id/submissions/",
         "/dashboard/organizations/teams/$team_id/tasks/"
       ]
     },
@@ -905,6 +955,10 @@ export const routeTree = rootRoute
       "filePath": "dashboard/organizations/other_organizations/$organization_id/members/$member_id.tsx",
       "parent": "/dashboard/organizations"
     },
+    "/dashboard/organizations/teams/$team_id/submissions/$submission_id": {
+      "filePath": "dashboard/organizations/teams/$team_id/submissions/$submission_id.tsx",
+      "parent": "/dashboard/organizations"
+    },
     "/dashboard/organizations/teams/$team_id/tasks/$task_id": {
       "filePath": "dashboard/organizations/teams/$team_id/tasks/$task_id.tsx",
       "parent": "/dashboard/organizations"
@@ -919,6 +973,10 @@ export const routeTree = rootRoute
     },
     "/dashboard/organizations/other_organizations/$organization_id/members/": {
       "filePath": "dashboard/organizations/other_organizations/$organization_id/members/index.tsx",
+      "parent": "/dashboard/organizations"
+    },
+    "/dashboard/organizations/teams/$team_id/submissions/": {
+      "filePath": "dashboard/organizations/teams/$team_id/submissions/index.tsx",
       "parent": "/dashboard/organizations"
     },
     "/dashboard/organizations/teams/$team_id/tasks/": {

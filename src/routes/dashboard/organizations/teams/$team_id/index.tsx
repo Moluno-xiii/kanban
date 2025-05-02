@@ -20,8 +20,6 @@ export const Route = createFileRoute(
   component: RouteComponent,
 });
 
-// TEam name, description, datecreated, admin email, team members, team tasks, completed/finished tasks,
-// if user is not a member of the team, redirect the user. fetch team data, if user id isn't super admin or admin, redirect.
 function RouteComponent() {
   const { team_id } = Route.useParams();
   const { data: team, isPending, error } = useGetTeam(team_id);
@@ -44,7 +42,7 @@ function RouteComponent() {
     }
   }, [team, user, isPending, isLoadingUserRole, userRole]);
 
-  if (isPending) return <Loading message="Loading team data for this team" />;
+  if (isPending) return <Loading message="Loading team data" />;
 
   if (error) {
     return <Error errorMessage={"Team doesn't exist."} />;

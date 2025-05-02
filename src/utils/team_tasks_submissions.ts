@@ -3,7 +3,7 @@ import { TeamTaskSubmission } from "./helperFunctions";
 
 const submitTask = async (
   team_id: TeamTaskSubmission["team_id"],
-  submitted_by: TeamTaskSubmission["sumitted_by"],
+  submitted_by: TeamTaskSubmission["submitted_by"],
   task_id: TeamTaskSubmission["task_id"],
   super_admin_id: TeamTaskSubmission["super_admin_id"],
   admin_id: TeamTaskSubmission["admin_id"],
@@ -32,18 +32,15 @@ const submitTask = async (
 };
 
 const getTaskSubmissions = async (
-  //   submitted_by: TeamTaskSubmission["sumitted_by"],
   team_id: TeamTaskSubmission["team_id"],
   task_id: TeamTaskSubmission["task_id"],
 ) => {
-  // create check for this function, so no one except the user and the admins can access this data.
-  // may not need check cos of RLS.
   const { data: submissions, error } = await supabase
     .from("team_tasks_submissions")
     .select("*")
-    // .eq("submitted_by", submitted_by)
     .eq("team_id", team_id)
-    .eq("task_id", task_id);
+    .eq("task_id", task_id)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error(error.message);
@@ -54,7 +51,7 @@ const getTaskSubmissions = async (
 };
 
 const getAllUserTeamTaskSubmissions = async (
-  submitted_by: TeamTaskSubmission["sumitted_by"],
+  submitted_by: TeamTaskSubmission["submitted_by"],
   team_id: TeamTaskSubmission["team_id"],
 ) => {
   const { data: submissions, error } = await supabase
@@ -73,11 +70,23 @@ const getAllUserTeamTaskSubmissions = async (
 
 const getAllTeamTaskSubmissions = async (
   team_id: TeamTaskSubmission["team_id"],
+  status: TeamTaskSubmission["status"] | "under_review" | "all",
 ) => {
-  const { data: submissions, error } = await supabase
+  let query = supabase
     .from("team_tasks_submissions")
     .select("*")
-    .eq("team_id", team_id);
+    .eq("team_id", team_id)
+    .order("created_at", { ascending: false });
+
+  if (status !== "all") {
+    if (status === "under_review") {
+      query = query.eq("status", "under review");
+    } else {
+      query = query.eq("status", status);
+    }
+  }
+
+  const { data: submissions, error } = await query;
 
   if (error) {
     console.error(error.message);
@@ -88,7 +97,7 @@ const getAllTeamTaskSubmissions = async (
 };
 
 const getAllUserSubmissions = async (
-  user_email: TeamTaskSubmission["sumitted_by"],
+  user_email: TeamTaskSubmission["submitted_by"],
 ) => {
   const { data: submissions, error } = await supabase
     .from("team_tasks_submissions")
@@ -126,6 +135,26 @@ const reviewTaskSubmission = async (
   return submission;
 };
 
+const deleteUserSubmission = async (
+  user_email: TeamTaskSubmission["submitted_by"],
+  team_id: TeamTaskSubmission["team_id"],
+  id: TeamTaskSubmission["id"],
+) => {
+  const { data: submissions, error } = await supabase
+    .from("team_tasks_submissions")
+    .delete()
+    .eq("submitted_by", user_email)
+    .eq("team_id", team_id)
+    .eq("id", id);
+  console.log(user_email, team_id, id);
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
+
+  return submissions;
+};
+
 // ADD DELETE SUBMISSION FOR USER
 // FETCHING SUBMISSIONS SHOULD HAVE A STATUS PROPERTY, SO THE USER CAN FETCH BASED ON THE STATUS WHERE NEEDED.
 // USE SUBROUTES FOR TEAM TASK SUBMISSIONS 'under review', 'rejected', 'accepted'
@@ -138,10 +167,11 @@ const reviewTaskSubmission = async (
 // task submissions will get all submissions with the task id and team id, so one task can have several submissions and several reviews.
 
 export {
-  submitTask,
-  getTaskSubmissions,
-  getAllUserTeamTaskSubmissions,
+  deleteUserSubmission,
   getAllTeamTaskSubmissions,
-  reviewTaskSubmission,
   getAllUserSubmissions,
+  getAllUserTeamTaskSubmissions,
+  getTaskSubmissions,
+  reviewTaskSubmission,
+  submitTask,
 };
