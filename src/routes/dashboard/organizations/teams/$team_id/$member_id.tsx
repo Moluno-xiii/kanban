@@ -10,6 +10,7 @@ import { RootState } from "../../../../../store";
 import { useModalContext } from "../../../../../contexts/ModalContext";
 import DeleteTeamMemberModal from "../../../../../components/modals/DeleteTeamMemberModal";
 import EditTeamMemberRoleModal from "../../../../../components/modals/EditTeamMemberRole";
+import { getMemberFinishedTasks } from "../../../../../utils/team_tasks";
 
 export const Route = createFileRoute(
   "/dashboard/organizations/teams/$team_id/$member_id",
@@ -27,14 +28,25 @@ function RouteComponent() {
     error,
   } = useQuery({
     queryKey: ["team_member", team_id, member_id],
-    queryFn: () => getTeamMember(member_id, team_id),
+    queryFn: async () => await getTeamMember(member_id, team_id),
     staleTime: Infinity,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     select: (res) => res[0],
   });
 
-  if (isPending) return <Loading message={"Loading team member"} />;
+  const { data: tasks, isPending: isLoadingfinishedTasks } = useQuery({
+    queryKey: ["user-tasks", member?.member_email],
+    queryFn: () => getMemberFinishedTasks(member.member_email, team_id),
+    staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
+
+  console.log(tasks);
+
+  if (isPending || isLoadingfinishedTasks)
+    return <Loading message={"Loading team member"} />;
   if (error) return <Error errorMessage={"Member not found"} />;
 
   return (
@@ -47,7 +59,7 @@ function RouteComponent() {
           Number of finished tasks (use email for this, incase a user exits and
           joins again.)
         </span>
-        <span>Number of finished tasks : '' </span>
+        <span>Number of finished tasks : {tasks?.length} </span>
         <span>Date joined : {dateToString(member.created_at)}</span>
         {user?.id === member.super_admin_id ? (
           <div className="flex flex-row items-center justify-between gap-x-2">

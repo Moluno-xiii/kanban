@@ -19,7 +19,7 @@ const DeleteOrganizationModal: React.FC<PropTypes> = ({
   });
   return (
     <Modal
-      title="Are you sure you want to Delete this organization??"
+      title="Are you sure you want to Delete this organization? Deleting an organization will delete all teams and tasks from the organization."
       handleClose={() => closeModal()}
     >
       <div className="flex flex-row items-center justify-end gap-x-2">

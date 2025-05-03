@@ -82,4 +82,22 @@ async function getAdminTeams(admin_id: string, organization_id: string) {
   return teams;
 }
 
-export { createTeam, deleteTeam, getTeam, getTeams, getAdminTeams };
+async function deleteOrganizationTeams(organization_id: string) {
+  const { data, error } = await supabase
+    .from("teams")
+    .delete()
+    .eq("organization_id", organization_id);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}
+
+export {
+  createTeam,
+  deleteTeam,
+  getTeam,
+  getTeams,
+  getAdminTeams,
+  deleteOrganizationTeams,
+};

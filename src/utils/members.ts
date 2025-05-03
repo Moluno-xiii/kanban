@@ -116,14 +116,10 @@ async function deleteMemberFromOrganization(
   }
 }
 
-async function deleteOrganizationMembers(
-  deleter_id: string,
-  super_admin_id: string,
-  organization_id: string,
-) {
-  if (super_admin_id.toLowerCase() !== deleter_id) {
-    throw new Error("You're not authorized to make this action.");
-  }
+async function deleteOrganizationMembers(organization_id: string) {
+  // if (super_admin_id.toLowerCase() !== deleter_id) {
+  //   throw new Error("You're not authorized to make this action.");
+  // }
   const { error } = await supabase
     .from("organization_members")
     .delete()

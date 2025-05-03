@@ -140,6 +140,42 @@ async function editTeamTaskStatus(status: string, task_id: string) {
   }
   return task;
 }
+
+async function getMemberFinishedTasks(assignee_email: string, team_id: string) {
+  const { data: tasks, error } = await supabase
+    .from("team_tasks")
+    .select("*")
+    .eq("team_id", team_id)
+    .eq("assigned_to", assignee_email)
+    .eq("status", "finished")
+    .order("date_finished", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return tasks;
+}
+
+const deleteTasks = async (organization_id?: string, team_id?: string) => {
+  let query = supabase.from("team_tasks").delete();
+
+  if (organization_id) {
+    query = query.eq("organization_id", organization_id);
+  }
+  if (team_id) {
+    query = query.eq("team_id", team_id);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
 export {
   checkIfTaskTitleExistsInTeam,
   createTeamTask,
@@ -148,4 +184,6 @@ export {
   getTeamTasks,
   getUserTasks,
   editTeamTaskStatus,
+  getMemberFinishedTasks,
+  deleteTasks,
 };

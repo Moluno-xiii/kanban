@@ -149,6 +149,24 @@ async function changeTeamMemberRole(
   return member;
 }
 
+async function deleteMembers(organization_id?: string, team_id?: string) {
+  let query = supabase.from("team_members").delete();
+
+  if (organization_id) {
+    query = query.eq("organization_id", organization_id);
+  }
+  if (team_id) {
+    query = query.eq("team_id", team_id);
+  }
+  const { data, error } = await query;
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+
 export {
   deleteMemberFromTeam,
   getTeamMembers,
@@ -158,4 +176,5 @@ export {
   checkIfMemberExistsInTeam,
   getTeamMember,
   changeTeamMemberRole,
+  deleteMembers,
 };

@@ -155,16 +155,27 @@ const deleteUserSubmission = async (
   return submissions;
 };
 
-// ADD DELETE SUBMISSION FOR USER
-// FETCHING SUBMISSIONS SHOULD HAVE A STATUS PROPERTY, SO THE USER CAN FETCH BASED ON THE STATUS WHERE NEEDED.
-// USE SUBROUTES FOR TEAM TASK SUBMISSIONS 'under review', 'rejected', 'accepted'
-// ALSO, USE DELETE SUBMISSIONS SHOULD ONLY WORK FOR ACCEPTED SUBMISSIONS, AND REJECTED SUBMISSIONS.
+const deleteSubmissions = async (
+  organization_id?: string,
+  team_id?: string,
+) => {
+  let query = supabase.from("team_tasks_submissions").delete();
 
-// user submits a task, it goes to the db as a submission.
-// admin reviews the task marks the task as accepted or rejected, with additional review note.
-// user can see the review when it's marked as accepted or rejected with the additional review note.
-// if task is rejected, task is still unfinished, else marked as finished.
-// task submissions will get all submissions with the task id and team id, so one task can have several submissions and several reviews.
+  if (organization_id) {
+    query = query.eq("organization_id", organization_id);
+  }
+  if (team_id) {
+    query = query.eq("team_id", team_id);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
 
 export {
   deleteUserSubmission,
@@ -174,4 +185,5 @@ export {
   getTaskSubmissions,
   reviewTaskSubmission,
   submitTask,
+  deleteSubmissions,
 };
