@@ -1,19 +1,17 @@
 import useDeleteTeamMember from "../../hooks/useDeleteTeamMember";
-import { Member, TeamType } from "../../utils/helperFunctions";
+import { TeamMember } from "../../utils/helperFunctions";
 import Modal from "../ui/Modal";
 
 interface PropTypes {
-  member: Member;
+  member: TeamMember;
   closeModal: () => void;
-  team: TeamType;
 }
 
-const DeleteTeamMemberModal: React.FC<PropTypes> = ({
-  member,
-  closeModal,
-  team,
-}) => {
-  const deleteMemberMutation = useDeleteTeamMember(team.id, team.name);
+const DeleteTeamMemberModal: React.FC<PropTypes> = ({ member, closeModal }) => {
+  const deleteMemberMutation = useDeleteTeamMember(
+    member.team_id,
+    member.team_name,
+  );
 
   return (
     <Modal

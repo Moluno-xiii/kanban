@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import ChangeMemberRoleModal from "../../../../../../components/modals/ChangeMemberRoleMoal";
 import DeleteMemberModal from "../../../../../../components/modals/DeleteUserModal";
 import EmptyState from "../../../../../../components/ui/EmptyState";
-import GoBack from "../../../../../../components/ui/GoBack";
 import Loading from "../../../../../../components/ui/Loading";
+import ReturnBack from "../../../../../../components/ui/ReturnBack";
 import { useModalContext } from "../../../../../../contexts/ModalContext";
 import { dateToString } from "../../../../../../utils/helperFunctions";
 import { getOrganizationMember } from "../../../../../../utils/members";
@@ -38,26 +39,36 @@ function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-y-4">
-      <GoBack
-        route={
-          "/dashboard/organizations/my_organizations/$organization_id/members/"
-        }
-      />
+      <ReturnBack />
       <p className="text-lg sm:text-xl">{member.member_email}</p>
       <span>Date joined : {dateToString(member.created_at)}</span>
       <span>Role : {member.role}</span>
 
-      <span></span>
       {member.role !== "super admin" ? (
-        <button
-          onClick={() => handleActiveModal("delete organization member")}
-          className="btn-error w-fit self-end"
-        >
-          Delete member
-        </button>
+        <div className="flex flex-row items-center justify-between gap-4">
+          <button
+            onClick={() => handleActiveModal("edit organization member role")}
+            className="btn"
+          >
+            Edit member role
+          </button>
+          <button
+            onClick={() => handleActiveModal("delete organization member")}
+            className="btn-error w-fit self-end"
+          >
+            Delete member
+          </button>
+        </div>
       ) : null}
+
       {activeModal === "delete organization member" ? (
         <DeleteMemberModal
+          member={member}
+          closeModal={() => handleActiveModal(null)}
+        />
+      ) : null}
+      {activeModal === "edit organization member role" ? (
+        <ChangeMemberRoleModal
           member={member}
           closeModal={() => handleActiveModal(null)}
         />

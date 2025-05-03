@@ -43,7 +43,7 @@ const AddTeamMemberModal: React.FC<PropTypes> = ({ team }) => {
       team_id: team.id,
       super_admin_id: team.super_admin_id,
       team_name: team.name,
-      role: "Member",
+      role: dataObject.role as "member" | "admin",
       admin_id: team.admin_id,
     };
     addTeamMemberMutation.mutate(finalObject);
@@ -61,37 +61,51 @@ const AddTeamMemberModal: React.FC<PropTypes> = ({ team }) => {
             You have no members in your organization, add new members to your
             organization to continue.
             <br />
-            Admins and Super Admins do not count as members.
+            Super Admins do not count as members.
           </span>
         ) : (
-          <div className="flex flex-col gap-y-1">
-            <label htmlFor="memberEmail">Select member email to add</label>
-            {isPending ? (
-              <span className="text-secondary text-center text-lg sm:text-xl">
-                Loading members...
-              </span>
-            ) : (
+          <div className="flex flex-col gap-y-3">
+            <div className="flex flex-col gap-y-1">
+              <label htmlFor="memberEmail">Select member email to add</label>
+              {isPending ? (
+                <span className="text-secondary text-center text-lg sm:text-xl">
+                  Loading members...
+                </span>
+              ) : (
+                <select
+                  className="border-secondary cursor-pointer rounded-md border p-2 sm:min-w-sm"
+                  required
+                  name="memberEmail"
+                  id=""
+                >
+                  {organizationMembers?.map((member: Member) => (
+                    <option
+                      value={JSON.stringify({
+                        email: member.member_email,
+                        id: member.member_id,
+                      })}
+                      key={member.member_id}
+                    >
+                      {member.member_email}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+            <div className="flex flex-col gap-y-1">
+              <label htmlFor="role">Select member role</label>
               <select
-                className="border-secondary min-w-sm cursor-pointer rounded-md border p-2"
-                required
-                name="memberEmail"
-                id=""
+                name="role"
+                id="role"
+                className="border-secondary rounded-md border p-2"
               >
-                {organizationMembers?.map((member: Member) => (
-                  <option
-                    value={JSON.stringify({
-                      email: member.member_email,
-                      id: member.member_id,
-                    })}
-                    key={member.member_id}
-                  >
-                    {member.member_email}
-                  </option>
-                ))}
+                <option value="member">Member </option>
+                <option value="admin">Admin </option>
               </select>
-            )}
+            </div>
           </div>
         )}
+
         {organizationMembers?.length ? (
           <button className="btn self-end" type="submit">
             {addTeamMemberMutation.isPending

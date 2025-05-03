@@ -72,7 +72,6 @@ const ReviewTeamTaskSubmissionModal: React.FC<Props> = ({
       reviewed_at: string;
     };
     reviewTaskMutation.mutate(dataObject);
-    console.log(dataObject);
   };
   const date = new Date();
 

@@ -17,7 +17,7 @@ const useAddMemberToTeam = (team_id: string, organization_id: string) => {
       super_admin_id: string;
       member_email: string;
       team_name: string;
-      role: string;
+      role: "member" | "admin";
       admin_id: string;
     }) => {
       const userStatus = await checkIfMemberExistsInTeam(

@@ -150,6 +150,7 @@ async function getMemberRole(member_id: string, organization_id: string) {
     .select("role")
     .eq("member_id", member_id)
     .eq("organization_id", organization_id);
+
   if (error) {
     throw new Error(error.message);
   }
@@ -173,6 +174,30 @@ async function checkIfMemberExistsInOrganization(
   return member.length ? true : false;
 }
 
+async function changeMemberRole(
+  member_email: string,
+  organization_id: string,
+  role: "admin" | "member",
+) {
+  const { data: member, error } = await supabase
+    .from("organization_members")
+    .update([
+      {
+        role,
+      },
+    ])
+    .eq("member_email", member_email)
+    .eq("organization_id", organization_id)
+    .select("*");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
+
+  return member;
+}
+
 export {
   addMemberToOrganization,
   getOrganizationMembers,
@@ -183,4 +208,5 @@ export {
   leaveOrganization,
   getMemberRole,
   checkIfMemberExistsInOrganization,
+  changeMemberRole,
 };

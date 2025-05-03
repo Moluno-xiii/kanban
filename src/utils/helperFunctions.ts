@@ -44,8 +44,21 @@ interface Member {
   organization_id: string;
   organization_name: string;
   primary_key: string;
-  role: string;
+  role: "admin" | "member" | "super admin";
   super_admin_id: string;
+}
+
+interface TeamMember {
+  admin_id: string;
+  created_at: string;
+  member_email: string;
+  member_id: string;
+  organization_id: string;
+  primary_key: string;
+  role: "Member" | "super admin" | "admin";
+  super_admin_id: string;
+  team_id: string;
+  team_name: string;
 }
 
 interface NotificationType {
@@ -113,4 +126,5 @@ export type {
   Task,
   TeamTaskSubmission,
   TaskTypes,
+  TeamMember,
 };

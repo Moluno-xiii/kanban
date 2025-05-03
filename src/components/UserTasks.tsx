@@ -27,7 +27,7 @@ const UserTasks: React.FC<Props> = ({ team_id, type }) => {
     return (
       <EmptyState
         button={false}
-        emptyStateText={`You have no ${type} tasks, your ${type} tasks will appear here.`}
+        emptyStateText={`You have no ${type !== "all" ? type : ""} tasks assigned to you, your ${type !== "all" ? type : ""} assigned tasks will appear here.`}
       />
     );
   return (

@@ -126,6 +126,29 @@ async function checkIfMemberExistsInTeam(member_id: string, team_id: string) {
   return user.length ? true : false;
 }
 
+async function changeTeamMemberRole(
+  role: "admin" | "member",
+  member_id: string,
+  team_id: string,
+) {
+  const { data: member, error } = await supabase
+    .from("team_members")
+    .update([
+      {
+        role,
+      },
+    ])
+    .eq("team_id", team_id)
+    .eq("member_id", member_id)
+    .select("*");
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return member;
+}
+
 export {
   deleteMemberFromTeam,
   getTeamMembers,
@@ -134,4 +157,5 @@ export {
   getMemberTeams,
   checkIfMemberExistsInTeam,
   getTeamMember,
+  changeTeamMemberRole,
 };

@@ -28,7 +28,9 @@ type ActiveModal =
   | "delete all read organization invitations"
   | "submit team task"
   | "delete user submission"
-  | "review user submission";
+  | "review user submission"
+  | "edit organization member role"
+  | "edit team member role";
 
 interface ModalTypes {
   activeModal: ActiveModal | null;

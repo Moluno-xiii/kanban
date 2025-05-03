@@ -136,10 +136,8 @@ async function editTeamTaskStatus(status: string, task_id: string) {
     .eq("id", task_id);
 
   if (error) {
-    console.error(error.message);
     throw new Error(error.message);
   }
-  console.log("team status updated successfully : ", status);
   return task;
 }
 export {

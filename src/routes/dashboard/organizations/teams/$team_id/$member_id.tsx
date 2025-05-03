@@ -5,6 +5,11 @@ import Loading from "../../../../../components/ui/Loading";
 import ReturnBack from "../../../../../components/ui/ReturnBack";
 import { dateToString } from "../../../../../utils/helperFunctions";
 import { getTeamMember } from "../../../../../utils/team_members";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../../store";
+import { useModalContext } from "../../../../../contexts/ModalContext";
+import DeleteTeamMemberModal from "../../../../../components/modals/DeleteTeamMemberModal";
+import EditTeamMemberRoleModal from "../../../../../components/modals/EditTeamMemberRole";
 
 export const Route = createFileRoute(
   "/dashboard/organizations/teams/$team_id/$member_id",
@@ -14,7 +19,8 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { team_id, member_id } = Route.useParams();
-
+  const { user } = useSelector((state: RootState) => state.auth);
+  const { activeModal, handleActiveModal } = useModalContext();
   const {
     data: member,
     isPending,
@@ -41,8 +47,38 @@ function RouteComponent() {
           Number of finished tasks (use email for this, incase a user exits and
           joins again.)
         </span>
-        <span>Number of </span>
+        <span>Number of finished tasks : '' </span>
         <span>Date joined : {dateToString(member.created_at)}</span>
+        {user?.id === member.super_admin_id ? (
+          <div className="flex flex-row items-center justify-between gap-x-2">
+            <button
+              onClick={() => handleActiveModal("delete team member")}
+              className="btn-error"
+            >
+              Delete member
+            </button>
+            <button
+              onClick={() => handleActiveModal("edit team member role")}
+              className="btn"
+            >
+              Change member role
+            </button>
+          </div>
+        ) : null}
+      </div>
+      <div>
+        {activeModal === "delete team member" ? (
+          <DeleteTeamMemberModal
+            member={member}
+            closeModal={() => handleActiveModal(null)}
+          />
+        ) : null}
+        {activeModal === "edit team member role" ? (
+          <EditTeamMemberRoleModal
+            member={member}
+            closeModal={() => handleActiveModal(null)}
+          />
+        ) : null}
       </div>
     </div>
   );
