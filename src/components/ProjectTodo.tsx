@@ -39,7 +39,7 @@ const ProjectTodo: React.FC<Props> = ({ project_id, todo }) => {
   return (
     <li
       key={todo.id}
-      className="border-secondary mx-auto flex w-fit max-w-md flex-col gap-y-2 rounded-md border-2 p-2 shadow-lg"
+      className="border-secondary mx-auto flex w-full flex-col gap-y-2 overflow-scroll rounded-md border-2 p-2 text-wrap shadow-lg lg:max-w-md"
     >
       <span
         aria-label="todo title "
@@ -71,11 +71,6 @@ const ProjectTodo: React.FC<Props> = ({ project_id, todo }) => {
           {todo.is_finished === "yes"
             ? "Mark as unfinished"
             : "Mark as finished"}
-          {/* {mutation.isPending
-          ? "Editing todo..."
-          : todo.is_finished === "yes"
-            ? "Mark todo as unfinished"
-            : "Mark todo as finished"} */}
         </button>
       </div>
 

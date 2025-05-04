@@ -8,8 +8,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { sendNotification } from "../utils/notifications";
 import { TaskTypes } from "../utils/helperFunctions";
+import { getMemberRole } from "../utils/members";
+import { getTeamMemberRole } from "../utils/team_members";
 
-const useCreateTeamTask = (team_id: string, closeModal: () => void) => {
+const useCreateTeamTask = (
+  team_id: string,
+  closeModal: () => void,
+  organization_id: string,
+) => {
   const queryClient = useQueryClient();
   const { user } = useSelector((state: RootState) => state.auth);
   return useMutation({
@@ -28,6 +34,29 @@ const useCreateTeamTask = (team_id: string, closeModal: () => void) => {
         formData.title,
         formData.team_id,
       );
+      const deleter_team_role = await getTeamMemberRole(
+        user?.id as string,
+        team_id,
+      );
+      const deleter_organization_role = await getMemberRole(
+        user?.id as string,
+        organization_id,
+      );
+
+      if (deleter_team_role[0]) {
+        if (
+          deleter_team_role[0].role !== "admin" &&
+          deleter_organization_role[0].role !== "super admin"
+        ) {
+          throw new Error(
+            "You're not authorized to make this action! only team Creators, team Admins, and Organization Super Admins can create team tasks.",
+          );
+        }
+      } else if (deleter_organization_role[0].role !== "super admin") {
+        throw new Error(
+          "You're not authorized to make this action! only team Creators, team Admins, and Organization Super Admins can create team tasks.",
+        );
+      }
       if (taskStatus)
         throw new Error(
           "A task with the same title already exists in this team!",
@@ -40,6 +69,8 @@ const useCreateTeamTask = (team_id: string, closeModal: () => void) => {
         formData.super_admin_id,
         formData.title,
         formData.description,
+        organization_id,
+        formData.team_name,
         formData.assigned_to,
         formData.assignee_id,
       );

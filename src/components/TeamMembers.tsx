@@ -9,6 +9,8 @@ import DeleteTeamMemberModal from "./modals/DeleteTeamMemberModal";
 import EmptyState from "./ui/EmptyState";
 import Error from "./ui/Error";
 import Loading from "./ui/Loading";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 interface PropTypes {
   team: TeamType;
@@ -26,16 +28,18 @@ const TeamMembers: React.FC<PropTypes> = ({ team }) => {
     handleActiveModal,
     handleActiveTeamMember,
   } = useModalContext();
-  const { data: userRole } = useGetTeamMemberRole(team.id);
-
-  if (isPending) return <Loading message="Loading organization members" />;
+  const { data: userRole, isPending: isLoadingUserRole } = useGetTeamMemberRole(
+    team.id,
+  );
+  const { user } = useSelector((state: RootState) => state.auth);
+  if (isPending || isLoadingUserRole)
+    return <Loading message="Loading organization members" />;
 
   if (error) {
     return (
       <Error errorMessage={error.message || "An unexpected error occured."} />
     );
   }
-
   if (!members || members.length < 1)
     return (
       <>
@@ -84,12 +88,17 @@ const TeamMembers: React.FC<PropTypes> = ({ team }) => {
             <div className="flex flex-1 flex-col gap-y-1">
               <span aria-label="member email">{member.member_email}</span>
               <span aria-label="member role" className="capitalize">
-                {member.role}
+                {member.member_id === member.admin_id
+                  ? "Team creator"
+                  : member.role}
               </span>
             </div>
             <div className="mt-2 flex flex-row items-center justify-between gap-4">
-              {member.member_id.toLowerCase() !== member.super_admin_id &&
-              userRole?.role.toLowerCase() !== "super admin" ? (
+              {member.member_id !== member.super_admin_id &&
+              member.member_id !== member.admin_id &&
+              (user?.id === member.admin_id ||
+                user?.id === member.super_admin_id ||
+                userRole?.role === "admin") ? (
                 <button
                   aria-label="delete team member"
                   onClick={() => {

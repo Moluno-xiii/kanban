@@ -23,7 +23,7 @@ const TaskSubmissions: React.FC<Props> = ({ team_id, task_id }) => {
     return (
       <EmptyState
         button={false}
-        emptyStateText="You haven't submitted any tasks yet, any tasks you submit will appear here."
+        emptyStateText="No submissions for this task yet, all submissions for this task will appear here."
       />
     );
   console.log(submissions);

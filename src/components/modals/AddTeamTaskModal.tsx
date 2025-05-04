@@ -32,8 +32,10 @@ const AddTeamTaskModal: React.FC<Props> = ({
     admin_id,
     super_admin_id,
   );
-  const createTaskMutation = useCreateTeamTask(team_id, () =>
-    handleActiveModal(null),
+  const createTaskMutation = useCreateTeamTask(
+    team_id,
+    () => handleActiveModal(null),
+    organization_id,
   );
 
   if (isPending) return <Loading message="Loading organization members" />;
@@ -120,7 +122,6 @@ const AddTeamTaskModal: React.FC<Props> = ({
         )}
 
         <input type="hidden" value={team_id} name="team_id" id="team_id" />
-        {/* <input type="hidden" value={"unassigned"} name="status" id="status" /> */}
         <input type="hidden" value={admin_id} name="admin_id" id="admin_id" />
         <input
           type="hidden"

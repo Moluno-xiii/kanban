@@ -4,8 +4,14 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { sendNotification } from "../utils/notifications";
+import { getMemberRole } from "../utils/members";
 
-const useDeleteTeamMember = (team_id: string, team_name: string) => {
+const useDeleteTeamMember = (
+  team_id: string,
+  team_name: string,
+  organization_id: string,
+  closeModal: () => void,
+) => {
   const queryClient = useQueryClient();
   const { user } = useSelector((state: RootState) => state.auth);
   return useMutation({
@@ -16,11 +22,32 @@ const useDeleteTeamMember = (team_id: string, team_name: string) => {
       member_id: string;
       member_email: string;
     }) => {
-      const deleter_role = await getTeamMemberRole(user?.id as string, team_id);
+      const deleter_team_role = await getTeamMemberRole(
+        user?.id as string,
+        team_id,
+      );
+      const deleter_organization_role = await getMemberRole(
+        user?.id as string,
+        organization_id,
+      );
+      console.log(deleter_team_role);
+      console.log(deleter_organization_role);
 
-      if (deleter_role[0].role.toLowerCase() === "member") {
-        throw new Error("You're not authorized to make this action!");
+      if (deleter_team_role[0]) {
+        if (
+          deleter_team_role[0].role !== "admin" &&
+          deleter_organization_role[0].role !== "super admin"
+        ) {
+          throw new Error(
+            "You're not authorized to make this action! only team Creators, team Admins, and Organization Super Admins can delete team members.",
+          );
+        }
+      } else if (deleter_organization_role[0].role !== "super admin") {
+        throw new Error(
+          "You're not authorized to make this action! only team Creators, team Admins, and Organization Super Admins can delete team members.",
+        );
       }
+
       await deleteMemberFromTeam(member_id, team_id);
       await sendNotification(
         member_id,
@@ -37,6 +64,7 @@ const useDeleteTeamMember = (team_id: string, team_name: string) => {
       queryClient.refetchQueries({
         queryKey: ["team-members", team_id],
       });
+      closeModal();
     },
     onError: (err: { message: string }) => {
       const message =

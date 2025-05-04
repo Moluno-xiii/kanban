@@ -30,7 +30,8 @@ type ActiveModal =
   | "delete user submission"
   | "review user submission"
   | "edit organization member role"
-  | "edit team member role";
+  | "edit team member role"
+  | "delete team";
 
 interface ModalTypes {
   activeModal: ActiveModal | null;

@@ -1,6 +1,6 @@
 import { createFileRoute, useSearch } from "@tanstack/react-router";
-import ReturnBack from "../../../../../../components/ui/ReturnBack";
 import { lazy, Suspense } from "react";
+import GoBack from "../../../../../../components/ui/GoBack";
 
 const TeamSubmissions = lazy(
   () => import("../../../../../../components/TeamSubmissions"),
@@ -25,7 +25,7 @@ function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-y-4">
-      <ReturnBack />
+      <GoBack route={`/dashboard/organizations/teams/${team_id}`} />
       <Suspense fallback={<span>Loading {type} submissions...</span>}>
         <TeamSubmissions type={type} team_id={team_id} />
       </Suspense>

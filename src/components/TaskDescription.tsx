@@ -5,6 +5,8 @@ import { dateToString } from "../utils/helperFunctions";
 import SubmitTeamTaskModal from "./modals/SubmitTeamTaskModal";
 import { useModalContext } from "../contexts/ModalContext";
 import EmptyState from "./ui/EmptyState";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 interface Props {
   task_id: string;
@@ -13,6 +15,7 @@ interface Props {
 
 const TaskDescription: React.FC<Props> = ({ task_id, team_id }) => {
   const { data: task, error, isPending } = useGetTeamTask(task_id, team_id);
+  const { user } = useSelector((state: RootState) => state.auth);
   const {
     activeModal,
     activeTeamTask,
@@ -52,7 +55,7 @@ const TaskDescription: React.FC<Props> = ({ task_id, team_id }) => {
           Assigned by : {task.assigned_by}
         </span>
       </div>
-      {task.status !== "finished" ? (
+      {task.status !== "finished" && user?.email === task.assigned_to ? (
         <button
           className="btn w-fit"
           onClick={() => {

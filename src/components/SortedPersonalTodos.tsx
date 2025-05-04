@@ -34,7 +34,7 @@ const SortedPersonalProjectTodos: React.FC<Props> = ({
   if (error) return <Error errorMessage={error.message} />;
 
   return (
-    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+    <ul className="grid max-w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
       {todos?.map((todo: Todo) => (
         <ProjectTodo key={todo.id} project_id={project_id} todo={todo} />
       ))}

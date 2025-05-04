@@ -20,14 +20,14 @@ async function createTeam(
 }
 
 async function deleteTeam(
-  deleter_id: string,
+  // deleter_id: string,
   team_id: string,
-  team_admin_id: string,
-  super_admin_id: string,
+  // team_admin_id: string,
+  // super_admin_id: string,
 ) {
-  if (deleter_id !== team_admin_id && deleter_id !== super_admin_id) {
-    throw new Error("You're not athorized to make this action.");
-  }
+  // if (deleter_id !== team_admin_id && deleter_id !== super_admin_id) {
+  //   throw new Error("You're not athorized to make this action.");
+  // }
   // delete all team tasks and members along with this.
   const { data: teams, error } = await supabase
     .from("teams")

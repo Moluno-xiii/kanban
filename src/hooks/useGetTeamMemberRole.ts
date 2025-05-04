@@ -7,7 +7,7 @@ const useGetTeamMemberRole = (team_id: string) => {
   const { user } = useSelector((state: RootState) => state.auth);
   return useQuery({
     queryKey: ["team-member-role", team_id],
-    queryFn: () => getTeamMemberRole(user?.id as string, team_id),
+    queryFn: async () => await getTeamMemberRole(user?.id as string, team_id),
     staleTime: Infinity,
     refetchOnMount: false,
     refetchOnWindowFocus: false,

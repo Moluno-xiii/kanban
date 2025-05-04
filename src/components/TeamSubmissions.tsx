@@ -11,6 +11,7 @@ import EmptyState from "./ui/EmptyState";
 import Error from "./ui/Error";
 import Loading from "./ui/Loading";
 import toast from "react-hot-toast";
+import useGetTeamMemberRole from "../hooks/useGetTeamMemberRole";
 
 interface Props {
   team_id: string;
@@ -39,23 +40,30 @@ const TeamSubmissions: React.FC<Props> = ({ team_id, type }) => {
     isPending: isLoadingTeamData,
     error: teamDataError,
   } = useGetTeam(team_id);
+  const {
+    data: userRole,
+    isPending: isLoadingUserRole,
+    error: userRoleError,
+  } = useGetTeamMemberRole(team_id);
 
   useEffect(() => {
-    if (!user || !team_data) return;
+    if (!user || !team_data || !userRole) return;
     if (
-      user?.id !== team_data?.admin_id ||
-      user?.id !== team_data?.super_admin_id
+      user?.id !== team_data?.admin_id &&
+      user?.id !== team_data?.super_admin_id &&
+      userRole.role !== "admin"
     ) {
       toast.error("You're not authorized to access this page!");
       navigate({ to: "/dashboard/organizations", replace: true });
     }
     console.log(team_data);
-  }, [user, isLoadingTeamData, team_data]);
+  }, [user, isLoadingTeamData, isLoadingUserRole, team_data, userRole]);
 
   if (isPending)
     return <Loading message={`Loading team's ${type} submissions.`} />;
   if (error) return <Error errorMessage={error.message} />;
   if (teamDataError) return <Error errorMessage={"TEam doesn't exist."} />;
+  if (userRoleError) return <Error errorMessage={userRoleError.message} />;
 
   return (
     <div className="flex flex-col gap-y-4">

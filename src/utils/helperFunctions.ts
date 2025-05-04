@@ -85,14 +85,17 @@ interface Task {
   admin_id: string;
   assigned_by: string;
   assigned_to: string;
+  assignee_id: string;
   created_at: string;
   description: string;
   id: string;
-  status: "assigned" | "unfinished" | "finished";
+  status: "unassigned" | "unfinished" | "finished";
   super_admin_id: string;
   team_id: string;
   title: string;
   date_finished: string;
+  organization_id: string;
+  team_name: string;
 }
 
 interface TeamTaskSubmission {
@@ -107,6 +110,8 @@ interface TeamTaskSubmission {
   admin_id: string;
   additional_review_note: string;
   reviewed_at: string;
+  organization_id: string;
+  team_name: string;
 }
 
 type TaskTypes = "finished" | "unfinished" | "unassigned";

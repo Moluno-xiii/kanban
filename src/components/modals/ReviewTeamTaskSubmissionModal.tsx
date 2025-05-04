@@ -4,6 +4,10 @@ import toast from "react-hot-toast";
 import { reviewTaskSubmission } from "../../utils/team_tasks_submissions";
 import { editTeamTaskStatus } from "../../utils/team_tasks";
 import { TeamTaskSubmission } from "../../utils/helperFunctions";
+import { getMemberRole } from "../../utils/members";
+import { getTeamMemberRole } from "../../utils/team_members";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 interface Props {
   submission: TeamTaskSubmission;
@@ -17,6 +21,7 @@ const ReviewTeamTaskSubmissionModal: React.FC<Props> = ({
   closeModal,
 }) => {
   const queryClient = useQueryClient();
+  const { user } = useSelector((state: RootState) => state.auth);
   const reviewTaskMutation = useMutation({
     mutationFn: async ({
       review_note,
@@ -25,6 +30,23 @@ const ReviewTeamTaskSubmissionModal: React.FC<Props> = ({
       reviewed_at: string;
       review_note?: string;
     }) => {
+      const userOrganizationRole = await getMemberRole(
+        user?.id as string,
+        submission.organization_id,
+      );
+      const userTeamRole = await getTeamMemberRole(
+        user?.id as string,
+        submission.team_id,
+      );
+
+      if (
+        userOrganizationRole[0].role !== "super admin" &&
+        userTeamRole[0].role !== "admin"
+      ) {
+        throw new Error(
+          "You're not authorized to make this action. Only team admins or Organization SUPER ADMINS can review team task submissions!",
+        );
+      }
       await reviewTaskSubmission(
         submission.id,
         reviewed_at,
@@ -32,7 +54,7 @@ const ReviewTeamTaskSubmissionModal: React.FC<Props> = ({
         review_note,
       );
       if (type === "accept") {
-        await editTeamTaskStatus("finished", submission.task_id);
+        await editTeamTaskStatus("finished", submission.task_id, reviewed_at);
       }
     },
     onSuccess: () => {
@@ -61,6 +83,8 @@ const ReviewTeamTaskSubmissionModal: React.FC<Props> = ({
     onError: (err: { message: string }) => {
       const message =
         err instanceof Error ? err.message : "An unexpeced error occured!";
+      console.log(submission);
+      console.error(err.message);
       toast.error(message);
     },
   });

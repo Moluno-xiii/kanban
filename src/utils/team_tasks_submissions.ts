@@ -7,6 +7,8 @@ const submitTask = async (
   task_id: TeamTaskSubmission["task_id"],
   super_admin_id: TeamTaskSubmission["super_admin_id"],
   admin_id: TeamTaskSubmission["admin_id"],
+  organization_id: TeamTaskSubmission["organization_id"],
+  team_name: TeamTaskSubmission["team_name"],
   additional_submission_note?: TeamTaskSubmission["additional_submission_note"],
 ) => {
   const { data: submission, error } = await supabase
@@ -20,6 +22,8 @@ const submitTask = async (
         super_admin_id,
         admin_id,
         additional_submission_note,
+        organization_id,
+        team_name,
       },
     ]);
 

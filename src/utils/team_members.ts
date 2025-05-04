@@ -104,7 +104,7 @@ async function getMemberTeams(organization_id: string, member_id: string) {
     .select("*")
     .eq("member_id", member_id)
     .eq("organization_id", organization_id)
-    .eq("role", "Member");
+    .neq("admin_id", member_id);
 
   if (error) {
     throw new Error(error.message);

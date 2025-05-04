@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { dateToString, Task } from "../utils/helperFunctions";
 import useGetUserTasks from "../hooks/useGetUserTasks";
+import Loading from "./ui/Loading";
 import Error from "./ui/Error";
 import EmptyState from "./ui/EmptyState";
 import { useModalContext } from "../contexts/ModalContext";
@@ -13,17 +14,17 @@ interface Props {
 }
 
 const UserTasks: React.FC<Props> = ({ team_id, type }) => {
-  const { data: tasks, error } = useGetUserTasks(team_id, type);
+  const { data: tasks, isPending, error } = useGetUserTasks(team_id, type);
   const {
     activeModal,
     activeTeamTask,
     handleActiveModal,
     handleActiveTeamTask,
   } = useModalContext();
-
+  if (isPending) return <Loading message="Loading your tasks" />;
   if (error) return <Error errorMessage={error.message} />;
 
-  if (!error && tasks && !tasks.length)
+  if (!error && !isPending && tasks && !tasks.length)
     return (
       <EmptyState
         button={false}
@@ -53,9 +54,11 @@ const UserTasks: React.FC<Props> = ({ team_id, type }) => {
           <span aria-label="date created">
             Created at : {dateToString(task.created_at)}
           </span>{" "}
-          <span aria-label="task finished date">
-            Date finished : {dateToString(task.date_finished)}
-          </span>
+          {task.date_finished ? (
+            <span aria-label="task finished date">
+              Date finished : {dateToString(task.date_finished)}
+            </span>
+          ) : null}
           <div className="flex flex-row items-center justify-between">
             <Link
               to="/dashboard/organizations/teams/$team_id/tasks/$task_id"

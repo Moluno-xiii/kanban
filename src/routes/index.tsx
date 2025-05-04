@@ -14,7 +14,9 @@ function RouteComponent() {
     <div className="flex min-h-[calc(100dvh-150px)] flex-col items-center justify-center gap-y-6 text-center">
       <p className="text-3xl">
         Welcome to tasksphere,{" "}
-        {user?.id ? profileData?.display_name || "User" : ""}
+        <span className="capitalize">
+          {user?.id ? profileData?.display_name || "User" : ""}
+        </span>
       </p>
       <div className="flex flex-col gap-y-3">
         <span>Organization solution for teams and personal projects</span>

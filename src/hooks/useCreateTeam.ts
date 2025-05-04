@@ -60,6 +60,12 @@ const useCreateTeam = (
         queryKey: ["organization-teams"],
       });
       queryClient.invalidateQueries({
+        queryKey: ["member-teams", organization_id],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["member-teams", organization_id],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["admin-teams"],
       });
       queryClient.refetchQueries({

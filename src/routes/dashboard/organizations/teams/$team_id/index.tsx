@@ -9,6 +9,8 @@ import useGetTeam from "../../../../../hooks/useGetTeam";
 import useGetTeamMemberRole from "../../../../../hooks/useGetTeamMemberRole.ts";
 import { RootState } from "../../../../../store/index.ts";
 import { dateToString } from "../../../../../utils/helperFunctions";
+import { useModalContext } from "../../../../../contexts/ModalContext.tsx";
+import DeleteTeamModal from "../../../../../components/modals/DeleteTeamModal.tsx";
 const TeamMembers = lazy(
   () => import("../../../../../components/TeamMembers.tsx"),
 );
@@ -27,6 +29,7 @@ function RouteComponent() {
     team?.id,
   );
   const { user } = useSelector((state: RootState) => state.auth);
+  const { activeModal, handleActiveModal } = useModalContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,6 +50,8 @@ function RouteComponent() {
   if (error) {
     return <Error errorMessage={"Team doesn't exist."} />;
   }
+
+  if (!isPending && !error && !team) return <span>Team doesn't exist</span>;
 
   return (
     <div className="flex flex-col gap-y-4 md:gap-y-6">
@@ -77,14 +82,21 @@ function RouteComponent() {
           team_name={team.name}
         />
       </Suspense>
-      {userRole?.role.toLowerCase() !== "member" ? (
+      {user?.id === team.admin_id ? (
         <button
           className="bg-error text-text self-end rounded-md p-2 disabled:cursor-not-allowed"
-          disabled
+          // disabled
           aria-label="delete team button"
+          onClick={() => handleActiveModal("delete team")}
         >
           Delete team
         </button>
+      ) : null}
+      {activeModal === "delete team" ? (
+        <DeleteTeamModal
+          team={team}
+          handleClose={() => handleActiveModal(null)}
+        />
       ) : null}
     </div>
   );
