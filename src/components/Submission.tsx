@@ -5,6 +5,8 @@ import DeleteUserTaskSubmissionModal from "./modals/DeleteUserTaskSubmissionModa
 import { RootState } from "../store";
 import { useState } from "react";
 import ReviewTeamTaskSubmissionModal from "./modals/ReviewTeamTaskSubmissionModal";
+import useGetTeamMemberRole from "../hooks/useGetTeamMemberRole";
+import Loading from "./ui/Loading";
 
 interface SubmissionType {
   submission: TeamTaskSubmission;
@@ -18,15 +20,22 @@ const Submission: React.FC<SubmissionType> = ({ submission }) => {
     handleActiveUserSubmission,
   } = useModalContext();
   const { user } = useSelector((state: RootState) => state.auth);
+  const [reviewStatus, setReviewStatus] = useState<string | null>("");
   const handleClose = () => {
     handleActiveModal(null);
     handleActiveUserSubmission(null);
   };
-  const [reviewStatus, setReviewStatus] = useState<string | null>("");
+  const {
+    data: userRole,
+    isPending,
+    // error : userRoleError,
+  } = useGetTeamMemberRole(submission.team_id);
+
+  if (isPending) return <Loading message={"loading submission"} />;
 
   return (
     <li className="border-secondary flex flex-col gap-y-2 rounded-md border p-2">
-      <em className="text-primary text-lg capitalize md:text-xl">
+      <em className="text-secondary text-lg capitalize md:text-xl">
         {submission.status}
       </em>
       <span>Submitted at : {dateToString(submission.created_at)}</span>
@@ -66,7 +75,8 @@ const Submission: React.FC<SubmissionType> = ({ submission }) => {
         </button>
       ) : null}
       {(user?.id === submission.admin_id ||
-        user?.id === submission.super_admin_id) &&
+        user?.id === submission.super_admin_id ||
+        userRole?.role === "admin") &&
       submission.status === "under review" ? (
         <div className="flex flex-row items-center justify-between">
           <button

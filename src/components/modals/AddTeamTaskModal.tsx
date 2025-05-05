@@ -1,9 +1,9 @@
 import useCreateTeamTask from "../../hooks/useCreateTeamTask";
-import useGetOrganizationMembers from "../../hooks/useGetOrganizationMembers";
-import Loading from "../ui/Loading";
-import Error from "../ui/Error";
-import Modal from "../ui/Modal";
+import useGetTeamMembers from "../../hooks/useGetTeamMembers";
 import { Member, TaskTypes } from "../../utils/helperFunctions";
+import Error from "../ui/Error";
+import Loading from "../ui/Loading";
+import Modal from "../ui/Modal";
 
 interface Props {
   admin_id: string;
@@ -23,15 +23,10 @@ const AddTeamTaskModal: React.FC<Props> = ({
   handleActiveModal,
 }) => {
   const {
-    data: organizationMembers,
+    data: teamMembers,
     isPending,
     error,
-  } = useGetOrganizationMembers(
-    organization_id,
-    undefined,
-    admin_id,
-    super_admin_id,
-  );
+  } = useGetTeamMembers(team_id, organization_id);
   const createTaskMutation = useCreateTeamTask(
     team_id,
     () => handleActiveModal(null),
@@ -40,6 +35,7 @@ const AddTeamTaskModal: React.FC<Props> = ({
 
   if (isPending) return <Loading message="Loading organization members" />;
   if (error) return <Error errorMessage={error.message} />;
+  console.log(teamMembers);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -90,7 +86,7 @@ const AddTeamTaskModal: React.FC<Props> = ({
             id="description"
           />
         </div>
-        {!organizationMembers || organizationMembers.length < 1 ? (
+        {!teamMembers || teamMembers.length < 1 ? (
           <span aria-label="organization members empty state text">
             You don't have any members in your organization!
           </span>
@@ -105,7 +101,7 @@ const AddTeamTaskModal: React.FC<Props> = ({
               defaultValue={""}
               aria-label="task assignee  email selection"
             >
-              {organizationMembers?.map((member: Member) => (
+              {teamMembers?.map((member: Member) => (
                 <option
                   aria-label={`email for ${member.member_email}`}
                   value={JSON.stringify({

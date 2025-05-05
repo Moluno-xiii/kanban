@@ -82,7 +82,9 @@ function RouteComponent() {
           team_name={team.name}
         />
       </Suspense>
-      {user?.id === team.admin_id ? (
+      {user?.id === team.admin_id ||
+      user?.id === team.super_admin_id ||
+      userRole?.role === "admin" ? (
         <button
           className="bg-error text-text self-end rounded-md p-2 disabled:cursor-not-allowed"
           // disabled

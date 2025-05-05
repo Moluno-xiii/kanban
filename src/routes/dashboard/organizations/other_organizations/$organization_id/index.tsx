@@ -37,7 +37,7 @@ function RouteComponent() {
   const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    if (!user || isPending || isFetchingUserRole) return;
+    if (!user || isPending || isFetchingUserRole || !userRole) return;
 
     if (
       (userRole.toLowerCase() !== "member" &&
@@ -57,14 +57,16 @@ function RouteComponent() {
 
   if (error) {
     toast.error(error.message);
-    return (
-      <Error
-        errorMessage={
-          error.message || "An unexpected error occured, try again."
-        }
-      />
-    );
+    return <Error errorMessage={"Organization not found!"} />;
   }
+
+  if (!data || data.length < 1)
+    return (
+      <div>
+        <GoBack route={"/dashboard/organizations"} />
+        Organization not found.
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-y-4">

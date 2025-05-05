@@ -13,6 +13,7 @@ import useGetAdminOrganization from "../../../../../hooks/useGetAdminOrganizatio
 import { RootState } from "../../../../../store";
 import { dateToString } from "../../../../../utils/helperFunctions";
 import UpdateOrganizationDetailsModal from "../../../../../components/modals/UpdateOrganizationDetailsModal.tsx";
+import DeleteOrganizationModal from "../../../../../components/modals/DeleteOrganizationModal.tsx";
 const OrganizationTeams = lazy(
   () => import("../../../../../components/OrganizationTeams.tsx"),
 );
@@ -41,16 +42,14 @@ function RouteComponent() {
   }
 
   if (error) {
-    return (
-      <Error errorMessage={error.message || "An unexpected error occured."} />
-    );
+    return <Error errorMessage={"Organization not found."} />;
   }
 
   if (!organization || organization.length < 1)
     return (
       <div>
         <GoBack route={"/dashboard/organizations"} />
-        Data not found.
+        Organization not found.
       </div>
     );
 
@@ -146,6 +145,19 @@ function RouteComponent() {
           super_admin_id={user?.id as string}
         />
       </Suspense>
+      <button
+        className="btn-error self-end"
+        onClick={() => handleActiveModal("delete organization")}
+      >
+        Delete Organization
+      </button>
+      {activeModal === "delete organization" ? (
+        <DeleteOrganizationModal
+          organization_id={organization_id}
+          organization_name={organization.name}
+          closeModal={() => handleActiveModal(null)}
+        />
+      ) : null}
     </div>
   );
 }

@@ -44,7 +44,7 @@ const ReviewTeamTaskSubmissionModal: React.FC<Props> = ({
         userTeamRole[0].role !== "admin"
       ) {
         throw new Error(
-          "You're not authorized to make this action. Only team admins or Organization SUPER ADMINS can review team task submissions!",
+          "You're not authorized to make this action. Only team Creators, TEam admins or Organization SUPER ADMINS can review team task submissions!",
         );
       }
       await reviewTaskSubmission(

@@ -21,17 +21,27 @@ const useDeleteTeam = (
   const navigate = useNavigate();
   return useMutation({
     mutationFn: async () => {
-      const userTeamRole = await getTeamMemberRole(user?.id as string, team_id);
-      const userOrganizationRole = await getMemberRole(
+      const deleter_team_role = await getTeamMemberRole(
+        user?.id as string,
+        team_id,
+      );
+      const deleter_organization_role = await getMemberRole(
         user?.id as string,
         organization_id,
       );
-      if (
-        userTeamRole[0].role !== "admin" &&
-        userOrganizationRole[0].role !== "super admin"
-      ) {
+
+      if (deleter_team_role[0]) {
+        if (
+          deleter_team_role[0].role !== "admin" &&
+          deleter_organization_role[0].role !== "super admin"
+        ) {
+          throw new Error(
+            "You're not authorized to make this action! only team Creators, team Admins, and Organization Super Admins can delete teams.",
+          );
+        }
+      } else if (deleter_organization_role[0].role !== "super admin") {
         throw new Error(
-          "You're not authorized to make this action. You have to be a Team CREATOR, or an Organization SUPER ADMIN to delete a team!",
+          "You're not authorized to make this action! only team Creators, team Admins, and Organization Super Admins can delete teams.",
         );
       }
       await deleteTeam(team_id);
