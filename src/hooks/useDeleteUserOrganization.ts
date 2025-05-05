@@ -41,7 +41,10 @@ const useDeleteUserOrganization = ({
       });
       toast.success("Organization deleted successfully!");
       handleCloseModal();
-      navigate({ to: "/dashboard/organizations/my_organizations" });
+      navigate({
+        to: "/dashboard/organizations/my_organizations",
+        replace: true,
+      });
     },
     onError: (err: { message: string }) => {
       toast.error(err.message || "An unexpected error occured, try again.");
@@ -63,10 +66,10 @@ const useDeleteUserOrganization = ({
         // user?.id as string,
         organization_id,
       );
-      await deleteMembers(organization_id);
-      await deleteSubmissions(organization_id);
-      await deleteTasks(organization_id);
       await deleteOrganizationTeams(organization_id);
+      await deleteMembers(organization_id);
+      await deleteTasks(organization_id);
+      await deleteSubmissions(organization_id);
       await sendNotification(
         user?.id as string,
         "Deleted organization",

@@ -11,6 +11,7 @@ import { useModalContext } from "../../../../../contexts/ModalContext";
 import DeleteTeamMemberModal from "../../../../../components/modals/DeleteTeamMemberModal";
 import EditTeamMemberRoleModal from "../../../../../components/modals/EditTeamMemberRole";
 import { getMemberFinishedTasks } from "../../../../../utils/team_tasks";
+import useGetTeamMemberRole from "../../../../../hooks/useGetTeamMemberRole";
 
 export const Route = createFileRoute(
   "/dashboard/organizations/teams/$team_id/$member_id",
@@ -34,6 +35,8 @@ function RouteComponent() {
     refetchOnWindowFocus: false,
     select: (res) => res[0],
   });
+  const { data: memberRole, isPending: loadingMemberRole } =
+    useGetTeamMemberRole(team_id);
 
   const { data: tasks, isPending: isLoadingfinishedTasks } = useQuery({
     queryKey: ["user-tasks", member?.member_email],
@@ -45,7 +48,7 @@ function RouteComponent() {
 
   console.log(tasks);
 
-  if (isPending || isLoadingfinishedTasks)
+  if (isPending || isLoadingfinishedTasks || loadingMemberRole)
     return <Loading message={"Loading team member"} />;
   if (error) return <Error errorMessage={"Member not found"} />;
 
@@ -61,7 +64,7 @@ function RouteComponent() {
         </span>
         <span>Number of finished tasks : {tasks?.length} </span>
         <span>Date joined : {dateToString(member.created_at)}</span>
-        {user?.id === member.super_admin_id ? (
+        {user?.id === member.super_admin_id || memberRole?.role === "admin" ? (
           <div className="flex flex-row items-center justify-between gap-x-2">
             <button
               onClick={() => handleActiveModal("delete team member")}

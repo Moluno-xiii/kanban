@@ -1,16 +1,18 @@
 import supabase from "../supabase";
-import { TaskTypes } from "./helperFunctions";
+import { TaskTypes, Task } from "./helperFunctions";
 
 async function createTeamTask(
-  assigned_by: string,
-  status: TaskTypes,
-  team_id: string,
-  admin_id: string,
-  super_admin_id: string,
-  title: string,
-  description: string,
-  assigned_to?: string,
-  assignee_id?: string,
+  assigned_by: Task["assigned_by"],
+  status: Task["status"],
+  team_id: Task["team_id"],
+  admin_id: Task["admin_id"],
+  super_admin_id: Task["super_admin_id"],
+  title: Task["title"],
+  description: Task["description"],
+  organization_id: Task["organization_id"],
+  team_name: Task["team_name"],
+  assigned_to: Task["assigned_to"],
+  assignee_id: Task["assignee_id"],
 ) {
   const { data: tasks, error } = await supabase
     .from("team_tasks")
@@ -25,6 +27,8 @@ async function createTeamTask(
         title,
         description,
         assignee_id,
+        organization_id,
+        team_name,
       },
     ])
 
@@ -110,7 +114,8 @@ async function getUserTasks(
     .from("team_tasks")
     .select("*")
     .eq("team_id", team_id)
-    .eq("assigned_to", assignee_email);
+    .eq("assigned_to", assignee_email)
+    .order("created_at", { ascending: false });
 
   if (status && status !== "all") {
     query = query.eq("status", status);
@@ -125,12 +130,17 @@ async function getUserTasks(
   return tasks;
 }
 
-async function editTeamTaskStatus(status: string, task_id: string) {
+async function editTeamTaskStatus(
+  status: string,
+  task_id: string,
+  date_finished: string,
+) {
   const { data: task, error } = await supabase
     .from("team_tasks")
     .update([
       {
         status,
+        date_finished,
       },
     ])
     .eq("id", task_id);

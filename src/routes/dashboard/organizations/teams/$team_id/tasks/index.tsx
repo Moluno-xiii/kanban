@@ -46,7 +46,7 @@ function RouteComponent() {
     <div className="flex flex-col gap-y-4">
       <div className="flex flex-row items-center justify-between">
         <GoBack route={`/dashboard/organizations/teams/${team_id}`} />
-        {userRole.role.toLowerCase() === "member" ? (
+        {userRole?.role.toLowerCase() === "member" ? (
           <Link
             to="/dashboard/organizations/teams/$team_id/tasks/assigned_tasks"
             params={{ team_id }}

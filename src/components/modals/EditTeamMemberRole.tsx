@@ -32,10 +32,12 @@ const EditTeamMemberRoleModal: React.FC<PropTypes> = ({
         member.organization_id,
       );
       if (
-        memberRole[0].role.toLowerCase() !== "admin" &&
-        userRole[0].role.toLowerCase() !== "super admin"
+        memberRole[0].role !== "admin" &&
+        userRole[0].role !== "super admin"
       ) {
-        throw new Error("You're not authorized to make this action!");
+        throw new Error(
+          "You're not authorized to make this action. Only Organization super admins or Team admins and Team Creators can edit a team member's role",
+        );
       }
       await changeTeamMemberRole(role, member.member_id, member.team_id);
     },

@@ -28,6 +28,8 @@ const SubmitTeamTaskModal: React.FC<Props> = ({ task }) => {
         task.id,
         task.super_admin_id,
         task.admin_id,
+        task.organization_id,
+        task.team_name,
         submission_note,
       ),
     onSuccess: () => {
@@ -60,6 +62,7 @@ const SubmitTeamTaskModal: React.FC<Props> = ({ task }) => {
       submission_note: string;
     };
     console.log(dataObject);
+    console.log(task);
     submitTaskMutation.mutate(dataObject.submission_note);
   };
 

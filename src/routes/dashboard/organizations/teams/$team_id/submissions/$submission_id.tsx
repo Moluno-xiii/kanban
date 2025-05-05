@@ -14,7 +14,7 @@ function RouteComponent() {
       <ReturnBack />
       Hello
       "/dashboard/organizations/teams/$team_id/submissions/$submission_id"!
-      <span>TEam id : {team_id}</span>
+      <span>Team id : {team_id}</span>
       <span>submission id : {submission_id}</span>
     </div>
   );

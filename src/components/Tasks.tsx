@@ -48,11 +48,12 @@ const Tasks: React.FC<PropTypes> = ({
             team_id={team_id}
             userRole={userRole}
             task={task}
+            organization_id={tasks[0].organization_id}
           />
         ))}
       </ul>
     );
-
+  console.log(tasks);
   return (
     <ul className="flex flex-col gap-4">
       {tasks.map((task: Task) => (
@@ -61,6 +62,7 @@ const Tasks: React.FC<PropTypes> = ({
           team_id={team_id}
           userRole={userRole}
           task={task}
+          organization_id={tasks[0].organization_id}
         />
       ))}
     </ul>
@@ -73,10 +75,12 @@ const TaskComponent = ({
   task,
   team_id,
   userRole,
+  organization_id,
 }: {
   task: Task;
   team_id: string;
   userRole: { role: string };
+  organization_id: string;
 }) => {
   const {
     activeModal,
@@ -140,6 +144,7 @@ const TaskComponent = ({
           handleClose={() => handleActiveModal(null)}
           task_id={task.id}
           team_id={team_id}
+          organization_id={organization_id}
         />
       ) : null}
     </li>

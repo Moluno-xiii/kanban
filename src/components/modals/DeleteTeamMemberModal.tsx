@@ -11,6 +11,8 @@ const DeleteTeamMemberModal: React.FC<PropTypes> = ({ member, closeModal }) => {
   const deleteMemberMutation = useDeleteTeamMember(
     member.team_id,
     member.team_name,
+    member.organization_id,
+    closeModal,
   );
 
   return (

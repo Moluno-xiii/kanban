@@ -34,7 +34,6 @@ const MemberTeams: React.FC<Props> = ({ organization_id }) => {
       <Error errorMessage={error.message || "An unexpected error occured."} />
     );
   }
-
   return (
     <div className="flex flex-col gap-y-2 rounded-md p-3">
       <p className="text-secondary text-lg sm:text-xl">
